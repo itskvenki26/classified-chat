@@ -4,7 +4,11 @@
     <string name="app_name">Classified!</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+<<<<<<< HEAD
     <string name="title_activity_comments_view">Comments</string>
     <string name="comments_view">Comments1</string>
 
+=======
+    <string name="posts_list">posts</string>
+>>>>>>> 50d943f1cb5793eb6bde63ebd4601e7e9c81a81e
 </resources>
