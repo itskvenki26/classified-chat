@@ -30,16 +30,11 @@ public final class R {
         public static final int container=0x7f080000;
     }
     public static final class layout {
-<<<<<<< HEAD
         public static final int activity_comments_view=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int fragment_comments_view=0x7f030002;
         public static final int fragment_main=0x7f030003;
-=======
-        public static final int activity_main=0x7f030000;
-        public static final int fragment_main=0x7f030001;
-        public static final int fragment_posts=0x7f030002;
->>>>>>> 50d943f1cb5793eb6bde63ebd4601e7e9c81a81e
+        public static final int fragment_posts=0x7f030004;
     }
     public static final class menu {
         public static final int comments_view=0x7f070000;
@@ -50,11 +45,8 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int comments_view=0x7f050004;
         public static final int hello_world=0x7f050001;
-<<<<<<< HEAD
+        public static final int posts_list=0x7f050005;
         public static final int title_activity_comments_view=0x7f050003;
-=======
-        public static final int posts_list=0x7f050003;
->>>>>>> 50d943f1cb5793eb6bde63ebd4601e7e9c81a81e
     }
     public static final class style {
         /** 
