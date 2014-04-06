@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">classified</string>
+    <string name="app_name">Classified!</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_comments_view">Comments</string>
+    <string name="comments_view">Comments1</string>
 
 </resources>
