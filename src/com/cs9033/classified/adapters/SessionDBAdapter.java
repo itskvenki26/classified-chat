@@ -63,9 +63,9 @@ public class SessionDBAdapter {
 
 	/** Create table syntax */
 
-	private static final String USER_CREATE = "create table tbl_user(_id integer primary key autoincrement,  user_email_lid text not null, user_name text not null,user_ph_no text not null);";
-	private static final String POSTS_CREATE = "create table tbl_user(_id integer primary key autoincrement,  creator text not null, time text not null,message text not null);";
-	private static final String COMMENTS_CREATE = "create table tbl_user(_id integer primary key autoincrement,  creator text not null, time text not null,message text not null, post_id text not null);";
+	private static final String USER_CREATE = "create table tbl_user(_id integer primary key autoincrement,  user_email text not null, user_name text not null,user_phone_num text not null);";
+	private static final String POSTS_CREATE = "create table tbl_user(_id integer primary key autoincrement,  post_creator text not null, post_time text not null,post_message text not null);";
+	private static final String COMMENTS_CREATE = "create table tbl_user(_id integer primary key autoincrement,  comment_creator text not null, comment_time text not null,comment_message text not null, comment_post_id text not null);";
 
 	// private static final String DEVICE_CREATE =
 	// "create table tbl_device(_id integer primary key autoincrement, device_name text not null,device_email text not null,device_regid text not null,device_imei text not null);";
