@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -49,10 +48,10 @@ public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 				R.layout.post_row, null, SessionDBAdapter.ALL_POSTS,
 				POST_ROW_VIEWS, Adapter.NO_SELECTION);
 		Log.d(TAG, "onCreateView: Created SimpleCursorAdapter");
-		Activity a = getActivity();
-		if (a == null) {
-			Log.d(TAG, "a is null");
-		}
+//		Activity a = getActivity();
+//		if (a == null) {
+//			Log.d(TAG, "a is null");
+//		}
 		ListView LV = (ListView) rootView.findViewById(R.id.post_list_view);
 
 		if (LV == null) {
@@ -99,7 +98,9 @@ public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
 		@Override
 		public Cursor loadInBackground() {
-			return SessionDBAdapter.getAllPostsData(getContext());
+			SessionDBAdapter sessionDBAdapter = new SessionDBAdapter(
+					getContext());
+			return sessionDBAdapter.getAllPostsData();
 		}
 	}
 }

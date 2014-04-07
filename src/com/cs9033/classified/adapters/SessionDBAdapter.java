@@ -55,11 +55,11 @@ public class SessionDBAdapter {
 	/*** Set all table with comma seperated like USER_TABLE,ABC_TABLE ***/
 	private static final String[] ALL_TABLES = { TABLE_USER, TABLE_POSTS,
 			TABLE_COMMENTS };
-	public static final String[] ALL_POSTS = { "_id", P_CREATOR, P_MSG, P_TIME };
+	public static final String[] ALL_POSTS = { P_CREATOR, P_MSG, P_TIME, KEY_ID };
 	// public static final String[] ALL_USERS = { "_id", P_CREATOR, P_MSG,
 	// P_TIME };
-	public static final String[] ALL_COMMENTS = { "_id", C_CREATOR, C_MSG,
-			C_TIME, C_POST_ID };
+	public static final String[] ALL_COMMENTS = { C_CREATOR, C_MSG, C_TIME,
+			C_POST_ID, KEY_ID };
 
 	/** Create table syntax */
 
@@ -282,29 +282,35 @@ public class SessionDBAdapter {
 	// Time is set to system time by default for now. Change it later
 
 	public void addCommentsData(Comments ct) {
-
+		Log.d(TAG, "addCommentsData ct");
 		final SQLiteDatabase db = open();
+		Log.d(TAG, "addCommentsData ct: got db");
 
 		String creator = sqlEscapeString(ct.getCREATOR());
 		String time = getTime();
 		String msg = sqlEscapeString(ct.getMessage());
 		String post_id = sqlEscapeString(ct.getPOST_ID());
+		Log.d(TAG, "addCommentsData ct: set comment values");
+
 		ContentValues cVal = new ContentValues();
 		cVal.put(C_CREATOR, creator);
 		cVal.put(C_TIME, time);
 		cVal.put(C_MSG, msg);
 		cVal.put(C_POST_ID, post_id);
 		db.insert(TABLE_COMMENTS, null, cVal);
+		Log.d(TAG, "addCommentsData ct: inserted comment");
 		db.close(); // Closing database connection
-
+		Log.d(TAG, "addCommentsData ct: closed db");
 		// catch (Throwable t) {
 		// Log.i("Database", "Exception caught: " + t.getMessage(), t);
 		// }
 	}
 
 	public void addCommentsData(String message, String postId) {
+		Log.d(TAG, "addCommentsData");
 		Comments ct = new Comments(0, CurrentUser.getName(), null, message,
 				postId);
+		Log.d(TAG, "addCommentsData: created comment object");
 		addCommentsData(ct);
 	}
 

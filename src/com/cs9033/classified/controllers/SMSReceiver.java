@@ -40,6 +40,7 @@ public class SMSReceiver extends BroadcastReceiver {
 
 			Intent broadcastIntent = new Intent(context,
 					MessagePollService.class);
+			broadcastIntent.setAction(MessagePollService.SMS_RECEIVED_ACTION);
 			broadcastIntent.putExtra("sms", str);
 			context.startService(broadcastIntent);
 			Log.d(TAG, "Sent sms:" + str);

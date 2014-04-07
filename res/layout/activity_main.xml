@@ -16,5 +16,13 @@
         android:layout_marginLeft="23dp"
         android:text="Go To Posts View" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/go_to_commentss_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/go_to_posts_view"
+        android:layout_alignTop="@+id/go_to_posts_view"
+        android:layout_marginTop="60dp"
+        android:text="Go To Comments View" />
 
+</RelativeLayout>

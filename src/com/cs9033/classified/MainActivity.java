@@ -27,9 +27,9 @@ public class MainActivity extends Activity implements OnClickListener {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 
-		Button b = (Button) findViewById(R.id.go_to_posts_view);
-
-		b.setOnClickListener(this);
+		((Button) findViewById(R.id.go_to_posts_view)).setOnClickListener(this);
+		((Button) findViewById(R.id.go_to_commentss_view))
+				.setOnClickListener(this);
 
 	}
 
@@ -55,16 +55,22 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		Intent intent;
 		switch (v.getId()) {
 		case R.id.go_to_posts_view:
-			Log.d(TAG, "Button CLicked");
-			Intent intent = new Intent(this, PostsActivity.class);
-			startActivity(intent);
+			Log.d(TAG, "go_to_posts_view Button Clicked");
+			intent = new Intent(this, PostsActivity.class);
+			break;
+		case R.id.go_to_commentss_view:
+			Log.d(TAG, "go_to_posts_view Button Clicked");
+			intent = new Intent(this, CommentsActivity.class);
+			// startActivity(intent);
 			break;
 		default:
 			return;
 
 		}
+		startActivity(intent);
 	}
 
 	/**
