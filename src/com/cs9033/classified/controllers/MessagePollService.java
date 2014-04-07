@@ -33,7 +33,7 @@ public class MessagePollService extends IntentService {
 		String action = intent.getAction();
 		if (action == SMS_RECEIVED_ACTION) {
 			Log.d(TAG, "Intent Handeled, adding " + extras.getString("sms"));
-			SessionDBAdapter.addPostsData(extras.getString("sms"));
+			SessionDBAdapter.addPostsData(extras.getString("sms"),this);
 		}
 	}
 }
