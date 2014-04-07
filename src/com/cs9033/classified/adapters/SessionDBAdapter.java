@@ -1,6 +1,7 @@
 package com.cs9033.classified.adapters;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import Models.Comments;
@@ -22,28 +23,23 @@ public class SessionDBAdapter {
 	public static final boolean DEBUG = true;
 
 	/******************** Logcat TAG ************/
-	public static final String TAG = "DBAdapter";
+	private static final String TAG = "DBAdapter";
 
 	/******************** Table Fields ************/
 	public static final String KEY_ID = "_id";
 
-	public static final String KEY_USER_EMAIL_ID = "user_email";
-	public static final String KEY_USER_NAME = "user_name";
-	public static final String KEY_USER_PH_NO = "user_phone_num";
+	public static final String U_EMAIL_ID = "user_email";
+	public static final String U_NAME = "user_name";
+	public static final String U_PH_NO = "user_phone_num";
 
-	public static final String KEY_POST_CREATOR = "creator";
-	public static final String KEY_POST_TIME = "time";
-	public static final String KEY_POST_MSG = "message";
+	public static final String P_CREATOR = "creator";
+	public static final String P_TIME = "time";
+	public static final String P_MSG = "message";
 
-	public static final String KEY_COMMENT_CREATOR = "comment_creator";
-	public static final String KEY_COMMENT_TIME = "comment_time";
-	public static final String KEY_COMMENT_MSG = "comment_message";
-	public static final String KEY_COMMENT_POST_ID = "comment_post_id";
-
-	// public static final String KEY_DEVICE_IMEI = "device_imei";
-	// public static final String KEY_DEVICE_NAME = "device_name";
-	// public static final String KEY_DEVICE_EMAIL = "device_email";
-	// public static final String KEY_DEVICE_REGID = "device_regid";
+	public static final String C_CREATOR = "comment_creator";
+	public static final String C_TIME = "comment_time";
+	public static final String C_MSG = "comment_message";
+	public static final String C_POST_ID = "comment_post_id";
 
 	/******************** Database Name ************/
 	public static final String DATABASE_NAME = "DB_sqllite";
@@ -52,34 +48,56 @@ public class SessionDBAdapter {
 	public static final int DATABASE_VERSION = 3;// started at 1
 
 	/** Table names */
-	public static final String USER_TABLE = "tbl_user";
-	// public static final String DEVICE_TABLE = "tbl_device";
-	public static final String POSTS_TABLE = "tbl_posts";
-	public static final String COMMENTS_TABLE = "tbl_comments";
+	public static final String TABLE_USER = "tbl_user";
+	public static final String TABLE_POSTS = "tbl_posts";
+	public static final String TABLE_COMMENTS = "tbl_comments";
 
 	/*** Set all table with comma seperated like USER_TABLE,ABC_TABLE ***/
-	private static final String[] ALL_TABLES = { USER_TABLE, POSTS_TABLE,
-			COMMENTS_TABLE };
-	public static final String[] ALL_POSTS = { "_id", KEY_POST_CREATOR,
-			KEY_POST_MSG, KEY_POST_TIME };
+	private static final String[] ALL_TABLES = { TABLE_USER, TABLE_POSTS,
+			TABLE_COMMENTS };
+	public static final String[] ALL_POSTS = { "_id", P_CREATOR, P_MSG, P_TIME };
+	// public static final String[] ALL_USERS = { "_id", P_CREATOR, P_MSG,
+	// P_TIME };
+	public static final String[] ALL_COMMENTS = { "_id", C_CREATOR, C_MSG,
+			C_TIME, C_POST_ID };
 
 	/** Create table syntax */
 
-	private static final String USER_CREATE = "create table tbl_user(_id integer primary key autoincrement,  user_email_lid text not null, user_name text not null,user_ph_no text not null);";
-	private static final String POSTS_CREATE = "create table tbl_posts(_id integer primary key autoincrement,  creator text not null, time text not null,message text not null);";
-	private static final String COMMENTS_CREATE = "create table tbl_user(_id integer primary key autoincrement,  creator text not null, time text not null,message text not null, post_id text not null);";
+	private static final String USER_CREATE = "create table " + TABLE_USER
+			+ " (" + KEY_ID + " integer primary key autoincrement,  "
+			+ U_EMAIL_ID + "  text not null, " + U_NAME + "  text not null, "
+			+ U_PH_NO + "  text not null);";
+
+	private static final String POSTS_CREATE = "create table " + TABLE_POSTS
+			+ " (" + KEY_ID + " integer primary key autoincrement,  "
+			+ P_CREATOR + "  text not null, " + P_TIME + "  text not null, "
+			+ P_MSG + "  text not null);";
+
+	private static final String COMMENTS_CREATE = "create table "
+			+ TABLE_COMMENTS + " (" + KEY_ID
+			+ " integer primary key autoincrement,  " + C_CREATOR
+			+ "  text not null, " + C_TIME + "  text not null, " + C_MSG
+			+ "  text not null, " + C_POST_ID + "  text not null);";
 
 	// private static final String DEVICE_CREATE =
 	// "create table tbl_device(_id integer primary key autoincrement, device_name text not null,device_email text not null,device_regid text not null,device_imei text not null);";
 
 	/**** Used to open database in syncronized way ****/
-	private static DataBaseHelper DBHelper = null;
+	private DataBaseHelper DBHelper = null;
 
-	protected SessionDBAdapter() {
+	private Context context;
+
+	@SuppressWarnings("unused")
+	private SessionDBAdapter() {
+	}
+
+	public SessionDBAdapter(Context context) {
+		this.context = context;
+		init(context);
 	}
 
 	/******************* Initialize database *************/
-	public static void init(Context context) {
+	public void init(Context context) {
 		if (DBHelper == null) {
 			if (DEBUG)
 				Log.d("DBAdapter", context.toString());
@@ -124,7 +142,7 @@ public class SessionDBAdapter {
 	} // Inner class closed
 
 	/**** Open database for insert,update,delete in syncronized manner ****/
-	private static synchronized SQLiteDatabase open() throws SQLException {
+	private synchronized SQLiteDatabase open() throws SQLException {
 		if (DBHelper == null) {
 			Log.d(TAG, "open: DBHelper is null");
 		}
@@ -152,7 +170,7 @@ public class SessionDBAdapter {
 
 	// Adding new user
 
-	public static void addUserData(UserData uData) {
+	public void addUserData(UserData uData) {
 		try {
 			final SQLiteDatabase db = open();
 
@@ -161,10 +179,10 @@ public class SessionDBAdapter {
 			String ph_no = sqlEscapeString(uData.getPH_NO());
 
 			ContentValues cVal = new ContentValues();
-			cVal.put(KEY_USER_EMAIL_ID, email_id);
-			cVal.put(KEY_USER_NAME, name);
-			cVal.put(KEY_USER_PH_NO, ph_no);
-			db.insert(USER_TABLE, null, cVal);
+			cVal.put(U_EMAIL_ID, email_id);
+			cVal.put(U_NAME, name);
+			cVal.put(U_PH_NO, ph_no);
+			db.insert(TABLE_USER, null, cVal);
 			db.close(); // Closing database connection
 		} catch (Throwable t) {
 			Log.i("Database", "Exception caught: " + t.getMessage(), t);
@@ -172,13 +190,12 @@ public class SessionDBAdapter {
 	}
 
 	// Getting single user data
-	public static UserData getUserData(int id) {
+	public UserData getUserData(int id) {
 		final SQLiteDatabase db = open();
 
-		Cursor cursor = db.query(USER_TABLE, new String[] { KEY_ID,
-				KEY_USER_EMAIL_ID, KEY_USER_NAME, KEY_USER_PH_NO }, KEY_ID
-				+ "=?", new String[] { String.valueOf(id) }, null, null, null,
-				null);
+		Cursor cursor = db.query(TABLE_USER, new String[] { KEY_ID, U_EMAIL_ID,
+				U_NAME, U_PH_NO }, KEY_ID + "=?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
@@ -188,7 +205,7 @@ public class SessionDBAdapter {
 		return data;
 	}
 
-	public static void addPostsData(Posts pt, Context context) {
+	public void addPostsData(Posts pt, Context context) {
 		try {
 			if (DBHelper == null) {
 				init(context);
@@ -201,10 +218,10 @@ public class SessionDBAdapter {
 			String msg = sqlEscapeString(pt.getMessage());
 
 			ContentValues cVal = new ContentValues();
-			cVal.put(KEY_POST_CREATOR, creator);
-			cVal.put(KEY_POST_TIME, time);
-			cVal.put(KEY_POST_MSG, msg);
-			db.insert(POSTS_TABLE, null, cVal);
+			cVal.put(P_CREATOR, creator);
+			cVal.put(P_TIME, time);
+			cVal.put(P_MSG, msg);
+			db.insert(TABLE_POSTS, null, cVal);
 			db.close(); // Closing database connection
 
 			Log.i("Database", "Added Post " + pt.getMessage());
@@ -213,18 +230,28 @@ public class SessionDBAdapter {
 		}
 	}
 
-	public static void addPostsData(String message, Context context) {
+	private String getTime() {
 
-		Posts post = new Posts(0, CurrentUser.getName(), "00.00", message);
+		Calendar c = Calendar.getInstance();
+		String time = c.get(Calendar.YEAR) + "-" + c.get(Calendar.MONTH) + "-"
+				+ c.get(Calendar.DAY_OF_MONTH) + " "
+				+ c.get(Calendar.HOUR_OF_DAY) + "." + c.get(Calendar.MINUTE);
+		return time;
+	}
+
+	public void addPostsData(String message, Context context) {
+
+		String time = getTime();
+		Posts post = new Posts(0, CurrentUser.getName(), time, message);
 		addPostsData(post, context);
 
 	}
 
-	public static Posts getPostsData(int id) {
+	public Posts getPostsData(int id) {
 		final SQLiteDatabase db = open();
 
-		Cursor cursor = db.query(USER_TABLE, new String[] { KEY_ID,
-				KEY_POST_CREATOR, KEY_POST_TIME, KEY_POST_MSG }, KEY_ID + "=?",
+		Cursor cursor = db.query(TABLE_USER, new String[] { KEY_ID, P_CREATOR,
+				P_TIME, P_MSG }, KEY_ID + "=?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
@@ -235,15 +262,12 @@ public class SessionDBAdapter {
 		return data;
 	}
 
-	public static Cursor getAllPostsData(Context context) {
+	public Cursor getAllPostsData() {
 		Log.d(TAG, "getAllPostData");
-		if (DBHelper == null) {
-			init(context);
-			Log.d(TAG, "init with context");
-		}
+
 		final SQLiteDatabase db = open();
 		Log.d(TAG, "getAllPostData: got Writer");
-		Cursor cursor = db.query(POSTS_TABLE, ALL_POSTS, null, null, null,
+		Cursor cursor = db.query(TABLE_POSTS, ALL_POSTS, null, null, null,
 				null, null, null);
 		Log.d(TAG, "getAllPostData: queried Cursor");
 		if (cursor != null) {
@@ -255,38 +279,40 @@ public class SessionDBAdapter {
 		return cursor;
 	}
 
-	public static void addCommentsData(Comments ct) {
-		try {
-			final SQLiteDatabase db = open();
+	// Time is set to system time by default for now. Change it later
 
-			String creator = sqlEscapeString(ct.getCREATOR());
-			String time = sqlEscapeString(ct.getTIME());
-			String msg = sqlEscapeString(ct.getMessage());
-			String post_id = sqlEscapeString(ct.getPOST_ID());
-			ContentValues cVal = new ContentValues();
-			cVal.put(KEY_COMMENT_CREATOR, creator);
-			cVal.put(KEY_COMMENT_TIME, time);
-			cVal.put(KEY_COMMENT_MSG, msg);
-			cVal.put(KEY_COMMENT_POST_ID, post_id);
-			db.insert(POSTS_TABLE, null, cVal);
-			db.close(); // Closing database connection
-		} catch (Throwable t) {
-			Log.i("Database", "Exception caught: " + t.getMessage(), t);
-		}
+	public void addCommentsData(Comments ct) {
+
+		final SQLiteDatabase db = open();
+
+		String creator = sqlEscapeString(ct.getCREATOR());
+		String time = getTime();
+		String msg = sqlEscapeString(ct.getMessage());
+		String post_id = sqlEscapeString(ct.getPOST_ID());
+		ContentValues cVal = new ContentValues();
+		cVal.put(C_CREATOR, creator);
+		cVal.put(C_TIME, time);
+		cVal.put(C_MSG, msg);
+		cVal.put(C_POST_ID, post_id);
+		db.insert(TABLE_COMMENTS, null, cVal);
+		db.close(); // Closing database connection
+
+		// catch (Throwable t) {
+		// Log.i("Database", "Exception caught: " + t.getMessage(), t);
+		// }
 	}
 
-	public static void addCommentsData(String message, String postId) {
-		Comments ct = new Comments(0, CurrentUser.getName(), "00.00", message,
+	public void addCommentsData(String message, String postId) {
+		Comments ct = new Comments(0, CurrentUser.getName(), null, message,
 				postId);
 		addCommentsData(ct);
 	}
 
-	public static Comments getCommentsData(int id) {
+	public Comments getCommentsData(int id) {
 		final SQLiteDatabase db = open();
 
-		Cursor cursor = db.query(USER_TABLE, new String[] { KEY_ID,
-				KEY_POST_CREATOR, KEY_POST_TIME, KEY_POST_MSG,
-				KEY_COMMENT_POST_ID }, KEY_ID + "=?",
+		Cursor cursor = db.query(TABLE_USER, new String[] { KEY_ID, P_CREATOR,
+				P_TIME, P_MSG, C_POST_ID }, KEY_ID + "=?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
@@ -298,11 +324,28 @@ public class SessionDBAdapter {
 		return data;
 	}
 
+	public Cursor getAllCommentsData() {
+		Log.d(TAG, "getAllCommentsData");
+
+		final SQLiteDatabase db = open();
+		Log.d(TAG, "getAllCommentsData: got Writer");
+		Cursor cursor = db.query(TABLE_COMMENTS, ALL_COMMENTS, null, null,
+				null, null, null, null);
+		Log.d(TAG, "getAllCommentsData: queried Cursor");
+		if (cursor != null) {
+			cursor.moveToFirst();
+			Log.d(TAG,
+					"getAllCommentsData: cursor is not null"
+							+ cursor.getColumnCount() + " " + cursor.getCount());
+		}
+		return cursor;
+	}
+
 	// Getting All user data
-	public static List<UserData> getAllUserData() {
+	public List<UserData> getAllUserData() {
 		List<UserData> contactList = new ArrayList<UserData>();
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + USER_TABLE + " ORDER BY "
+		String selectQuery = "SELECT  * FROM " + TABLE_USER + " ORDER BY "
 				+ KEY_ID + " desc";
 
 		final SQLiteDatabase db = open();
@@ -327,8 +370,8 @@ public class SessionDBAdapter {
 	}
 
 	// Getting users Count
-	public static int getUserDataCount() {
-		String countQuery = "SELECT  * FROM " + USER_TABLE;
+	public int getUserDataCount() {
+		String countQuery = "SELECT  * FROM " + TABLE_USER;
 		final SQLiteDatabase db = open();
 		Cursor cursor = db.rawQuery(countQuery, null);
 
@@ -351,11 +394,11 @@ public class SessionDBAdapter {
 	 */
 
 	// Getting distinct user data use in spinner
-	public static List<UserData> getDistinctUser() {
+	public List<UserData> getDistinctUser() {
 		List<UserData> contactList = new ArrayList<UserData>();
 		// Select All Query
 		String selectQuery = "SELECT  distinct(user_email_id),user_name  FROM "
-				+ USER_TABLE + "ORDER BY " + KEY_ID + " desc";
+				+ TABLE_USER + "ORDER BY " + KEY_ID + " desc";
 
 		final SQLiteDatabase db = open();
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -377,10 +420,10 @@ public class SessionDBAdapter {
 	}
 
 	// Getting imei already in user table or not
-	public static int validateNewMessageUserData(String Email) {
+	public int validateNewMessageUserData(String Email) {
 		int count = 0;
 		try {
-			String countQuery = "SELECT " + KEY_ID + "FROM " + USER_TABLE
+			String countQuery = "SELECT " + KEY_ID + "FROM " + TABLE_USER
 					+ "WHERE user_email_id='" + Email + "'";
 
 			final SQLiteDatabase db = open();
