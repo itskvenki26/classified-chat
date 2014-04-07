@@ -205,7 +205,7 @@ public class SessionDBAdapter {
 		return data;
 	}
 
-	public void addPostsData(Posts pt, Context context) {
+	public void addPostsData(Posts pt) {
 		try {
 			if (DBHelper == null) {
 				init();
@@ -239,11 +239,11 @@ public class SessionDBAdapter {
 		return time;
 	}
 
-	public void addPostsData(String message, Context context) {
+	public void addPostsData(String message) {
 
 		String time = getTime();
 		Posts post = new Posts(0, CurrentUser.getName(), time, message);
-		addPostsData(post, context);
+		addPostsData(post);
 
 	}
 
