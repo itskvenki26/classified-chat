@@ -7,18 +7,15 @@
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
-    
-     <!-- GCM connects to Internet Services. -->
+
+    <!-- GCM connects to Internet Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
- 
+
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
- 
+
     <!-- Keeps the processor from sleeping when a message is received. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
- 
-   
-
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
@@ -47,8 +44,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.cs9033.classified.controllers.MessagePollService" >
-        </service>
+        <service android:name="com.cs9033.classified.controllers.MessagePollService" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.cs9033.classified;
+package Models;
  public  class UserData {
      
         //private variables

@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 import android.widget.Toast;
 
 public class SMSReceiver extends BroadcastReceiver {
+
+	private static final String TAG = "SMSReceiver";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -24,10 +27,7 @@ public class SMSReceiver extends BroadcastReceiver {
 			msgs = new SmsMessage[pdus.length];
 			for (int i = 0; i < msgs.length; i++) {
 				msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-
 				address = msgs[i].getOriginatingAddress();
-				// contactId = ContactsUtils.getContactId(mContext, address,
-				// "address");
 				str += msgs[i].getMessageBody().toString();
 				str += "\n";
 			}
@@ -38,12 +38,11 @@ public class SMSReceiver extends BroadcastReceiver {
 				showNotification(contactId, str);
 			}
 
-			// ---send a broadcast intent to update the SMS received in the
-			// activity---
-			Intent broadcastIntent = new Intent();
-			broadcastIntent.setAction("SMS_RECEIVED_ACTION");
+			Intent broadcastIntent = new Intent(context,
+					MessagePollService.class);
 			broadcastIntent.putExtra("sms", str);
-			context.sendBroadcast(broadcastIntent);
+			context.startService(broadcastIntent);
+			Log.d(TAG, "Sent sms:" + str);
 		}
 
 	}

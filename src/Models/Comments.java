@@ -1,22 +1,24 @@
-package com.cs9033.classified;
- public  class Posts {
+package Models;
+ public  class Comments {
      
         //private variables
         int id;
         String creator;
         String time;
         String message;
+        String post_id;
          
         // Empty constructor
-        public Posts(){
+        public Comments(){
       
         }
         // constructor
-        public Posts(int id, String creator, String time, String message){
+        public Comments(int id, String creator, String time, String message, String post_id){
             this.id      = id;
             this.creator    = creator;
             this.time    = time;
             this.message = message;
+            this.post_id= post_id;
              
         }
       
@@ -59,13 +61,22 @@ package com.cs9033.classified;
         public void setMessage(String message){
             this.message = message;
         }
+        
+        public String getPOST_ID(){
+            return this.post_id;
+        }
+      
+        // setting Message
+        public void setPOST_ID(String post_id){
+            this.post_id = post_id;
+        }
      
         /* (non-Javadoc)
          * @see java.lang.Object#toString()
          */
         @Override
         public String toString() {
-            return "PostInfo [time=" +creator+'\t' +time + "]";
+            return "CommentInfo [time=" +creator+'\t' +time +'\t'+ post_id+ "]";
         }
          
     }
