@@ -93,11 +93,11 @@ public class SessionDBAdapter {
 
 	public SessionDBAdapter(Context context) {
 		this.context = context;
-		init(context);
+		init();
 	}
 
 	/******************* Initialize database *************/
-	public void init(Context context) {
+	public void init() {
 		if (DBHelper == null) {
 			if (DEBUG)
 				Log.d("DBAdapter", context.toString());
@@ -208,7 +208,7 @@ public class SessionDBAdapter {
 	public void addPostsData(Posts pt, Context context) {
 		try {
 			if (DBHelper == null) {
-				init(context);
+				init();
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
