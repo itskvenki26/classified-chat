@@ -37,6 +37,10 @@
             android:name="com.cs9033.classified.CommentsView"
             android:label="@string/title_activity_comments_view" >
         </activity>
+        <activity
+            android:name="com.cs9033.classified.PostsActivity"
+            android:label="@string/title_activity_posts_view" >
+        </activity>
 
         <receiver android:name="com.cs9033.classified.controllers.SMSReceiver" >
             <intent-filter>

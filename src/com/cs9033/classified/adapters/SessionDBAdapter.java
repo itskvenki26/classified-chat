@@ -31,9 +31,9 @@ public class SessionDBAdapter {
 	public static final String KEY_USER_NAME = "user_name";
 	public static final String KEY_USER_PH_NO = "user_phone_num";
 
-	public static final String KEY_POST_CREATOR = "post_creator";
-	public static final String KEY_POST_TIME = "post_time";
-	public static final String KEY_POST_MSG = "post_message";
+	public static final String KEY_POST_CREATOR = "creator";
+	public static final String KEY_POST_TIME = "time";
+	public static final String KEY_POST_MSG = "message";
 
 	public static final String KEY_COMMENT_CREATOR = "comment_creator";
 	public static final String KEY_COMMENT_TIME = "comment_time";
@@ -49,7 +49,7 @@ public class SessionDBAdapter {
 	public static final String DATABASE_NAME = "DB_sqllite";
 
 	/**** Database Version (Increase one if want to also upgrade your database) ****/
-	public static final int DATABASE_VERSION = 1;// started at 1
+	public static final int DATABASE_VERSION = 3;// started at 1
 
 	/** Table names */
 	public static final String USER_TABLE = "tbl_user";
@@ -60,11 +60,13 @@ public class SessionDBAdapter {
 	/*** Set all table with comma seperated like USER_TABLE,ABC_TABLE ***/
 	private static final String[] ALL_TABLES = { USER_TABLE, POSTS_TABLE,
 			COMMENTS_TABLE };
+	public static final String[] ALL_POSTS = { "_id", KEY_POST_CREATOR,
+			KEY_POST_MSG, KEY_POST_TIME };
 
 	/** Create table syntax */
 
 	private static final String USER_CREATE = "create table tbl_user(_id integer primary key autoincrement,  user_email_lid text not null, user_name text not null,user_ph_no text not null);";
-	private static final String POSTS_CREATE = "create table tbl_user(_id integer primary key autoincrement,  creator text not null, time text not null,message text not null);";
+	private static final String POSTS_CREATE = "create table tbl_posts(_id integer primary key autoincrement,  creator text not null, time text not null,message text not null);";
 	private static final String COMMENTS_CREATE = "create table tbl_user(_id integer primary key autoincrement,  creator text not null, time text not null,message text not null, post_id text not null);";
 
 	// private static final String DEVICE_CREATE =
@@ -123,6 +125,9 @@ public class SessionDBAdapter {
 
 	/**** Open database for insert,update,delete in syncronized manner ****/
 	private static synchronized SQLiteDatabase open() throws SQLException {
+		if (DBHelper == null) {
+			Log.d(TAG, "open: DBHelper is null");
+		}
 		return DBHelper.getWritableDatabase();
 	}
 
@@ -183,8 +188,12 @@ public class SessionDBAdapter {
 		return data;
 	}
 
-	public static void addPostsData(Posts pt) {
+	public static void addPostsData(Posts pt, Context context) {
 		try {
+			if (DBHelper == null) {
+				init(context);
+				Log.d(TAG, "init with context");
+			}
 			final SQLiteDatabase db = open();
 
 			String creator = sqlEscapeString(pt.getCREATOR());
@@ -204,10 +213,10 @@ public class SessionDBAdapter {
 		}
 	}
 
-	public static void addPostsData(String message) {
+	public static void addPostsData(String message, Context context) {
 
 		Posts post = new Posts(0, CurrentUser.getName(), "00.00", message);
-		addPostsData(post);
+		addPostsData(post, context);
 
 	}
 
@@ -226,14 +235,23 @@ public class SessionDBAdapter {
 		return data;
 	}
 
-	public static Cursor getAllPostsData() {
+	public static Cursor getAllPostsData(Context context) {
+		Log.d(TAG, "getAllPostData");
+		if (DBHelper == null) {
+			init(context);
+			Log.d(TAG, "init with context");
+		}
 		final SQLiteDatabase db = open();
-
-		Cursor cursor = db.query(USER_TABLE, new String[] { KEY_POST_MSG },
-				null, null, null, null, null, null);
-		if (cursor != null)
+		Log.d(TAG, "getAllPostData: got Writer");
+		Cursor cursor = db.query(POSTS_TABLE, ALL_POSTS, null, null, null,
+				null, null, null);
+		Log.d(TAG, "getAllPostData: queried Cursor");
+		if (cursor != null) {
 			cursor.moveToFirst();
-
+			Log.d(TAG,
+					"getAllPostData: cursor is not null"
+							+ cursor.getColumnCount() + " " + cursor.getCount());
+		}
 		return cursor;
 	}
 

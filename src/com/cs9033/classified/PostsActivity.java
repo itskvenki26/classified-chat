@@ -1,27 +1,33 @@
 package com.cs9033.classified;
 
+import Fragments.PostsFragment;
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class PostsActivity extends Activity {
+
+	private static final String TAG = "PostsActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+
+		Log.d(TAG, "onCreate");
+
+		setContentView(R.layout.activity_posts);
+		Log.d(TAG, "onCreate: inflated view");
 
 		if (savedInstanceState == null) {
+			Log.d(TAG, "onCreate: checked instance state");
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+					.add(R.id.activity_posts, new PostsFragment()).commit();
+			Log.d(TAG, "onCreate: added Fragment");
 		}
-
-//		Messager.sendSMS(this, "+13476561714", "Test Message");
+		Log.d(TAG, "onCreate: return");
+		// Messager.sendSMS(this, "+13476561714", "Test Message");
 
 	}
 
@@ -48,18 +54,5 @@ public class PostsActivity extends Activity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			return rootView;
-		}
-	}
 
 }

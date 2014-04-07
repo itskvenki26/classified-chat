@@ -2,14 +2,20 @@ package com.cs9033.classified;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener {
+
+	private static final String TAG = "MainActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,11 @@ public class MainActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+
+		Button b = (Button) findViewById(R.id.go_to_posts_view);
+
+		b.setOnClickListener(this);
+
 	}
 
 	@Override
@@ -40,6 +51,20 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.go_to_posts_view:
+			Log.d(TAG, "Button CLicked");
+			Intent intent = new Intent(this, PostsActivity.class);
+			startActivity(intent);
+			break;
+		default:
+			return;
+
+		}
 	}
 
 	/**
