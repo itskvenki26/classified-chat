@@ -1,4 +1,4 @@
-package com.cs9033.classified;
+package com.cs9033.classified.adapters;
 
 import java.util.ArrayList;
 import java.util.List;

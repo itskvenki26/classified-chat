@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cs9033.classified.SessionDBAdapter;
+import com.cs9033.classified.adapters.SessionDBAdapter;
 
 public class MessagePollService extends IntentService {
 	private static final String TAG = "MessagePollService";
