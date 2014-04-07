@@ -22,7 +22,7 @@ import com.cs9033.classified.adapters.SessionDBAdapter;
 
 public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
-	@SuppressWarnings("unused")
+	// @SuppressWarnings("unused")
 	private static final String TAG = "PostsFragment";
 
 	private static final int POST_LOADER = 0;
@@ -30,7 +30,7 @@ public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 			R.id.post_creator_text_view, R.id.post_message_text_view,
 			R.id.post_time_text_view };
 
-	private Activity activity;
+	// private Activity activity;
 	private SimpleCursorAdapter simpleCursorAdapter;
 
 	public PostsFragment() {
@@ -76,7 +76,7 @@ public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new PostLoader(activity);
+		return new PostLoader(getActivity());
 	}
 
 	@Override
@@ -88,12 +88,6 @@ public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		simpleCursorAdapter.swapCursor(null);
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.activity = activity;
 	}
 
 	// /SImple Loader class

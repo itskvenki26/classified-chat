@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cs9033.classified.CommentsView"
+            android:name="com.cs9033.classified.CommentsActivity"
             android:label="@string/title_activity_comments_view" >
         </activity>
         <activity
