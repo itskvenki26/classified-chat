@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.cs9033.classified.R;
-import com.cs9033.classified.adapters.SessionDBAdapter;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 
 public class CommentsFragment extends Fragment implements
 		LoaderCallbacks<Cursor> {
@@ -40,7 +40,7 @@ public class CommentsFragment extends Fragment implements
 
 		Log.d(TAG, "onCreateView: inflated view");
 		simpleCursorAdapter = new SimpleCursorAdapter(getActivity(),
-				R.layout.comment_row, null, SessionDBAdapter.ALL_COMMENTS,
+				R.layout.comment_row, null, ChatRoomsDBAdapter.ALL_COMMENTS,
 				COMMENT_ROW_VIEWS, Adapter.NO_SELECTION);
 		Log.d(TAG, "onCreateView: Created SimpleCursorAdapter");
 		// Activity a = getActivity();
@@ -95,7 +95,7 @@ public class CommentsFragment extends Fragment implements
 
 		@Override
 		public Cursor loadInBackground() {
-			SessionDBAdapter sessionDBAdapter = new SessionDBAdapter(
+			ChatRoomsDBAdapter sessionDBAdapter = new ChatRoomsDBAdapter(
 					getContext());
 			return sessionDBAdapter.getAllCommentsData();
 		}

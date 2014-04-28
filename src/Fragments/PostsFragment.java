@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.cs9033.classified.R;
-import com.cs9033.classified.adapters.SessionDBAdapter;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 
 public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
@@ -45,7 +45,7 @@ public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 				false);
 		Log.d(TAG, "onCreateView: inflated view");
 		simpleCursorAdapter = new SimpleCursorAdapter(getActivity(),
-				R.layout.post_row, null, SessionDBAdapter.ALL_POSTS,
+				R.layout.post_row, null, ChatRoomsDBAdapter.ALL_POSTS,
 				POST_ROW_VIEWS, Adapter.NO_SELECTION);
 		Log.d(TAG, "onCreateView: Created SimpleCursorAdapter");
 //		Activity a = getActivity();
@@ -98,7 +98,7 @@ public class PostsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
 		@Override
 		public Cursor loadInBackground() {
-			SessionDBAdapter sessionDBAdapter = new SessionDBAdapter(
+			ChatRoomsDBAdapter sessionDBAdapter = new ChatRoomsDBAdapter(
 					getContext());
 			return sessionDBAdapter.getAllPostsData();
 		}

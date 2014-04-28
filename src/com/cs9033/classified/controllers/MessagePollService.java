@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 //implements FileTransferListener
+
 public class MessagePollService extends IntentService {
 	private static final String TAG = "MessagePollService";
 	public static final String MESSAGE_RECEIVED_ACTION = "MESSAGE_RECEIVED_ACTION";
@@ -100,6 +101,7 @@ public class MessagePollService extends IntentService {
 		// Check message
 		// Encrypt with LTP
 		// Push message to DB
+
 	}
 
 	// @Override
