@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cs9033.classified.adapters.SessionDBAdapter;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 
 public class MessagePollService extends IntentService {
 	private static final String TAG = "MessagePollService";
@@ -50,7 +50,7 @@ public class MessagePollService extends IntentService {
 				String msg = dsms[2];
 				if (c.equals("c")) {
 					Log.d(TAG, "onHandleIntent: is classified sms");
-					SessionDBAdapter sessionDBAdapter = new SessionDBAdapter(
+					ChatRoomsDBAdapter sessionDBAdapter = new ChatRoomsDBAdapter(
 							this);
 					if (type.equals("post")) {
 						Log.d(TAG, "onHandleIntent: type=post");

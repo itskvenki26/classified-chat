@@ -1,24 +1,37 @@
 package Models;
+
+import org.json.JSONException;
+import org.json.JSONObject;
  public  class Comments {
      
         //private variables
         int id;
+        int P_id;
+        int CR_id;
         String creator;
         String time;
         String message;
-        String post_id;
+        int post_id;
+        
+        public static final String C_P_ID= "post id comment belongs to"; 
+    	public static final String C_CR_ID= "chat room comment belongs to";
+    	public static final String C_CREATOR = "comment_creator";
+    	public static final String C_TIME = "comment_time";
+    	public static final String C_MSG = "comment_message";
          
         // Empty constructor
         public Comments(){
       
         }
         // constructor
-        public Comments(int id, String creator, String time, String message, String post_id){
+        public Comments(int id, int P_id,int CR_id,String creator, String time, String message){
             this.id      = id;
+            this.P_id = P_id;
+            this.CR_id = CR_id;
             this.creator    = creator;
             this.time    = time;
             this.message = message;
-            this.post_id= post_id;
+           // this.post_id= post_id;
              
         }
       
@@ -30,6 +43,25 @@ package Models;
         // setting id
         public void setID(int id){
             this.id = id;
+        }
+        
+     // getting imei
+        public int getP_id(){
+            return this.getP_id();
+        }
+      
+        // setting imei
+        public void setP_id(int P_id){
+            this.P_id = P_id;
+        }
+        
+        public int getCR_id(){
+            return this.getCR_id();
+        }
+      
+        // setting imei
+        public void setCR_id(int CR_id){
+            this.CR_id = CR_id;
         }
       
         // getting imei
@@ -62,13 +94,14 @@ package Models;
             this.message = message;
         }
         
-        public String getPOST_ID(){
-            return this.post_id;
-        }
-      
-        // setting Message
-        public void setPOST_ID(String post_id){
-            this.post_id = post_id;
+        public JSONObject toJSON() throws JSONException {
+        	JSONObject json = new JSONObject();
+        	json.put(C_P_ID, P_id);
+        	json.put(C_CR_ID, CR_id);
+        	json.put(C_CREATOR, creator);
+        	json.put(C_TIME,time);
+        	json.put(C_MSG, message);
+        	return json;
         }
      
         /* (non-Javadoc)

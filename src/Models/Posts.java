@@ -1,22 +1,34 @@
 package Models;
+
+import org.json.JSONException;
+import org.json.JSONObject;
  public  class Posts {
      
+	    public static final String P_CREATOR = "creator";
+		public static final String P_CR_ID ="chat room it belongs to";
+		public static final String P_TITLE= "title";
+		public static final String P_TIME = "time";
+		public static final String P_MSG = "message";
         //private variables
         int id;
+        int CR_id;
         String creator;
         String time;
         String message;
+        String title;
          
         // Empty constructor
         public Posts(){
       
         }
         // constructor
-        public Posts(int id, String creator, String time, String message){
+        public Posts(int id, int CR_id, String title,String creator, String time, String message){
             this.id      = id;
-            this.creator    = creator;
+            this.CR_id   = CR_id;  
+            this.title   = title;
+            this.creator = creator;
             this.time    = time;
-            this.message = message;
+            this.message = message;            
              
         }
       
@@ -29,6 +41,21 @@ package Models;
         public void setID(int id){
             this.id = id;
         }
+        
+        public int getCR_id(){
+            return this.CR_id;
+        }
+        public void setCR_id(int CR_id){
+        	 this.CR_id =CR_id;
+        }
+        
+        public String getTitle(){
+            return this.title;
+        }
+        public void setTitle(String title){
+        	 this.title =title;
+        }
+      
       
         // getting imei
         public String getCREATOR(){
@@ -58,6 +85,16 @@ package Models;
         // setting Message
         public void setMessage(String message){
             this.message = message;
+        }
+        
+        public JSONObject toJSON() throws JSONException {
+        	JSONObject json = new JSONObject();
+        	json.put(P_CREATOR, creator);
+        	json.put(P_CR_ID, CR_id);
+        	json.put(P_TITLE, title);
+        	json.put(P_TIME,time);
+        	json.put(P_MSG, message);
+        	return json;
         }
      
         /* (non-Javadoc)
