@@ -6,13 +6,29 @@ import org.json.JSONObject;
 public class CurrentUser {
 
 	private static int id;
-	private static String email_id;
-	private static String name;
-	private static String ph_no;
+	private static int crid;
+	private static String Cur_Mak;
+	private static String Cur_Ekey;
+	private static String Old_Mak;
 	
-	public static final String U_EMAIL_ID = "user_email";
-	public static final String U_NAME = "user_name";
-	public static final String U_PH_NO = "user_phone_num";
+	public static final String CU_CRID="current user crid";
+	public static final String CU_CUR_MAK = "current user current MAK";
+	public static final String CU_EKEY = "current user current EKEY";
+	public static final String CU_OLD_MAK = "current user OLD MAK";
+	
+	 public CurrentUser(){
+	      
+     }
+     // constructor
+     public CurrentUser(int id,int crid, String Cur_Mak, String Cur_Ekey, String Old_Mak/*,ArrayList<Channel> Chlist*/){
+         this.id      = id;
+         this.crid=crid;
+         this.Cur_Mak    = Cur_Mak;
+         this.Cur_Ekey    = Cur_Ekey;
+         this.Old_Mak = Old_Mak;
+        // this.Chlist=Chlist;
+          
+     }
 
 	public static int getId() {
 		return id;
@@ -22,35 +38,42 @@ public class CurrentUser {
 		CurrentUser.id = id;
 	}
 
-	public static String getEmail_id() {
-		return email_id;
+	public String getCur_Mak() {
+		return Cur_Mak;
+	}
+	public int getcrid() {
+		return crid;
 	}
 
-	public static void setEmail_id(String email_id) {
-		CurrentUser.email_id = email_id;
+	public static void setcrid(int crid) {
+		CurrentUser.crid = crid;
 	}
 
-	public static String getName() {
-		return name;
+	public static void setCur_Mak(String Cur_Mak) {
+		CurrentUser.Cur_Mak = Cur_Mak;
 	}
 
-	public static void setName(String name) {
-		CurrentUser.name = name;
+	public String getCur_Ekey() {
+		return Cur_Ekey;
 	}
 
-	public static String getPh_no() {
-		return ph_no;
+	public static void setCur_Ekey(String Cur_Ekey) {
+		CurrentUser.Cur_Ekey = Cur_Ekey;
 	}
 
-	public static void setPh_no(String ph_no) {
-		CurrentUser.ph_no = ph_no;
+	public String getOld_Mak() {
+		return Old_Mak;
+	}
+
+	public static void setOld_Mak(String Old_Mak) {
+		CurrentUser.Old_Mak = Old_Mak;
 	}
 	
 	public JSONObject toJSON() throws JSONException {
     	JSONObject json = new JSONObject();
-    	json.put(U_EMAIL_ID, email_id);
-    	json.put(U_NAME, name);
-    	json.put(U_PH_NO, ph_no);
+    	json.put(CU_CUR_MAK, Cur_Mak);
+    	json.put(CU_EKEY, Cur_Ekey);
+    	json.put(CU_OLD_MAK, Old_Mak);
     	
     	return json;
     }

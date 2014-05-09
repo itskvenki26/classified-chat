@@ -8,5 +8,6 @@
     <string name="title_activity_posts_view">Posts</string>
     <string name="comments_view">Comments1</string>
     <string name="posts_list">posts</string>
+     <string name="back">back</string>
 
 </resources>

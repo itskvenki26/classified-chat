@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.cs9033.classified.R;
+
 import Models.Channel;
 import Models.ChatRoom_Profile;
 import Models.ChatRooms;
@@ -20,6 +22,7 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 
 public class ChatRoomsDBAdapter {
@@ -36,6 +39,11 @@ public class ChatRoomsDBAdapter {
 	public static final String U_NAME = "user_name";
 	public static final String U_PH_NO = "user_phone_num";
 	public static final String U_CHANNELS="list of user channels";
+	
+	public static final String CU_CUR_MAK = "current user current MAK";
+	public static final String CU_EKEY = "current user current EKEY";
+	public static final String CU_OLD_MAK = "current user OLD MAK";
+	public static final String CU_CRID="current user crid";
 
 	public static final String P_CREATOR = "creator";
 	public static final String P_CR_ID ="chat room it belongs to";
@@ -97,6 +105,7 @@ public class ChatRoomsDBAdapter {
 	public static final String TABLE_CHANNELS ="tbl_channels";
 	public static final String TABLE_MESSAGEQ= "tbl_message";
 	public static final String TABLE_MYCHANNELS="tbl_mychannels";
+	public static final String TABLE_CURRENT_USER="tbl_current_user";
 
 	/*** Set all table with comma seperated like USER_TABLE,ABC_TABLE ***/
 	private static final String[] ALL_TABLES = { TABLE_USER, TABLE_POSTS,
@@ -111,8 +120,16 @@ public class ChatRoomsDBAdapter {
 	public static final String[] ALL_CRP={CRP_CRID,CRP_MAC_CUR,CRP_MAC_OLD,KEY_ID};
 	public static final String[] ALL_CHANNELS= {CH_U_ID,CH_TYPE,CH_PH_NUM,CH_TIME,CH_PREF,KEY_ID };
 	public static final String[] ALL_MESSAGES= {M_U_ID,M_CR_ID,M_CH_ID,M_ENC_MSG,M_TIME,KEY_ID};
-	public static final String[] ALL_MYCHANNELs={MCH_HOST,MCH_SERVICE,MCH_USR_NAME,MCH_PWD,KEY_ID};
+	public static final String[] ALL_MYCHANNELS={MCH_HOST,MCH_SERVICE,MCH_USR_NAME,MCH_PWD,KEY_ID};
+	public static final String[] ALL_USERS ={U_EMAIL_ID,U_NAME,U_PH_NO,KEY_ID};
+	//public static final String[] ALL_CU
 	/** Create table syntax */
+	
+	private static final String CURRENT_USER_CREATE = "create table " + TABLE_CURRENT_USER
+			+ " (" + KEY_ID + " integer primary key autoincrement,  "
+			+CU_CRID + " integer not null,  "
+			+ CU_CUR_MAK + "  text not null, " + CU_EKEY + "  text not null, "
+			+ CU_OLD_MAK + "  text not null);";
 
 	private static final String USER_CREATE = "create table " + TABLE_USER
 			+ " (" + KEY_ID + " integer primary key autoincrement,  "
@@ -172,6 +189,22 @@ public class ChatRoomsDBAdapter {
 	private DataBaseHelper DBHelper = null;
 
 	private Context context;
+	
+	public String[] getColsAllUsers() {
+		return ALL_USERS;
+	}
+	public String[] getColsAllChatRooms() {
+	return ALL_CR;
+	}
+	public String[] getColsAllPosts() {
+		return ALL_POSTS;
+	}
+	public String[] getColsAllComments() {
+		return ALL_COMMENTS;
+	}
+	public String[] getColsAllChannels() {
+		return ALL_CHANNELS;
+	}
 
 	@SuppressWarnings("unused")
 	private ChatRoomsDBAdapter() {
@@ -210,6 +243,7 @@ public class ChatRoomsDBAdapter {
 				db.execSQL(MESSAGEQ_CREATE);
 				db.execSQL(MYCHANNELS_CREATE);
 				db.execSQL(CRP_CREATE);
+				db.execSQL(CURRENT_USER_CREATE);
 			} catch (Exception exception) {
 				if (DEBUG)
 					Log.i(TAG, "Exception onCreate() exception");
@@ -258,6 +292,47 @@ public class ChatRoomsDBAdapter {
 	 */
 
 	// Adding new user
+	
+	
+	public void addCurrentUserData(CurrentUser cu) {
+		try {
+			final SQLiteDatabase db = open();
+            int crid=sqlEscapeString(cu.getcrid());
+			String curmak = sqlEscapeString(cu.getCur_Mak());
+			String curkey = sqlEscapeString(cu.getCur_Ekey());
+			String oldmak = sqlEscapeString(cu.getOld_Mak());
+			//ArrayList<Channel> Chlist =uData.getChlist();
+			
+			ContentValues cVal = new ContentValues();
+			cVal.put(CU_CRID,crid);
+			cVal.put(CU_CUR_MAK, curmak);
+			cVal.put(CU_EKEY, curkey);
+			cVal.put(CU_OLD_MAK, oldmak);
+			//for(Channel c:Chlist)
+			//{
+			//cVal.put(U_CHANNELS, Chlist);
+			//}
+			db.insert(TABLE_USER, null, cVal);
+			db.close(); // Closing database connection
+		} catch (Throwable t) {
+			Log.i("Database", "Exception caught: " + t.getMessage(), t);
+		}
+	}
+	
+	public CurrentUser getCurrentUserData(int id) {
+		final SQLiteDatabase db = open();
+
+		Cursor cursor = db.query(TABLE_CURRENT_USER, new String[] { KEY_ID, CU_CRID,
+				CU_CUR_MAK, CU_EKEY, CU_OLD_MAK}, KEY_ID + "=?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
+		if (cursor != null)
+			cursor.moveToFirst();
+
+		CurrentUser data = new CurrentUser(Integer.parseInt(cursor.getString(0)),Integer.parseInt(cursor.getString(1)),
+				cursor.getString(2), cursor.getString(3), cursor.getString(4));
+		// return contact
+		return data;
+	}
 
 	public void addUserData(UserData uData) {
 		try {
@@ -299,7 +374,28 @@ public class ChatRoomsDBAdapter {
 		return data;
 	}
 	
+	public void getAllUsers(){
+		UserData usr = new UserData();
+
+        final SQLiteDatabase db = open();
+
+		String from[] = getColsAllUsers();
+		int to[] = new int[]{};
+		
+		Cursor c = db.query(TABLE_USER,ALL_USERS,null,null,null,null,null);
+		
+		
+		
+		//SimpleCursorAdapter sca = new SimpleCursorAdapter(this, R.layout.fragment_users, c, from, to, 0);
+		//setListAdapter(sca);
 	
+	}
+	
+	private void setListAdapter(SimpleCursorAdapter sca) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void addMessage(MessageQ msg) {
 		try {
 			if (DBHelper == null) {
