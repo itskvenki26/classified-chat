@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBAdapter extends SQLiteOpenHelper {
 
 	public static final String DATABASE_NAME = "DB_sqllite";
-
 	
 	public static final int DATABASE_VERSION = 1;
 	

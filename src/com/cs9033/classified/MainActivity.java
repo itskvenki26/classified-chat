@@ -12,6 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+
+import com.cs9033.classified.controllers.MessagePollService;
+import com.cs9033.classified.controllers.SendMessage;
+import com.cs9033.classified.demo.DemoKeys;
+import com.cs9033.classified.demo.DemoPost;
+import com.cs9033.classified.demo.DemoXKeys;
 
 public class MainActivity extends Activity implements OnClickListener {
 
@@ -28,8 +35,17 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 		((Button) findViewById(R.id.go_to_posts_view)).setOnClickListener(this);
-		((Button) findViewById(R.id.go_to_commentss_view))
-				.setOnClickListener(this);
+		((Button) findViewById(R.id.go_to_keys_view)).setOnClickListener(this);
+		((Button) findViewById(R.id.go_to_xkeys_view)).setOnClickListener(this);
+		// ((Button) findViewById(R.id.go_to_comments_view))
+		// .setOnClickListener(this);
+		(new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				MessagePollService.start();
+			}
+		})).start();
 
 	}
 
@@ -59,13 +75,26 @@ public class MainActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.go_to_posts_view:
 			Log.d(TAG, "go_to_posts_view Button Clicked");
-			intent = new Intent(this, PostsActivity.class);
+			intent = new Intent(this, DemoPost.class);
 			break;
-		case R.id.go_to_commentss_view:
-			Log.d(TAG, "go_to_posts_view Button Clicked");
-			intent = new Intent(this, CommentsActivity.class);
+		case R.id.go_to_keys_view:
+			Log.d(TAG, "go_to_keys_view Button Clicked");
+			intent = new Intent(this, DemoKeys.class);
 			// startActivity(intent);
 			break;
+		case R.id.go_to_xkeys_view:
+			Log.d(TAG, "go_to_xkeys_view Button Clicked");
+			intent = new Intent(this, DemoXKeys.class);
+			break;
+		case R.id.main_button1:
+			Log.d(TAG, "Clicked");
+			EditText txt = ((EditText) findViewById(R.id.main_edit_text));
+			String msg = txt.getText().toString();
+
+			intent = new Intent(this, SendMessage.class);
+			intent.putExtra("message", msg);
+			startService(intent);
+			return;
 		default:
 			return;
 
@@ -86,8 +115,13 @@ public class MainActivity extends Activity implements OnClickListener {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
+
+			((Button) rootView.findViewById(R.id.main_button1))
+					.setOnClickListener((MainActivity) getActivity());
+
 			return rootView;
 		}
+
 	}
 
 }

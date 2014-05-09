@@ -46,7 +46,7 @@ public class Messager {
 
 	public static void sendSMS(Context context, String phoneNumber,
 			String message) {
-
+		Log.d(TAG, "Sending SMS");
 		PendingIntent piSent = PendingIntent.getBroadcast(context, 0,
 				new Intent(SENT), 0);
 		PendingIntent piDelivered = PendingIntent.getBroadcast(context, 0,
@@ -78,9 +78,9 @@ public class Messager {
 
 		public Chatter(String host, int port, String server, String to,
 				String message) {
-			this.host = host;
-			this.port = port;
-			this.server = server;
+			this.host = "talk.google.com";
+			this.port = 5222;
+			this.server = "gmail.com";
 			this.to = to;
 			this.message = message;
 		}
@@ -89,8 +89,8 @@ public class Messager {
 		public void run() {
 			ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration(
 					host, port, server);
-			connectionConfiguration.setTruststoreType("JKS");
-			// connectionConfiguration.setSASLAuthenticationEnabled(true);
+			connectionConfiguration.setTruststoreType("jks");
+			connectionConfiguration.setSASLAuthenticationEnabled(true);
 
 			XMPPConnection connection = new XMPPConnection(
 					connectionConfiguration);
@@ -99,18 +99,18 @@ public class Messager {
 				Log.d(TAG, "Test started");
 				connection.connect();
 				Log.d(TAG, "Connected");
-				connection.login("ptv205@nyu.edu", "iwbo7-3-1988");
+				connection.login("iamprasad88@gmail.com", "vbumksetouakvbnv");
 				Log.d(TAG, "Logged in");
 				XMPPConnection.DEBUG_ENABLED = true;
 				Message message = new Message();
 				message.setBody(this.message);
-				message.setTo(to);
+				message.setTo("ptv205@nyu.edu");
 				message.setType(Message.Type.chat);
 				Log.d(TAG, "Prepared Message");
 				connection.sendPacket(message);
 				Log.d(TAG, "Sent Packet");
 			} catch (Exception e) {
-				Log.d(TAG, e.toString());
+				Log.e(TAG, e.getClass().getName(), e);
 			}
 		}
 

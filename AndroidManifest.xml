@@ -49,6 +49,20 @@
         </receiver>
 
         <service android:name="com.cs9033.classified.controllers.MessagePollService" />
+        <service android:name="com.cs9033.classified.controllers.SendMessage" />
+
+        <activity
+            android:name="com.cs9033.classified.demo.DemoPost"
+            android:label="@string/title_activity_demo_post" >
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.demo.DemoKeys"
+            android:label="@string/title_activity_demo_keys" >
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.demo.DemoXKeys"
+            android:label="@string/title_activity_demo_xkeys" >
+        </activity>
     </application>
 
 </manifest>

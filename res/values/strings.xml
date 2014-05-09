@@ -8,6 +8,12 @@
     <string name="title_activity_posts_view">Posts</string>
     <string name="comments_view">Comments1</string>
     <string name="posts_list">posts</string>
+
      <string name="back">back</string>
+
+    <string name="title_activity_demo_post">DemoPost</string>
+    <string name="title_activity_demo_keys">DemoKeys</string>
+    <string name="title_activity_demo_xkeys">DemoXKeys</string>
+
 
 </resources>
