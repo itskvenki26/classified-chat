@@ -6,5 +6,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/asmack-android-19-0.8.10.jar"/>
+	<classpathentry kind="lib" path="libs/commons-codec-1.9.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/D:/commons-codec-1.9-bin/commons-codec-1.9/commons-codec-1.9-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -29,7 +29,7 @@ public class SMSReceiver extends BroadcastReceiver {
 				msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
 				number = msgs[i].getOriginatingAddress();
 				str += msgs[i].getMessageBody().toString();
-				str += "\n";
+				// str += "\n";
 			}
 
 			// Toast.makeText(context, address + ":" + str, Toast.LENGTH_LONG)

@@ -1,28 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.cs9033.classified.MainActivity"
     tools:ignore="MergeRootFrame" >
 
     <Button
         android:id="@+id/go_to_posts_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="138dp"
-        android:layout_marginLeft="23dp"
         android:text="Go To Posts View" />
 
     <Button
-        android:id="@+id/go_to_commentss_view"
-        android:layout_width="wrap_content"
+        android:id="@+id/go_to_keys_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/go_to_posts_view"
-        android:layout_alignTop="@+id/go_to_posts_view"
-        android:layout_marginTop="60dp"
-        android:text="Go To Comments View" />
+        android:text="Show Keys" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/go_to_xkeys_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show eXchange Keys" />
+
+</LinearLayout>

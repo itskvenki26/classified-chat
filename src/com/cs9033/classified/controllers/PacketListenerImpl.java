@@ -4,18 +4,29 @@ import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 
+import com.cs9033.classified.adapters.DemoDBAdapter;
+
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class PacketListenerImpl implements PacketListener {
 	public static final String TAG = "PacketListenerImpl";
+	private Context context;
 
 	@Override
 	public void processPacket(Packet packet) {
 		Message message = (Message) packet;
 		message.setLanguage(Message.getDefaultLanguage());
+		String from = message.getFrom();
 		String body = message.getBody();
 		if (body != null) {
-			String from = message.getFrom();
+			Intent broadcastIntent = new Intent(context,
+					MessagePollService.class);
+			broadcastIntent.setAction(MessagePollService.CHAT_RECEIVED_ACTION);
+			broadcastIntent.putExtra("chat", body);
+			broadcastIntent.putExtra("from", from);
+			context.startService(broadcastIntent);
 			Log.d(TAG, from + ":" + body);
 
 			// Toast.makeText(MainActivity.this, from + ":" + body,
