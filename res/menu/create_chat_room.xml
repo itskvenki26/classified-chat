@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.cs9033.classified.CreateChatRoomActivity" >
+
+    <item
+        android:id="@+id/create_chatroom_menu_save_chatroom"
+        android:icon="@drawable/ic_action_save"
+        android:showAsAction="always"
+        android:title="@string/save_chat_room"/>
+
+</menu>

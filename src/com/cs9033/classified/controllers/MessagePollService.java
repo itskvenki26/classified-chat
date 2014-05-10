@@ -1,6 +1,7 @@
 package com.cs9033.classified.controllers;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
@@ -77,7 +78,9 @@ public class MessagePollService extends IntentService {
 				XMPPConnection.DEBUG_ENABLED = true;
 
 				PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
-				connection.addPacketListener(new PacketListenerImpl(), filter);
+				PacketListenerImpl listenerImpl = new PacketListenerImpl();
+				connection.addPacketListener(listenerImpl, filter);
+//				listenerImpl.
 				Log.d(TAG, "Added Packet Listener");
 				// manager = new FileTransferManager(connection);
 				// manager.addFileTransferListener(this);

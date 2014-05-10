@@ -8,21 +8,21 @@
     tools:ignore="MergeRootFrame" >
 
     <Button
-        android:id="@+id/go_to_posts_view"
+        android:id="@+id/go_to_create_chat_room_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Go To Posts View" />
+        android:text="@string/create_chat_room" />
 
     <Button
-        android:id="@+id/go_to_keys_view"
+        android:id="@+id/go_to_show_chat_room_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show Keys" />
+        android:text="@string/show_chat_room" />
 
     <Button
-        android:id="@+id/go_to_xkeys_view"
+        android:id="@+id/go_to_join_chat_room_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show eXchange Keys" />
+        android:text="@string/join_chat_room" />
 
 </LinearLayout>

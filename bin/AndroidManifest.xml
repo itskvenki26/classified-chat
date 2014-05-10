@@ -27,11 +27,15 @@
         <activity
             android:name="com.cs9033.classified.MainActivity"
             android:label="@string/app_name" >
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>
+            -->
+
         </activity>
         <activity
             android:name="com.cs9033.classified.CommentsActivity"
@@ -40,6 +44,11 @@
         <activity
             android:name="com.cs9033.classified.PostsActivity"
             android:label="@string/title_activity_posts_view" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <receiver android:name="com.cs9033.classified.controllers.SMSReceiver" >
@@ -62,6 +71,28 @@
         <activity
             android:name="com.cs9033.classified.demo.DemoXKeys"
             android:label="@string/title_activity_demo_xkeys" >
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.ClassifiedChatRoomsActivity"
+            android:label="@string/title_activity_classified_chat_rooms" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.CreateChatRoomActivity"
+            android:label="@string/title_activity_create_chat_room" >
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.ChatRoomDetailActivity"
+            android:label="@string/title_activity_chat_room_detail" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

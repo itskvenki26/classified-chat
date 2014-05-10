@@ -34,9 +34,12 @@ public class MainActivity extends Activity implements OnClickListener {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 
-		((Button) findViewById(R.id.go_to_posts_view)).setOnClickListener(this);
-		((Button) findViewById(R.id.go_to_keys_view)).setOnClickListener(this);
-		((Button) findViewById(R.id.go_to_xkeys_view)).setOnClickListener(this);
+		((Button) findViewById(R.id.go_to_create_chat_room_view))
+				.setOnClickListener(this);
+		((Button) findViewById(R.id.go_to_show_chat_room_view))
+				.setOnClickListener(this);
+		((Button) findViewById(R.id.go_to_join_chat_room_view))
+				.setOnClickListener(this);
 		// ((Button) findViewById(R.id.go_to_comments_view))
 		// .setOnClickListener(this);
 		(new Thread(new Runnable() {
@@ -73,16 +76,16 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		Intent intent;
 		switch (v.getId()) {
-		case R.id.go_to_posts_view:
+		case R.id.go_to_create_chat_room_view:
 			Log.d(TAG, "go_to_posts_view Button Clicked");
 			intent = new Intent(this, DemoPost.class);
 			break;
-		case R.id.go_to_keys_view:
+		case R.id.go_to_show_chat_room_view:
 			Log.d(TAG, "go_to_keys_view Button Clicked");
 			intent = new Intent(this, DemoKeys.class);
 			// startActivity(intent);
 			break;
-		case R.id.go_to_xkeys_view:
+		case R.id.go_to_join_chat_room_view:
 			Log.d(TAG, "go_to_xkeys_view Button Clicked");
 			intent = new Intent(this, DemoXKeys.class);
 			break;

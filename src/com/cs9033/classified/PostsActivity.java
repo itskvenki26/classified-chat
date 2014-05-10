@@ -1,15 +1,23 @@
 package com.cs9033.classified;
 
-import Fragments.PostsFragment;
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 public class PostsActivity extends Activity {
 
 	private static final String TAG = "PostsActivity";
+
+	ShowCommentsFragment showCommentsFragment;
+	AddCommentsFragment addCommentsFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +29,14 @@ public class PostsActivity extends Activity {
 		Log.d(TAG, "onCreate: inflated view");
 
 		if (savedInstanceState == null) {
-			Log.d(TAG, "onCreate: checked instance state");
-			getFragmentManager().beginTransaction()
-					.add(R.id.activity_posts, new PostsFragment()).commit();
+			showCommentsFragment = new ShowCommentsFragment();
+			addCommentsFragment = new AddCommentsFragment();
+			getFragmentManager()
+					.beginTransaction()
+					.add(R.id.activity_posts_show_comments_scroll_view,
+							showCommentsFragment)
+					.add(R.id.activity_posts_add_comments_scroll_view,
+							addCommentsFragment).commit();
 			Log.d(TAG, "onCreate: added Fragment");
 		}
 		Log.d(TAG, "onCreate: return");
@@ -54,5 +67,51 @@ public class PostsActivity extends Activity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
+	public static class ShowCommentsFragment extends Fragment {
 
+		public ShowCommentsFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(
+					R.layout.fragment_show_comments_view, container, false);
+			// Load adapter with posts of current chat room
+
+			return rootView;
+		}
+	}
+
+	public static class AddCommentsFragment extends Fragment implements
+			OnClickListener {
+		ImageButton button;
+
+		public AddCommentsFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(
+					R.layout.fragment_add_comment_view, container, false);
+			button = (ImageButton) rootView
+					.findViewById(R.id.add_comment_button);
+			button.setOnClickListener(this);
+			// Load adapter with posts of current chat room
+
+			return rootView;
+		}
+
+		@Override
+		public void onClick(View v) {
+			int id = v.getId();
+
+			switch (id) {
+			case R.id.add_comment_button:
+				// Check the comment and add it to comments table
+				break;
+			}
+		}
+	}
 }

@@ -4,10 +4,6 @@ import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 
-import com.cs9033.classified.adapters.DemoDBAdapter;
-
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class PacketListenerImpl implements PacketListener {

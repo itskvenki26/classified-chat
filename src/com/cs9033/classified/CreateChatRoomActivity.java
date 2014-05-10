@@ -1,29 +1,27 @@
 package com.cs9033.classified;
 
-import Fragments.CommentsFragment;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-public class CommentsActivity extends Activity {
+public class CreateChatRoomActivity extends Activity {
+	public static final String TAG = "CreateChatRoomActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_comments_view);
+		setContentView(R.layout.activity_create_chat_room);
 
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new CommentsFragment()).commit();
-		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.comments_view, menu);
+		getMenuInflater().inflate(R.menu.create_chat_room, menu);
 		return true;
 	}
 
@@ -33,9 +31,23 @@ public class CommentsActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.create_chatroom_menu_save_chatroom) {
+			try {
+				// Create and save new chatroom
+
+				Toast.makeText(this, "Chatroom Created successfully",
+						Toast.LENGTH_SHORT).show();
+
+			} catch (Exception e) {
+				Toast.makeText(this, "Chatroom cannot be created",
+						Toast.LENGTH_SHORT).show();
+				Log.e(TAG, e.getClass().getName(), e);
+			} finally {
+				finish();
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }
