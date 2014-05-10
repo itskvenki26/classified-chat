@@ -4,16 +4,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
  public  class Posts {
      
-	    public static final String P_CREATOR = "creator";
+	   // public static final String P_CREATOR = "creator";
 		public static final String P_CR_ID ="chat room it belongs to";
 		public static final String P_TITLE= "title";
-		public static final String P_TIME = "time";
+		//public static final String P_TIME = "time";
 		public static final String P_MSG = "message";
         //private variables
         int id;
         int CR_id;
-        String creator;
-        String time;
+        //String creator;
+        //String time;
         String message;
         String title;
          
@@ -22,12 +22,10 @@ import org.json.JSONObject;
       
         }
         // constructor
-        public Posts(int id, int CR_id, String title,String creator, String time, String message){
+        public Posts(int id, int CR_id, String title, String message){
             this.id      = id;
             this.CR_id   = CR_id;  
-            this.title   = title;
-            this.creator = creator;
-            this.time    = time;
+            this.title   = title;            
             this.message = message;            
              
         }
@@ -57,25 +55,25 @@ import org.json.JSONObject;
         }
       
       
-        // getting imei
-        public String getCREATOR(){
-            return this.creator;
-        }
-      
-        // setting imei
-        public void setCREATOR(String creator){
-            this.creator = creator;
-        }
-         
-        // getting name
-        public String getTIME(){
-            return this.time;
-        }
-      
-        // setting name
-        public void setTime(String time){
-            this.time = time;
-        }
+//        // getting imei
+//        public String getCREATOR(){
+//            return this.creator;
+//        }
+//      
+//        // setting imei
+//        public void setCREATOR(String creator){
+//            this.creator = creator;
+//        }
+//         
+//        // getting name
+//        public String getTIME(){
+//            return this.time;
+//        }
+//      
+//        // setting name
+//        public void setTime(String time){
+//            this.time = time;
+//        }
          
         // getting Message
         public String getMessage(){
@@ -89,10 +87,10 @@ import org.json.JSONObject;
         
         public JSONObject toJSON() throws JSONException {
         	JSONObject json = new JSONObject();
-        	json.put(P_CREATOR, creator);
+        	//json.put(P_CREATOR, creator);
         	json.put(P_CR_ID, CR_id);
         	json.put(P_TITLE, title);
-        	json.put(P_TIME,time);
+        	//json.put(P_TIME,time);
         	json.put(P_MSG, message);
         	return json;
         }
@@ -102,7 +100,7 @@ import org.json.JSONObject;
          */
         @Override
         public String toString() {
-            return "PostInfo [time=" +creator+'\t' +time + "]";
+            return "PostInfo [time=" +title + "]";
         }
          
     }
