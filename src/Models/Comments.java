@@ -8,15 +8,15 @@ import org.json.JSONObject;
         int id;
         int P_id;
         int CR_id;
-        String creator;
-        String time;
+       // String creator;
+        //String time;
         String message;
-        int post_id;
+       // int post_id;
         
         public static final String C_P_ID= "post id comment belongs to"; 
     	public static final String C_CR_ID= "chat room comment belongs to";
-    	public static final String C_CREATOR = "comment_creator";
-    	public static final String C_TIME = "comment_time";
+    	//public static final String C_CREATOR = "comment_creator";
+    	//public static final String C_TIME = "comment_time";
     	public static final String C_MSG = "comment_message";
          
         // Empty constructor
@@ -24,12 +24,12 @@ import org.json.JSONObject;
       
         }
         // constructor
-        public Comments(int id, int P_id,int CR_id,String creator, String time, String message){
+        public Comments(int id, int P_id,int CR_id, String message){
             this.id      = id;
             this.P_id = P_id;
             this.CR_id = CR_id;
-            this.creator    = creator;
-            this.time    = time;
+           // this.creator    = creator;
+           // this.time    = time;
             this.message = message;
            // this.post_id= post_id;
              
@@ -65,24 +65,24 @@ import org.json.JSONObject;
         }
       
         // getting imei
-        public String getCREATOR(){
-            return this.creator;
-        }
-      
-        // setting imei
-        public void setCREATOR(String creator){
-            this.creator = creator;
-        }
-         
-        // getting name
-        public String getTIME(){
-            return this.time;
-        }
-      
-        // setting name
-        public void setTime(String time){
-            this.time = time;
-        }
+//        public String getCREATOR(){
+//            return this.creator;
+//        }
+//      
+//        // setting imei
+//        public void setCREATOR(String creator){
+//            this.creator = creator;
+//        }
+//         
+//        // getting name
+//        public String getTIME(){
+//            return this.time;
+//        }
+//      
+//        // setting name
+//        public void setTime(String time){
+//            this.time = time;
+//        }
          
         // getting Message
         public String getMessage(){
@@ -98,8 +98,8 @@ import org.json.JSONObject;
         	JSONObject json = new JSONObject();
         	json.put(C_P_ID, P_id);
         	json.put(C_CR_ID, CR_id);
-        	json.put(C_CREATOR, creator);
-        	json.put(C_TIME,time);
+        	//json.put(C_CREATOR, creator);
+        	//json.put(C_TIME,time);
         	json.put(C_MSG, message);
         	return json;
         }
@@ -109,7 +109,7 @@ import org.json.JSONObject;
          */
         @Override
         public String toString() {
-            return "CommentInfo [time=" +creator+'\t' +time +'\t'+ post_id+ "]";
+            return "CommentInfo [time=" +message+ "]";
         }
          
     }
