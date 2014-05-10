@@ -1,5 +1,7 @@
 package com.cs9033.classified;
 
+import com.cs9033.classified.create.CreateChatRoomActivity;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -25,6 +27,7 @@ public class ClassifiedChatRoomsActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, showChatRoomFragment).commit();
 		}
+
 	}
 
 	@Override

@@ -11,7 +11,7 @@
         android:id="@+id/go_to_create_chat_room_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_chat_room" />
+        android:text="@string/title_activity_create_chat_room" />
 
     <Button
         android:id="@+id/go_to_show_chat_room_view"

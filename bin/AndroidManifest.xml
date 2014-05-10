@@ -33,7 +33,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>
             -->
 
         </activity>
@@ -82,7 +82,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cs9033.classified.CreateChatRoomActivity"
+            android:name="com.cs9033.classified.create.CreateChatRoomActivity"
             android:label="@string/title_activity_create_chat_room" >
         </activity>
         <activity
@@ -93,6 +93,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.create.CreatePostActivity"
+            android:label="@string/title_activity_create_post" >
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.UsersActivity"
+            android:label="@string/title_activity_users" >
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.create.AddUserActivity"
+            android:label="@string/title_activity_add_user" >
         </activity>
     </application>
 

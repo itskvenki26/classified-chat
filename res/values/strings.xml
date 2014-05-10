@@ -10,9 +10,10 @@
     <string name="title_activity_demo_post">DemoPost</string>
     <string name="title_activity_demo_keys">DemoKeys</string>
     <string name="title_activity_demo_xkeys">DemoXKeys</string>
-    <string name="title_activity_classified_chat_rooms">Classified Chat Rooms</string>
+    <string name="title_activity_classified_chat_rooms">Chat Rooms</string>
     <string name="title_activity_create_chat_room">Create Chat Room</string>
     <string name="title_activity_chat_room_detail">Chat Room</string>
+    <string name="title_activity_create_post">Add Post</string>
 
     <!-- Generic Strings -->
     <string name="blank" />
@@ -20,17 +21,23 @@
     <string name="desc">Description</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="initiate_add_user">Initiate Add User</string>
+    <string name="verify_add_user_key">Verify Key</string>
 
     <!-- Common Strings -->
     <string name="posts_list">Posts</string>
-    <string name="create_chat_room">Create Chat Room</string>
     <string name="show_chat_room">Show Chat Room</string>
     <string name="join_chat_room">Join Chat Room</string>
     <string name="save_chat_room">Save Chat Room</string>
     <string name="view_users">View Users</string>
     <string name="add_user">Add User</string>
     <string name="view_post">View Post</string>
-    <string name="add_post">Add Post</string>
     <string name="add_comment">Add Comment</string>
+
+    <!-- Unused Strings -->
+    <!-- <string name="create_chat_room">Create Chat Room</string> -->
+    <!-- <string name="add_post">Add Post</string> -->
+    <string name="title_activity_users">Users</string>
+    <string name="title_activity_add_user">Add User</string>
 
 </resources>

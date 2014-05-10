@@ -11,11 +11,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class PostsActivity extends Activity {
 
 	private static final String TAG = "PostsActivity";
-
+	long crID;
+	String crName;
+	long pID;
+	String pName;
 	ShowCommentsFragment showCommentsFragment;
 	AddCommentsFragment addCommentsFragment;
 
@@ -29,15 +33,32 @@ public class PostsActivity extends Activity {
 		Log.d(TAG, "onCreate: inflated view");
 
 		if (savedInstanceState == null) {
-			showCommentsFragment = new ShowCommentsFragment();
-			addCommentsFragment = new AddCommentsFragment();
-			getFragmentManager()
-					.beginTransaction()
-					.add(R.id.activity_posts_show_comments_scroll_view,
-							showCommentsFragment)
-					.add(R.id.activity_posts_add_comments_scroll_view,
-							addCommentsFragment).commit();
-			Log.d(TAG, "onCreate: added Fragment");
+			Bundle extras = getIntent().getExtras();
+
+			String chatRoomName = "Test";
+			if (extras != null) {
+				chatRoomName = extras.getString("ChatRoomName", null);
+			}
+			Log.d(TAG, "Chatroom Name = " + chatRoomName);
+			if (chatRoomName != null) {
+				crName = chatRoomName;
+				crID = extras.getLong("CRID");
+				pID = extras.getLong("PID");
+				pName = extras.getString("PName");
+				setTitle(pName + ":" + getTitle());
+				showCommentsFragment = new ShowCommentsFragment();
+				addCommentsFragment = new AddCommentsFragment();
+				getFragmentManager()
+						.beginTransaction()
+						.add(R.id.activity_posts_show_comments_scroll_view,
+								showCommentsFragment)
+						.add(R.id.activity_posts_add_comments_scroll_view,
+								addCommentsFragment).commit();
+			} else {
+				Toast.makeText(this, "Chat Room does not exist",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
 		}
 		Log.d(TAG, "onCreate: return");
 		// Messager.sendSMS(this, "+13476561714", "Test Message");

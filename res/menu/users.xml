@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.cs9033.classified.UsersActivity" >
+
+    <item
+        android:id="@+id/users_menu_add_user"
+        android:icon="@drawable/ic_action_add_person"
+        android:showAsAction="always"
+        android:title="@string/add_user"/>
+
+</menu>

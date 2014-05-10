@@ -13,17 +13,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cs9033.classified.create.AddUserActivity;
-import com.cs9033.classified.create.CreatePostActivity;
 
-public class ChatRoomDetailActivity extends Activity {
-	private static final String TAG = "ChatRoomDetailActivity";
+public class UsersActivity extends Activity {
+	private static final String TAG = "UsersActivity";
 	long crID;
 	String crName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_chat_room_detail);
+		setContentView(R.layout.activity_users);
 
 		if (savedInstanceState == null) {
 			Bundle extras = getIntent().getExtras();
@@ -38,7 +37,7 @@ public class ChatRoomDetailActivity extends Activity {
 				crID = extras.getLong("CRID");
 				setTitle(chatRoomName + ":" + getTitle());
 				getFragmentManager().beginTransaction()
-						.add(R.id.container, new ShowPostsFragment()).commit();
+						.add(R.id.container, new ShowUsersFragment()).commit();
 			} else {
 				Toast.makeText(this, "Chat Room does not exist",
 						Toast.LENGTH_SHORT).show();
@@ -51,7 +50,7 @@ public class ChatRoomDetailActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.chat_room_detail, menu);
+		getMenuInflater().inflate(R.menu.users, menu);
 		return true;
 	}
 
@@ -63,24 +62,14 @@ public class ChatRoomDetailActivity extends Activity {
 		int id = item.getItemId();
 		Intent intent = null;
 		switch (id) {
-
-		case R.id.chatroom_detail_menu_add_post:
-			// Go to Add Posts view
-			intent = (new Intent(this, CreatePostActivity.class)).putExtra(
-					"CRID", crID).putExtra("CRName", crName);
-			break;
-		case R.id.chatroom_detail_menu_add_user:
-			// Go to Add User view
+		case R.id.users_menu_add_user:
 			intent = (new Intent(this, AddUserActivity.class)).putExtra("CRID",
 					crID).putExtra("CRName", crName);
 			break;
-		case R.id.chatroom_detail_menu_view_users:
-			// List all users for current chat room
-			intent = (new Intent(this, UsersActivity.class)).putExtra("CRID",
-					crID).putExtra("CRName", crName);
+
+		default:
 			break;
 		}
-
 		if (intent != null) {
 			startActivity(intent);
 		}
@@ -90,18 +79,16 @@ public class ChatRoomDetailActivity extends Activity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class ShowPostsFragment extends Fragment {
+	public static class ShowUsersFragment extends Fragment {
 
-		public ShowPostsFragment() {
+		public ShowUsersFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(
-					R.layout.fragment_chat_room_detail, container, false);
-			// Load adapter with posts of current chat room
-
+			View rootView = inflater.inflate(R.layout.fragment_users,
+					container, false);
 			return rootView;
 		}
 	}

@@ -16,6 +16,6 @@
         android:id="@+id/chatroom_detail_menu_add_post"
         android:icon="@drawable/ic_action_chat"
         android:showAsAction="always"
-        android:title="@string/add_post"/>
+        android:title="@string/title_activity_create_post"/>
 
 </menu>
