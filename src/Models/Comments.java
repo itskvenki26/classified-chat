@@ -6,8 +6,8 @@ import org.json.JSONObject;
      
         //private variables
         int id;
-        int P_id;
-        int CR_id;
+        long P_id;
+        long CR_id;
        // String creator;
         //String time;
         String message;
@@ -24,7 +24,7 @@ import org.json.JSONObject;
       
         }
         // constructor
-        public Comments(int id, int P_id,int CR_id, String message){
+        public Comments(int id, long P_id,long CR_id, String message){
             this.id      = id;
             this.P_id = P_id;
             this.CR_id = CR_id;
@@ -51,7 +51,7 @@ import org.json.JSONObject;
         }
       
         // setting imei
-        public void setP_id(int P_id){
+        public void setP_id(long P_id){
             this.P_id = P_id;
         }
         
@@ -60,8 +60,8 @@ import org.json.JSONObject;
         }
       
         // setting imei
-        public void setCR_id(int CR_id){
-            this.CR_id = CR_id;
+        public void setCR_id(long crID){
+            this.CR_id = crID;
         }
       
         // getting imei

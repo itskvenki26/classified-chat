@@ -172,12 +172,12 @@ public class ChatRoomsDBAdapter {
 	private static final String USER_CREATE = "create table " + TABLE_USER
 			+ " (" + KEY_ID + " integer primary key autoincrement,  "
 			+ U_EMAIL_ID + "  text not null, " + U_NAME + "  text not null, "
-			+ U_PH_NO + "  UNIQUE," + U_PREF_CHANNEL_ID + "integer not null);";
+			+ U_PH_NO + " text UNIQUE," + U_PREF_CHANNEL_ID + "integer not null);";
 
 	private static final String POSTS_CREATE = "create table " + TABLE_POSTS
 			+ " (" + KEY_ID + " integer primary key autoincrement,  "
 			+ P_CR_ID
-			+ "  integer not null, " +P_TITLE+ "text not null, " + P_MSG
+			+ "  integer UNIQUE, " +P_TITLE+ "text UNIQUE, " + P_MSG
 			+ "  text not null);";
 
 	private static final String COMMENTS_CREATE = "create table "
@@ -188,7 +188,7 @@ public class ChatRoomsDBAdapter {
 
 	private static final String CR_CREATE = "create table " + TABLE_CHATROOMS
 			+ "(" + KEY_ID + "integer primary key autoincrement, " + CR_NAME
-			+ "UNIQUE" + CR_TIME + "text not null"
+			+ "text UNIQUE" + CR_TIME + "text not null"
 			+ CR_DESCRIPTION + "text not null" + CR_CURRENT_MAC
 			+ "integer not null" + CR_OLD_MAC + "integer not null"
 			+ CR_CURRENT_E + " integer not null);";
@@ -369,7 +369,7 @@ public class ChatRoomsDBAdapter {
 		}
 	}
 
-	public ChatRoom_User getChatRoomUserData(int id) {
+	public ChatRoom_User getChatRoomUserData(long id) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_CR_USER, new String[] { KEY_ID,
@@ -412,7 +412,7 @@ public class ChatRoomsDBAdapter {
 	}
 
 	// Getting single user data
-	public User getUserData(int id) {
+	public User getUserData(long id) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_USER, new String[] { KEY_ID, U_EMAIL_ID,
@@ -525,7 +525,7 @@ public class ChatRoomsDBAdapter {
 		}
 	}
 
-	public User_Channel getUser_ChannelsData(int id) {
+	public User_Channel getUser_ChannelsData(long id) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_USER_CHANNEL, new String[] { KEY_ID,
@@ -578,7 +578,7 @@ public class ChatRoomsDBAdapter {
 		}
 	}
 
-	public MyProfile getMyprofileData(int id) {
+	public MyProfile getMyprofileData(long id) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_MY_PROFILE, new String[] { KEY_ID,
@@ -632,7 +632,7 @@ public class ChatRoomsDBAdapter {
 		}
 	}
 
-	public MyProfile_Channel getMyprofile_ChannelData(int id) {
+	public MyProfile_Channel getMyprofile_ChannelData(long id) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_MY_PROFILE_CHANNEL, new String[] { KEY_ID,
@@ -721,7 +721,7 @@ public class ChatRoomsDBAdapter {
 		}
 	}
 
-	public ChatRooms getChatRoomsData(int id) {
+	public ChatRooms getChatRoomsData(long id) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_CHATROOMS, new String[] { KEY_ID,
@@ -737,6 +737,24 @@ public class ChatRoomsDBAdapter {
 				cursor.getString(4), cursor.getString(5), cursor.getString(6));
 		// return contact
 		return data;
+	}
+	
+	public Cursor getChatRoomsCursor() {
+		final SQLiteDatabase db = open();
+
+		Cursor cursor = db.query(TABLE_CHATROOMS, new String[] { KEY_ID,
+				CR_CURRENT_MAC, CR_CURRENT_E, CR_OLD_MAC, CR_NAME,
+				CR_TIME, CR_DESCRIPTION },null, null,
+				null, null, null, null);
+		if (cursor != null)
+			cursor.moveToFirst();
+
+//		ChatRooms data = new ChatRooms((cursor.getInt(0)),
+//				cursor.getInt(1), cursor.getInt(2),
+//				 cursor.getInt(3),
+//				cursor.getString(4), cursor.getString(5), cursor.getString(6));
+		// return contact
+		return cursor;
 	}
 
 	public void addPostsData(Posts pt) {
@@ -786,10 +804,10 @@ public class ChatRoomsDBAdapter {
 
 	}
 
-	public Posts getPostsData(int id) {
+	public Posts getPostsData(long id) {
 		final SQLiteDatabase db = open();
 
-		Cursor cursor = db.query(TABLE_POSTS, new String[] { KEY_ID,  P_MSG }, KEY_ID + "=?",
+		Cursor cursor = db.query(TABLE_POSTS, new String[] { KEY_ID, P_TITLE, P_MSG }, KEY_ID + "=?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
@@ -799,6 +817,21 @@ public class ChatRoomsDBAdapter {
 				);
 		// return contact
 		return data;
+	}
+	
+	public Cursor getPostsCursor(long crid) {
+		final SQLiteDatabase db = open();
+
+		Cursor cursor = db.query(TABLE_POSTS, new String[] { KEY_ID, P_TITLE, P_MSG }, P_CR_ID + "=?",
+				new String[] { String.valueOf(crid) }, null, null, null, null);
+		if (cursor != null)
+			cursor.moveToFirst();
+
+//		Posts data = new Posts((cursor.getInt(0)),
+//				cursor.getInt(1), cursor.getString(2), cursor.getString(3)
+//				);
+		// return contact
+		return cursor;
 	}
 
 	public Cursor getAllPostsData() {
@@ -856,7 +889,7 @@ public class ChatRoomsDBAdapter {
 		// addCommentsData(ct);
 	}
 
-	public Comments getCommentsData(int id) {
+	public Comments getCommentsData(long id) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_COMMENTS, new String[] { KEY_ID, C_P_ID,
@@ -869,6 +902,21 @@ public class ChatRoomsDBAdapter {
 				cursor.getInt(1), cursor.getInt(2), cursor.getString(3));
 		// return contact
 		return data;
+	}
+	
+	public Cursor getCommentsCursor(long crid, long postid) {
+		final SQLiteDatabase db = open();
+
+		Cursor cursor = db.query(TABLE_COMMENTS, new String[] { KEY_ID, C_P_ID,
+				C_CR_ID, C_MSG }, C_CR_ID + "=?"+C_P_ID + "=?",new String[] { String.valueOf(crid),String.valueOf(postid) },
+				null, null, null);
+		if (cursor != null)
+			cursor.moveToFirst();
+
+//		Comments data = new Comments((cursor.getInt(0)),
+//				cursor.getInt(1), cursor.getInt(2), cursor.getString(3));
+		// return contact
+		return cursor;
 	}
 
 	public Cursor getAllCommentsData() {
