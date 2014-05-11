@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cs9033.classified.R;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.crypto.SecureMessage;
+import com.cs9033.classified.models.ChatRoom;
 
 public class CreateChatRoomActivity extends Activity {
 	public static final String TAG = "CreateChatRoomActivity";
@@ -35,6 +39,22 @@ public class CreateChatRoomActivity extends Activity {
 		try {
 			switch (id) {
 			case R.id.create_chatroom_menu_save_chatroom:
+
+				// create_chat_room_name
+				// create_chat_room_desc
+
+				ChatRoom chatRoom = new ChatRoom();
+				EditText name = (EditText) findViewById(R.id.create_chat_room_name);
+				EditText desc = (EditText) findViewById(R.id.create_chat_room_desc);
+
+				ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
+				chatRoom.setCR_name(name.getText().toString());
+				chatRoom.setDescription(desc.getText().toString());
+				chatRoom.setCurrent_e(SecureMessage.getNewEKey());
+				chatRoom.setCurrent_mac(SecureMessage.getNewMacKey());
+				chatRoom.setOld_mac(SecureMessage.getNewMacKey());
+				adapter.addChatRoomData(chatRoom);
+
 				Toast.makeText(this, "Chatroom Created successfully",
 						Toast.LENGTH_SHORT).show();
 				break;

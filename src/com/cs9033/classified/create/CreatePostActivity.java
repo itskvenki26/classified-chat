@@ -1,29 +1,33 @@
 package com.cs9033.classified.create;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cs9033.classified.R;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.models.Post;
 
 public class CreatePostActivity extends Activity {
 	public static final String TAG = "CreatePostActivity";
+
+	long crID = -1;
+	String crName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_post);
-
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+		Bundle extras = getIntent().getExtras();
+		if (extras != null && extras.containsKey("CRID")) {
+			crID = extras.getLong("CRID");
+			crName = extras.getString("CRName");
+		} else {
+			finish();
 		}
 	}
 
@@ -46,7 +50,17 @@ public class CreatePostActivity extends Activity {
 		try {
 			switch (id) {
 			case R.id.create_post_menu_save_post:
-				// Create Post
+				Post post = new Post();
+				EditText name = (EditText) findViewById(R.id.create_post_name);
+				EditText desc = (EditText) findViewById(R.id.create_post_desc);
+
+				post.setMessage(desc.getText().toString());
+				post.setTitle(name.getText().toString());
+				post.setCR_id(crID);
+				Log.d(TAG, post.toJSON().toString());
+				ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
+				adapter.addPostsData(post);
+
 				Toast.makeText(this, "Post Added successfully",
 						Toast.LENGTH_SHORT).show();
 				break;
@@ -59,23 +73,6 @@ public class CreatePostActivity extends Activity {
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_create_post,
-					container, false);
-			return rootView;
-		}
 	}
 
 }

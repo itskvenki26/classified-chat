@@ -5,21 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ScrollView
+    <FrameLayout
         android:id="@+id/activity_posts_show_comments_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0dip"
         android:layout_weight="1"
-        android:background="@android:color/holo_orange_dark"
-        android:minHeight="20dp"
         android:orientation="vertical" />
 
-    <ScrollView
+    <FrameLayout
         android:id="@+id/activity_posts_add_comments_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
-        android:minHeight="20dp"
-        android:orientation="vertical" />
+        android:orientation="vertical" >
+    </FrameLayout>
 
 </LinearLayout>

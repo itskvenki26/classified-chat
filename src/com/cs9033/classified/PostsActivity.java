@@ -1,6 +1,5 @@
 package com.cs9033.classified;
 
-import Models.Comments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.database.Cursor;
@@ -19,16 +18,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.models.Comment;
 
 public class PostsActivity extends Activity {
 
 	private static final String TAG = "PostsActivity";
+	private static final String SHOW_COMMENTS_FRAGMENT = "showCommentsFragment";
+	private static final String ADD_COMMENTS_FRAGMENT = "addCommentsFragment";
 	long crID;
 	String crName;
 	long pID;
 	String pName;
-	ShowCommentsFragment showCommentsFragment;
-	AddCommentsFragment addCommentsFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,38 +44,31 @@ public class PostsActivity extends Activity {
 
 			String chatRoomName = null;
 			if (extras != null) {
-				chatRoomName = extras.getString("ChatRoomName", null);
-			}
-			Log.d(TAG, "Chatroom Name = " + chatRoomName);
-			if (chatRoomName != null) {
-				crName = chatRoomName;
-				crID = extras.getLong("CRID");
-				pID = extras.getLong("PID");
-				pName = extras.getString("PName");
-				setTitle(pName + ":" + getTitle());
-				showCommentsFragment = new ShowCommentsFragment();
-				addCommentsFragment = new AddCommentsFragment();
-				getFragmentManager()
-						.beginTransaction()
-						.add(R.id.activity_posts_show_comments_scroll_view,
-								showCommentsFragment)
-						.add(R.id.activity_posts_add_comments_scroll_view,
-								addCommentsFragment).commit();
-			} else {
-				Toast.makeText(this, "Chat Room does not exist",
-						Toast.LENGTH_SHORT).show();
-				finish();
+				chatRoomName = extras.getString("CRName", null);
+
+				Log.d(TAG, "Chatroom Name = " + chatRoomName);
+				if (chatRoomName != null) {
+					crName = chatRoomName;
+					crID = extras.getLong("CRID");
+					pID = extras.getLong("PID");
+					pName = extras.getString("PName");
+					setTitle(pName + ":" + getTitle());
+					getFragmentManager()
+							.beginTransaction()
+							.add(R.id.activity_posts_show_comments_scroll_view,
+									new ShowCommentsFragment(),
+									SHOW_COMMENTS_FRAGMENT)
+							.add(R.id.activity_posts_add_comments_scroll_view,
+									new AddCommentsFragment(),
+									ADD_COMMENTS_FRAGMENT).commit();
+				} else {
+					Toast.makeText(this, "Post does not exist",
+							Toast.LENGTH_SHORT).show();
+					finish();
+				}
 			}
 		}
 		Log.d(TAG, "onCreate: return");
-		// Messager.sendSMS(this, "+13476561714", "Test Message");
-
-	}
-
-	private void refresh() {
-		if (showCommentsFragment != null) {
-			showCommentsFragment.refresh();
-		}
 
 	}
 
@@ -104,18 +97,14 @@ public class PostsActivity extends Activity {
 	 */
 	public static class ShowCommentsFragment extends Fragment {
 		PostsActivity parent;
-		ChatRoomsDBAdapter cdb;
 
 		public ShowCommentsFragment() {
 		}
 
-		public void refresh() {
-			if (cdb != null) {
-				cdb.notifyAll();
+		SimpleCursorAdapter sca;
+		ListView ll;
 
-			}
-		}
-
+		@SuppressWarnings("deprecation")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -123,24 +112,38 @@ public class PostsActivity extends Activity {
 					R.layout.fragment_show_comments_view, container, false);
 			// Load adapter with posts of current chat room
 
+			ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(getActivity());
 			String[] fro = new String[] { ChatRoomsDBAdapter.C_MSG };
-
 			int to[] = new int[] { android.R.id.text1 };
+			Log.d(TAG, "CRID = " + parent.crID + " PID = " + parent.pID);
 			Cursor c = cdb.getCommentsCursor(parent.crID, parent.pID);
-			@SuppressWarnings("deprecation")
-			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent,
+			sca = new SimpleCursorAdapter(parent,
 					android.R.layout.simple_list_item_1, c, fro, to);
-			ListView ll = (ListView) rootView
-					.findViewById(R.id.comment_list_view);
+			ll = (ListView) rootView.findViewById(R.id.show_comment_list_view);
 			ll.setAdapter(sca);
-			// ll.setOnItemClickListener(this);
+
 			return rootView;
 		}
 
 		@Override
 		public void onAttach(Activity activity) {
+			super.onAttach(activity);
 			parent = (PostsActivity) activity;
-			cdb = new ChatRoomsDBAdapter(parent);
+		}
+
+		@SuppressWarnings("deprecation")
+		public void refresh() {
+			Log.d(TAG, "refresh");
+			ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(getActivity());
+			String[] fro = new String[] { ChatRoomsDBAdapter.C_MSG };
+			int to[] = new int[] { android.R.id.text1 };
+			Log.d(TAG, "CRID = " + parent.crID + " PID = " + parent.pID);
+			Cursor c = cdb.getCommentsCursor(parent.crID, parent.pID);
+			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent,
+					android.R.layout.simple_list_item_1, c, fro, to);
+
+			ll.setAdapter(sca);
+			ll.setSelection(sca.getCount() - 1);
 		}
 	}
 
@@ -148,7 +151,6 @@ public class PostsActivity extends Activity {
 			OnClickListener {
 		ImageButton button;
 		PostsActivity parent;
-		ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(parent);
 
 		public AddCommentsFragment() {
 		}
@@ -167,30 +169,40 @@ public class PostsActivity extends Activity {
 
 		@Override
 		public void onAttach(Activity activity) {
-
+			super.onAttach(activity);
 			parent = (PostsActivity) activity;
-
 		}
 
 		@Override
 		public void onClick(View v) {
 			int id = v.getId();
-			Comments c = new Comments();
 
 			switch (id) {
 			case R.id.add_comment_button:
 				// Check the comment and add it to comments table
-				EditText t1 = (EditText) v
-						.findViewById(R.id.add_comment_edit_text);
+				ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(getActivity());
+				Comment c = new Comment();
+				EditText t1 = (EditText) getActivity().findViewById(
+						R.id.add_comment_edit_text);
+				Log.d(TAG, "Edit text");
 				String msg = (String) t1.getText().toString();
+				Log.d(TAG, "msg" + msg);
 				c.setCR_id(parent.crID);
 				c.setP_id(parent.pID);
 				c.setMessage(msg);
-				cdb.addCommentsData(c);
-				// startActivity(in);
-				parent.refresh();
+				Log.d(TAG, c.toJSON().toString());
+				cdb.addCommentData(c);
+				Log.d(TAG, Long.toString(c.getId()));
+				parent.refersh();
 				break;
 			}
 		}
 	}
+
+	public void refersh() {
+		ShowCommentsFragment f = (ShowCommentsFragment) getFragmentManager()
+				.findFragmentByTag(SHOW_COMMENTS_FRAGMENT);
+		f.refresh();
+	}
+
 }

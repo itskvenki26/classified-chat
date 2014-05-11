@@ -27,6 +27,11 @@
     <string name="verify_add_user_key">Verify Key</string>
     <string name="next">Next</string>
     <string name="refresh">Refresh</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="host">Host</string>
+    <string name="server">Server</string>
+    <string name="port">Port</string>
+    <string name="user_name">User Name</string>
 
     <!-- Common Strings -->
     <string name="posts_list">Posts</string>
@@ -41,5 +46,7 @@
     <!-- Unused Strings -->
     <!-- <string name="create_chat_room">Create Chat Room</string> -->
     <!-- <string name="add_post">Add Post</string> -->
+
+    <string name="title_activity_update_profile">UpdateProfileActivity</string>
 
 </resources>

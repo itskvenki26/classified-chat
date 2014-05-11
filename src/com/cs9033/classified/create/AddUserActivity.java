@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -117,7 +116,7 @@ public class AddUserActivity extends Activity {
 	}
 
 	private void gotoPhase3() {
-		// Collect Chatroom, Posts, User details and send via XMPP
+		// Collect Chatroom, Post, User details and send via XMPP
 	}
 
 	/**

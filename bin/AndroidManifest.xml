@@ -25,30 +25,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.cs9033.classified.MainActivity"
-            android:label="@string/app_name" >
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-
-        </activity>
-        <activity
-            android:name="com.cs9033.classified.CommentsActivity"
-            android:label="@string/title_activity_comments_view" >
-        </activity>
-        <activity
             android:name="com.cs9033.classified.PostsActivity"
             android:label="@string/title_activity_posts_view" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <receiver android:name="com.cs9033.classified.controllers.SMSReceiver" >
@@ -60,18 +38,6 @@
         <service android:name="com.cs9033.classified.controllers.MessagePollService" />
         <service android:name="com.cs9033.classified.controllers.SendMessage" />
 
-        <activity
-            android:name="com.cs9033.classified.demo.DemoPost"
-            android:label="@string/title_activity_demo_post" >
-        </activity>
-        <activity
-            android:name="com.cs9033.classified.demo.DemoKeys"
-            android:label="@string/title_activity_demo_keys" >
-        </activity>
-        <activity
-            android:name="com.cs9033.classified.demo.DemoXKeys"
-            android:label="@string/title_activity_demo_xkeys" >
-        </activity>
         <activity
             android:name="com.cs9033.classified.ClassifiedChatRoomsActivity"
             android:label="@string/title_activity_classified_chat_rooms" >
@@ -88,11 +54,6 @@
         <activity
             android:name="com.cs9033.classified.ChatRoomDetailActivity"
             android:label="@string/title_activity_chat_room_detail" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.cs9033.classified.create.CreatePostActivity"
@@ -109,6 +70,15 @@
         <activity
             android:name="com.cs9033.classified.create.AddUserActivity"
             android:label="@string/title_activity_add_user" >
+        </activity>
+        <activity
+            android:name="com.cs9033.classified.create.UpdateProfileActivity"
+            android:label="@string/title_activity_update_profile" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

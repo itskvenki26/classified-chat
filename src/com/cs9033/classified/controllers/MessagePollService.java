@@ -56,7 +56,7 @@ public class MessagePollService extends IntentService {
 	static void init() {
 
 		// Get list of hosts from My Profile table
-		// For each host check chat messages with code template
+		// For each xmpp_host check chat messages with code template
 		if (!running) {
 
 			// -------------------------------------------------------------
@@ -97,13 +97,13 @@ public class MessagePollService extends IntentService {
 			//
 			// connection = new XMPPConnection(connConfig);
 			// try {
-			// // Connect to the server
+			// // Connect to the xmpp_server
 			// connection.connect();
 			// Log.d(TAG, "Connected to nyu.edu");
 			// } catch (XMPPException e) {
 			// Log.e(TAG, e.getClass().getName(), e);
 			// connection = null;
-			// // Unable to connect to server
+			// // Unable to connect to xmpp_server
 			// }
 			//
 			// try {

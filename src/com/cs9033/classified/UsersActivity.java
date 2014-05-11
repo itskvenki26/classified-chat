@@ -96,7 +96,7 @@ public class UsersActivity extends Activity {
 			ListView LV = (ListView) rootView
 					.findViewById(R.id.fragment_users_root);
 			ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(getActivity());
-			Cursor c = db.getUserData(id);
+			// Cursor c = db.getUserData(id);
 			return rootView;
 		}
 

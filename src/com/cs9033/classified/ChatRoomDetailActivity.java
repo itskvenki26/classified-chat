@@ -38,18 +38,20 @@ public class ChatRoomDetailActivity extends Activity {
 			String chatRoomName = null;
 			if (extras != null) {
 				chatRoomName = extras.getString("CRName", null);
-			}
-			Log.d(TAG, "Chatroom Name = " + chatRoomName);
-			if (chatRoomName != null) {
-				crName = chatRoomName;
-				crID = extras.getLong("CRID");
-				setTitle(chatRoomName + ":" + getTitle());
-				getFragmentManager().beginTransaction()
-						.add(R.id.container, new ShowPostsFragment()).commit();
-			} else {
-				Toast.makeText(this, "Chat Room does not exist",
-						Toast.LENGTH_SHORT).show();
-				finish();
+
+				Log.d(TAG, "Chatroom Name = " + chatRoomName);
+				if (chatRoomName != null) {
+					crName = chatRoomName;
+					crID = extras.getLong("CRID");
+					setTitle(chatRoomName + ":" + getTitle());
+					getFragmentManager().beginTransaction()
+							.add(R.id.container, new ShowPostsFragment())
+							.commit();
+				} else {
+					Toast.makeText(this, "Chat Room does not exist",
+							Toast.LENGTH_SHORT).show();
+					finish();
+				}
 			}
 		}
 	}
@@ -72,7 +74,7 @@ public class ChatRoomDetailActivity extends Activity {
 		switch (id) {
 
 		case R.id.chatroom_detail_menu_add_post:
-			// Go to Add Posts view
+			// Go to Add Post view
 			intent = (new Intent(this, CreatePostActivity.class)).putExtra(
 					"CRID", crID).putExtra("CRName", crName);
 			break;
@@ -108,6 +110,7 @@ public class ChatRoomDetailActivity extends Activity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
+			Log.d(TAG, "onCreateView");
 			View rootView = inflater.inflate(
 					R.layout.fragment_chat_room_detail, container, false);
 			// Load adapter with posts of current chat room
@@ -130,7 +133,8 @@ public class ChatRoomDetailActivity extends Activity {
 
 		@Override
 		public void onAttach(Activity activity) {
-
+			Log.d(TAG, "onAttach");
+			super.onAttach(activity);
 			parent = (ChatRoomDetailActivity) activity;
 
 		}
@@ -138,19 +142,16 @@ public class ChatRoomDetailActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			// TODO Auto-generated method stub
 			long pid = id;
-			// String ptitle=ChatRoomsDBAdapter.P_TITLE;
 			TextView t1 = (TextView) view.findViewById(android.R.id.text1);
-			// String msg=(String) t1.getText();
 			String PTitle = (String) t1.getText();
 			Intent in = new Intent(getActivity(), PostsActivity.class);
 			in.putExtra("PID", pid);
 			in.putExtra("PName", PTitle);
 			in.putExtra("CRName", this.parent.crName);
 			in.putExtra("CRID", this.parent.crID);
+			Log.d(TAG, "Item Click:" + this.parent.crName);
 			startActivity(in);
-			// in.putExtra(name, value);
 		}
 	}
 

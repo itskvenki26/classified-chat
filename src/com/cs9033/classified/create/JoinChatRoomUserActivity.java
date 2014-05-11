@@ -51,23 +51,8 @@ public class JoinChatRoomUserActivity extends Activity {
 		if (savedInstanceState == null) {
 			Bundle extras = getIntent().getExtras();
 
-			String chatRoomName = "Test";
-			if (extras != null) {
-				chatRoomName = extras.getString("ChatRoomName", null);
-			}
-			Log.d(TAG, "Chatroom Name = " + chatRoomName);
-			if (chatRoomName != null) {
-				crName = chatRoomName;
-				crID = extras.getLong("CRID");
-				setTitle(chatRoomName + ":" + getTitle());
-				getFragmentManager().beginTransaction()
-						.add(R.id.container, new ShowQRPhase1Fragment())
-						.commit();
-			} else {
-				Toast.makeText(this, "Chat Room does not exist",
-						Toast.LENGTH_SHORT).show();
-				finish();
-			}
+			getFragmentManager().beginTransaction()
+					.add(R.id.container, new ShowQRPhase1Fragment()).commit();
 		}
 	}
 
@@ -107,6 +92,7 @@ public class JoinChatRoomUserActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 		SharedPreferences sharedPreferences = getSharedPreferences(JOIN_CHAT,
 				Context.MODE_PRIVATE);
 		if (sharedPreferences != null) {
@@ -131,6 +117,7 @@ public class JoinChatRoomUserActivity extends Activity {
 
 		@Override
 		public void onAttach(Activity activity) {
+			super.onAttach(activity);
 			parent = (JoinChatRoomUserActivity) activity;
 		}
 
@@ -139,10 +126,10 @@ public class JoinChatRoomUserActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_show_qr1,
 					container, false);
-			((Button) rootView).findViewById(
-					R.id.show_qr1_initiate_join_cr_button).setOnClickListener(
-					this);
-			((Button) rootView).findViewById(R.id.show_qr1_next_button)
+			((Button) rootView
+					.findViewById(R.id.show_qr1_initiate_join_cr_button))
+					.setOnClickListener(this);
+			((Button) rootView.findViewById(R.id.show_qr1_next_button))
 					.setOnClickListener(this);
 			Log.d(TAG, "Created View");
 
@@ -159,9 +146,10 @@ public class JoinChatRoomUserActivity extends Activity {
 				try {
 					json.accumulate("KEY1", key1);
 					json.accumulate("PH", "<Phone Number>");
-					json.accumulate("HOST", "host");
-					json.accumulate("SERVER", "server");
-					json.accumulate("PORT", "port");
+					json.accumulate("HOST", "xmpp_host");
+					json.accumulate("SERVER", "xmpp_server");
+					json.accumulate("PORT", "xmpp_port");
+					json.accumulate("UN", "xmpp_un");
 					key1 = new String(Hex.encodeHex(json.toString().getBytes()));
 				} catch (JSONException e) {
 					Log.e(TAG, e.getClass().getName(), e);
@@ -206,6 +194,7 @@ public class JoinChatRoomUserActivity extends Activity {
 
 		@Override
 		public void onAttach(Activity activity) {
+			super.onAttach(activity);
 			parent = (JoinChatRoomUserActivity) activity;
 		}
 
@@ -214,9 +203,9 @@ public class JoinChatRoomUserActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_show_qr2,
 					container, false);
-			((Button) rootView).findViewById(R.id.show_qr2_verify_key_button)
+			((Button) rootView.findViewById(R.id.show_qr2_verify_key_button))
 					.setOnClickListener(this);
-			((Button) rootView).findViewById(R.id.show_qr2_next)
+			((Button) rootView.findViewById(R.id.show_qr2_next))
 					.setOnClickListener(this);
 			return rootView;
 		}
@@ -232,6 +221,8 @@ public class JoinChatRoomUserActivity extends Activity {
 									Context.MODE_PRIVATE);
 					String key1 = sharedPreferences.getString("KEY1", null);
 					String key2 = sharedPreferences.getString("KEY2", null);
+					Log.d(TAG, "key1=" + key1);
+					Log.d(TAG, "key2=" + key2);
 					if (key1 != null && key2 != null) {
 						byte[] key1bytes = Hex.decodeHex(key1.toCharArray());
 						// String key2 = parent.getKey2();
@@ -276,11 +267,11 @@ public class JoinChatRoomUserActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
 					R.layout.fragment_show_received_cr, container, false);
-			((Button) rootView).findViewById(
-					R.id.show_received_chat_room_create_chat_room_button)
+			((Button) rootView
+					.findViewById(R.id.show_received_chat_room_create_chat_room_button))
 					.setOnClickListener(this);
-			((Button) rootView).findViewById(
-					R.id.show_received_chat_room_refresh_button)
+			((Button) rootView
+					.findViewById(R.id.show_received_chat_room_refresh_button))
 					.setOnClickListener(this);
 			return rootView;
 		}
@@ -307,7 +298,7 @@ public class JoinChatRoomUserActivity extends Activity {
 							LinearLayout usersLinearLayout = (LinearLayout) view
 									.findViewById(R.id.show_received_chat_room_users);
 
-							JSONArray postsJSON = json.getJSONArray("Posts");
+							JSONArray postsJSON = json.getJSONArray("Post");
 							JSONArray usersJSON = json.getJSONArray("Users");
 
 							int postsLen = postsJSON.length();
