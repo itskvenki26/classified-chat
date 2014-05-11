@@ -89,7 +89,9 @@ public class ClassifiedChatRoomsActivity extends Activity {
 			
 			int to[] = new int[]{android.R.id.text1,android.R.id.text2};
 			Cursor c = cdb.getChatRoomsCursor();
-			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent ,android.R.layout.simple_list_item_2, c, fro, to);
+			@SuppressWarnings("deprecation")
+			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent,
+					android.R.layout.simple_list_item_2, c, fro, to);
 			ListView ll = (ListView) rootView.findViewById(R.id.container);
             ll.setAdapter(sca);
             ll.setOnItemClickListener(this);
