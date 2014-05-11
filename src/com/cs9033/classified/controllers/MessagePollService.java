@@ -1,7 +1,6 @@
 package com.cs9033.classified.controllers;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
@@ -15,7 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cs9033.classified.adapters.DemoDBAdapter;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.crypto.SecureMessage;
 
 //implements FileTransferListener
@@ -156,24 +155,25 @@ public class MessagePollService extends IntentService {
 		// Encrypt with LTP
 		// Push message to DB
 
-		DemoDBAdapter db = new DemoDBAdapter(this);
-		String[] keys = db.getXKeys();
-		String current_mac_key = keys[0];
-		String current_e_key = keys[1];
+		ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(this);
+//		String[] keys = db.getXKeys();
+//		String current_mac_key = keys[0];
+//		String current_e_key = keys[1];
 
 		try {
-			String jsonText = SecureMessage.decrypt(current_e_key, messageBody);
-			Log.d(TAG, "Received json:" + jsonText);
-			JSONObject json = new JSONObject(jsonText);
-
-			String next_mac_key = json.getString("next_mac_key");
-			String next_e_key = json.getString("next_e_key");
-			String post = json.getString("message");
-
-			Log.d(TAG, "Clear Text" + post);
-
-			db.updatePost(post);
-			db.updateXKeys(next_mac_key, next_e_key);
+			// String jsonText = SecureMessage.decrypt(current_e_key,
+			// messageBody);
+			// Log.d(TAG, "Received json:" + jsonText);
+			// JSONObject json = new JSONObject(jsonText);
+			//
+			// String next_mac_key = json.getString("next_mac_key");
+			// String next_e_key = json.getString("next_e_key");
+			// String post = json.getString("message");
+			//
+			// Log.d(TAG, "Clear Text" + post);
+			//
+			// db.updatePost(post);
+			// db.updateXKeys(next_mac_key, next_e_key);
 
 		} catch (Exception e) {
 			Log.e(TAG, e.toString(), e);

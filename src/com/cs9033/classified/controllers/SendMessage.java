@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cs9033.classified.adapters.DemoDBAdapter;
 import com.cs9033.classified.crypto.SecureMessage;
 
 public class SendMessage extends IntentService {
