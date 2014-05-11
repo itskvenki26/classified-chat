@@ -6,9 +6,9 @@ import org.json.JSONObject;
      
         //private variables
         int id;        
-        int current_mac;
-        int current_e;
-        int old_mac;       
+        long current_mac;
+        long current_e;
+        long old_mac;       
         String CR_name;  
         String time;
         String description;
@@ -26,7 +26,7 @@ import org.json.JSONObject;
       
         }
         // constructor
-        public ChatRooms(int id, int current_mac, int current_e,int old_mac,String CR_name, String time, String description){
+        public ChatRooms(int id, long current_mac, long current_e,long old_mac,String CR_name, String time, String description){
             this.id      = id;
             this.current_mac=current_mac;
             this.current_e=current_e;
@@ -46,30 +46,30 @@ import org.json.JSONObject;
         public void setID(int id){
             this.id = id;
         }
-        public int getcurrent_mac(){
+        public long getcurrent_mac(){
             return this.current_mac;
         }
    
-        public void setcurrent_mac(int current_mac){
+        public void setcurrent_mac(long current_mac){
             this.current_mac = current_mac;
         }
       
        
-        public void setold_mac(int old_mac){
+        public void setold_mac(long old_mac){
             this.old_mac = old_mac;
         }
         
-        public int getold_mac(){
+        public long getold_mac(){
             return this.old_mac;
         }
       
         
         
-        public void setcurrent_e(int current_e){
+        public void setcurrent_e(long current_e){
             this.current_e = current_e;
         }
         
-        public int getcurrent_e(){
+        public long getcurrent_e(){
             return this.current_e;
         }   
        

@@ -12,7 +12,7 @@ import org.json.JSONObject;
         int id;
        // String CR_name;
         //String Password;
-        int U_id;
+        long U_id;
         //String creator;
         String C_Type;
         String ph_Num;
@@ -25,7 +25,7 @@ import org.json.JSONObject;
       
         }
         // constructor
-        public Channel(int id,int U_id, String C_Type, String ph_Num, String time, String preffered_Ch){
+        public Channel(int id,long U_id, String C_Type, String ph_Num, String time, String preffered_Ch){
             this.id      = id;
             this.U_id = U_id;
             
@@ -46,10 +46,10 @@ import org.json.JSONObject;
             this.id = id;
         }
         
-        public int getU_id(){
+        public long getU_id(){
             return this.U_id;
         }
-        public void setU_id(int U_id){
+        public void setU_id(long U_id){
         	 this.U_id =U_id;
         }
         

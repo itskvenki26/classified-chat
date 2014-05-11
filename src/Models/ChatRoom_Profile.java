@@ -8,7 +8,7 @@ import org.json.JSONObject;
      
         //private variables
 	    int id;
-        int crid;
+        long crid;
         String MAC_Cur;
         String MAC_Old;
         
@@ -25,7 +25,7 @@ import org.json.JSONObject;
       
         }
         // constructor
-        public ChatRoom_Profile( int id,int crid, String MAC_Cur, String MAC_Old/*ArrayList<Channel> Chlist*/){
+        public ChatRoom_Profile( int id,long crid, String MAC_Cur, String MAC_Old/*ArrayList<Channel> Chlist*/){
             this.id      = id;
             this.crid    = crid;
             this.MAC_Cur    = MAC_Cur;
@@ -50,12 +50,12 @@ import org.json.JSONObject;
         }
       
         // getting imei
-        public int getcrid(){
+        public long getcrid(){
             return this.crid;
         }
       
         // setting imei
-        public void setcrid(int crid){
+        public void setcrid(long crid){
             this.crid = crid;
         }
          
