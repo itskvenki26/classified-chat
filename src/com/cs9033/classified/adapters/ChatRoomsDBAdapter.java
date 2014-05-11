@@ -346,10 +346,10 @@ public class ChatRoomsDBAdapter {
 	public void addChatRoomUserData(ChatRoom_User cru) {
 		try {
 			final SQLiteDatabase db = open();
-			int crid = sqlEscapeString(cru.getcrid());
-			int usrid =sqlEscapeString(cru.getusrid());
-			int curmak = sqlEscapeString(cru.getCur_Mak());
-			int cuerkey = sqlEscapeString(cru.getCur_Ekey());
+			long crid = cru.getcrid();
+			long usrid =cru.getusrid();
+			long curmak = cru.getCur_Mak();
+			long cuerkey = cru.getCur_Ekey();
 			
 			// ArrayList<Channel> Chlist =uData.getChlist();
 
@@ -368,6 +368,8 @@ public class ChatRoomsDBAdapter {
 			Log.i("Database", "Exception caught: " + t.getMessage(), t);
 		}
 	}
+
+	
 
 	public ChatRoom_User getChatRoomUserData(long id) {
 		final SQLiteDatabase db = open();
@@ -496,13 +498,13 @@ public class ChatRoomsDBAdapter {
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
-            int usrid=sqlEscapeString(uch.getusrid()); 
+            long usrid=uch.getusrid(); 
             String type=sqlEscapeString(uch.gettype());
             String phnum=sqlEscapeString(uch.getphnum());
 			String host = sqlEscapeString(uch.getHost());
 			String service = sqlEscapeString(uch.getService());
 			String usrname = sqlEscapeString(uch.getusername());
-			int port=sqlEscapeString(uch.getport());
+			long port=uch.getport();
 			int pref_channel_boolean=sqlEscapeString(uch.getpref_channel_boolean());
 			// String pref = sqlEscapeString(ch.getpreffered_Ch());
 
@@ -548,13 +550,13 @@ public class ChatRoomsDBAdapter {
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
-            int usrid=sqlEscapeString(mp.getusrid()); 
+            long usrid=mp.getusrid(); 
             String type=sqlEscapeString(mp.gettype());
             String phnum=sqlEscapeString(mp.getphnum());
 			String host = sqlEscapeString(mp.getHost());
 			String service = sqlEscapeString(mp.getService());
 			String usrname = sqlEscapeString(mp.getusername());
-			int port=sqlEscapeString(mp.getport());
+			long port=mp.getport();
 			int pref_channel_boolean=sqlEscapeString(mp.getpref_channel_boolean());
 			String name = sqlEscapeString(mp.getname());
 
@@ -602,13 +604,13 @@ public class ChatRoomsDBAdapter {
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
-            int usrid=sqlEscapeString(mpc.getusrid()); 
+            long usrid=mpc.getusrid(); 
             String type=sqlEscapeString(mpc.gettype());
             String phnum=sqlEscapeString(mpc.getphnum());
 			String host = sqlEscapeString(mpc.getHost());
 			String service = sqlEscapeString(mpc.getService());
 			String usrname = sqlEscapeString(mpc.getusername());
-			int port=sqlEscapeString(mpc.getport());
+			long port=mpc.getport();
 			int pref_channel_boolean=sqlEscapeString(mpc.getpref_channel_boolean());
 			//String name = sqlEscapeString(mp.getname());
 
@@ -698,9 +700,9 @@ public class ChatRoomsDBAdapter {
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
-			int curmac = sqlEscapeString(cr.getcurrent_mac());
-			int cur_e = sqlEscapeString(cr.getcurrent_e());
-			int oldmac = sqlEscapeString(cr.getold_mac());			
+			long curmac = cr.getcurrent_mac();
+			long cur_e = cr.getcurrent_e();
+			long oldmac = cr.getold_mac();			
 			String CRName = sqlEscapeString(cr.getCR_name());			
 			String time = sqlEscapeString(cr.getTIME());
 			String txt = sqlEscapeString(cr.getdescription());
@@ -765,7 +767,7 @@ public class ChatRoomsDBAdapter {
 			}
 			final SQLiteDatabase db = open();
 
-			int crid = sqlEscapeString(pt.getCR_id());
+			long crid =pt.getCR_id();
 			String title = sqlEscapeString(pt.getTitle());
 			//String creator = sqlEscapeString(pt.getCREATOR());
 			//String time = sqlEscapeString(pt.getTIME());
@@ -858,11 +860,11 @@ public class ChatRoomsDBAdapter {
 		final SQLiteDatabase db = open();
 		Log.d(TAG, "addCommentsData ct: got db");
 
-		int crid = sqlEscapeString(ct.getCR_id());
+		long crid = ct.getCR_id();
 		//String creator = sqlEscapeString(ct.getCREATOR());
 		//String time = getTime();
 		String msg = sqlEscapeString(ct.getMessage());
-		int post_id = sqlEscapeString(ct.getP_id());
+		long post_id = ct.getP_id();
 		Log.d(TAG, "addCommentsData ct: set comment values");
 
 		ContentValues cVal = new ContentValues();
