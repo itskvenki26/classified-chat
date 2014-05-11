@@ -21,12 +21,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-<<<<<<< HEAD
+
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.AddUserActivity;
-=======
+
 import com.cs9033.classified.create.JoinChatRoomUserActivity;
->>>>>>> 8e9222f80be369d39406646e2c4ddb175abcad85
+
 import com.cs9033.classified.create.CreatePostActivity;
 
 public class ChatRoomDetailActivity extends Activity {
