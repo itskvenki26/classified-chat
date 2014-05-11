@@ -12,5 +12,10 @@
         android:icon="@drawable/ic_action_new"
         android:showAsAction="always"
         android:title="@string/title_activity_create_chat_room"/>
+    <item
+        android:id="@+id/classified_chat_rooms_menu_my_profile"
+        android:icon="@drawable/ic_action_settings"
+        android:showAsAction="ifRoom"
+        android:title="@string/title_activity_update_profile"/>
 
 </menu>

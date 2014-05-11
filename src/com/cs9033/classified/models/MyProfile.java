@@ -21,6 +21,7 @@ public class MyProfile {
 	String xmpp_server;
 	int xmpp_port;
 	String xmpp_user_name;
+	String xmpp_password;
 
 	public static final String MP_EMAIL_ID = "profile_email";
 	public static final String MP_NAME = "profile_name";
@@ -29,6 +30,7 @@ public class MyProfile {
 	public static final String MP_XMPP_SERVER = "profile_xmpp_server";
 	public static final String MP_XMPP_PORT = "profile_xmpp_port";
 	public static final String MP_XMPP_USER_NAME = "profile_xmpp_user_name";
+	public static final String MP_XMPP_PASSWORD = "profile_xmpp_password";
 	public static final String MP_CR_ID = "profile_cr_id";
 
 	// Empty constructor
@@ -38,7 +40,7 @@ public class MyProfile {
 
 	public MyProfile(String email_id, String name, String ph_no,
 			String xmpp_host, String xmpp_server, int xmpp_port,
-			String xmpp_user_name) {
+			String xmpp_user_name, String xmpp_password) {
 		super();
 		this.email_id = email_id;
 		this.name = name;
@@ -47,6 +49,7 @@ public class MyProfile {
 		this.xmpp_server = xmpp_server;
 		this.xmpp_port = xmpp_port;
 		this.xmpp_user_name = xmpp_user_name;
+		this.xmpp_password = xmpp_password;
 	}
 
 	public long getId() {
@@ -113,16 +116,22 @@ public class MyProfile {
 		this.xmpp_user_name = xmpp_user_name;
 	}
 
+	public String getXmpp_password() {
+		return xmpp_password;
+	}
+
+	public void setXmpp_password(String xmpp_password) {
+		this.xmpp_password = xmpp_password;
+	}
+
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 
-		json.put(MP_EMAIL_ID, email_id);
-		json.put(MP_NAME, name);
-		json.put(MP_PH_NO, ph_no);
-		json.put(MP_XMPP_HOST, xmpp_host);
-		json.put(MP_XMPP_PORT, xmpp_port);
-		json.put(MP_XMPP_SERVER, xmpp_server);
-		json.put(MP_XMPP_USER_NAME, xmpp_user_name);
+		json.put(MP_EMAIL_ID, email_id).put(MP_NAME, name).put(MP_PH_NO, ph_no)
+				.put(MP_XMPP_HOST, xmpp_host).put(MP_XMPP_PORT, xmpp_port)
+				.put(MP_XMPP_SERVER, xmpp_server)
+				.put(MP_XMPP_USER_NAME, xmpp_user_name)
+				.put(MP_XMPP_PASSWORD, xmpp_password);
 
 		return json;
 	}
@@ -145,7 +154,8 @@ public class MyProfile {
 					json.getString(MP_NAME), json.getString(MP_PH_NO),
 					json.getString(MP_XMPP_HOST),
 					json.getString(MP_XMPP_SERVER), json.getInt(MP_XMPP_PORT),
-					json.getString(MP_XMPP_USER_NAME));
+					json.getString(MP_XMPP_USER_NAME),
+					json.getString(MP_XMPP_PASSWORD));
 
 		} catch (JSONException | DecoderException e) {
 			Log.e(TAG, e.getClass().getName(), e);
@@ -154,12 +164,10 @@ public class MyProfile {
 		return null;
 	}
 
-	boolean saveToDB(Context context) {
+	public void saveToDB(Context context) {
 
 		ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(context);
 		db.addMyProfileData(this);
-		return false;
-
 	}
 
 }

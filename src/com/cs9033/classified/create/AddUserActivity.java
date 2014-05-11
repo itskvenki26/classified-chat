@@ -134,9 +134,9 @@ public class AddUserActivity extends Activity {
 			View rootView = inflater.inflate(R.layout.fragment_scan_qr1,
 					container, false);
 
-			((Button) rootView).findViewById(
-					R.id.scan_qr1_initiate_add_user_button).setOnClickListener(
-					this);
+			((Button) rootView
+					.findViewById(R.id.scan_qr1_initiate_add_user_button))
+					.setOnClickListener(this);
 
 			return rootView;
 		}

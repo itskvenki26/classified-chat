@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +34,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cs9033.classified.R;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.crypto.SecureMessage;
+import com.cs9033.classified.models.MyProfile;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 public class JoinChatRoomUserActivity extends Activity {
@@ -49,7 +52,6 @@ public class JoinChatRoomUserActivity extends Activity {
 		setContentView(R.layout.activity_join_chat_room_user);
 
 		if (savedInstanceState == null) {
-			Bundle extras = getIntent().getExtras();
 
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new ShowQRPhase1Fragment()).commit();
@@ -141,30 +143,49 @@ public class JoinChatRoomUserActivity extends Activity {
 			int id = v.getId();
 			switch (id) {
 			case R.id.show_qr1_initiate_join_cr_button:
-				String key1 = SecureMessage.getNewEKey();
+
 				JSONObject json = new JSONObject();
 				try {
-					json.accumulate("KEY1", key1);
-					json.accumulate("PH", "<Phone Number>");
-					json.accumulate("HOST", "xmpp_host");
-					json.accumulate("SERVER", "xmpp_server");
-					json.accumulate("PORT", "xmpp_port");
-					json.accumulate("UN", "xmpp_un");
-					key1 = new String(Hex.encodeHex(json.toString().getBytes()));
+					ChatRoomsDBAdapter dbAdapter = new ChatRoomsDBAdapter(
+							getActivity());
+					MyProfile myProfile = dbAdapter.getMyProfiledata();
+					if (myProfile != null) {
+						String xChange1 = SecureMessage.getNewEKey();
+						json.accumulate("KEY1", xChange1);
+						json.accumulate("PH", myProfile.getPh_no());
+						json.accumulate("HOST", myProfile.getXmpp_host());
+						json.accumulate("SERVER", myProfile.getXmpp_server());
+						json.accumulate("PORT", myProfile.getXmpp_port());
+						json.accumulate("UN", myProfile.getXmpp_user_name());
+						json.accumulate("N", myProfile.getName());
+						xChange1 = new String(Hex.encodeHex(json.toString()
+								.getBytes()));
+						SharedPreferences sharedPreferences = getActivity()
+								.getSharedPreferences(JOIN_CHAT,
+										Context.MODE_PRIVATE);
+
+						boolean edit = sharedPreferences.edit()
+								.putString("KEY1", xChange1).commit();
+						if (edit) {
+							IntentIntegrator integrator = new IntentIntegrator(
+									this);
+							integrator.shareText(xChange1);
+							((Button) getView().findViewById(
+									R.id.show_qr1_next_button))
+									.setEnabled(true);
+						}
+					} else {
+						Intent i = new Intent(getActivity(),
+								UpdateProfileActivity.class);
+						getActivity().startActivity(i);
+						Toast.makeText(getActivity(),
+								"Please update your profile first",
+								Toast.LENGTH_SHORT).show();
+					}
 				} catch (JSONException e) {
 					Log.e(TAG, e.getClass().getName(), e);
 				}
 
-				SharedPreferences sharedPreferences = getActivity()
-						.getSharedPreferences(JOIN_CHAT, Context.MODE_PRIVATE);
-				boolean edit = sharedPreferences.edit().putString("KEY1", key1)
-						.commit();
-				if (edit) {
-					IntentIntegrator integrator = new IntentIntegrator(this);
-					integrator.shareText(key1);
-					((Button) getView().findViewById(R.id.show_qr1_next_button))
-							.setEnabled(true);
-				}
 				break;
 			case R.id.show_qr1_next_button:
 				parent.gotoPhase2();

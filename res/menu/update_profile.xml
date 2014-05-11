@@ -6,6 +6,6 @@
         android:id="@+id/update_profile_menu_save"
         android:icon="@drawable/ic_action_save"
         android:showAsAction="always"
-        android:title="@string/save_chat_room"/>
+        android:title="@string/save"/>
 
 </menu>

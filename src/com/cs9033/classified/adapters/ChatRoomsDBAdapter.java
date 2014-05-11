@@ -27,13 +27,13 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 	/******************** Table Fields ************/
 	public static final String KEY_ID = "_id";
 
-	public static final String U_EMAIL_ID = "user_email";
-	public static final String U_NAME = "user_name";
-	public static final String U_PH_NO = "user_phone_num";
-	public static final String U_XMPP_HOST = "user_xmpp_host";
-	public static final String U_XMPP_SERVER = "user_xmpp_server";
-	public static final String U_XMPP_PORT = "user_xmpp_port";
-	public static final String U_XMPP_USER_NAME = "user_xmpp_user_name";
+	public static final String U_EMAIL_ID = "email";
+	public static final String U_NAME = "name";
+	public static final String U_PH_NO = "phone_num";
+	public static final String U_XMPP_HOST = "xmpp_host";
+	public static final String U_XMPP_SERVER = "xmpp_server";
+	public static final String U_XMPP_PORT = "xmpp_port";
+	public static final String U_XMPP_USER_NAME = "xmpp_user_name";
 	public static final String U_CR_ID = "user_cr_id";
 
 	public static final String P_CR_ID = "cr_id";
@@ -51,14 +51,15 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 	public static final String CR_OLD_MAC = "old_mac";
 	public static final String CR_CURRENT_E = "current_e";
 
-	public static final String MP_EMAIL_ID = "my_profile_email";
-	public static final String MP_NAME = "my_profile_name";
-	public static final String MP_PH_NO = "my_profile_phone_num";
-	public static final String MP_XMPP_HOST = "my_profile_xmpp_host";
-	public static final String MP_XMPP_SERVER = "my_profile_xmpp_server";
-	public static final String MP_XMPP_PORT = "my_profile_xmpp_port";
-	public static final String MP_XMPP_USER_NAME = "my_profile_xmpp_user_name";
-	public static final String MP_CR_ID = "my_profile_cr_id";
+	public static final String MP_EMAIL_ID = "email";
+	public static final String MP_NAME = "name";
+	public static final String MP_PH_NO = "phone_num";
+	public static final String MP_XMPP_HOST = "xmpp_host";
+	public static final String MP_XMPP_SERVER = "xmpp_server";
+	public static final String MP_XMPP_PORT = "xmpp_port";
+	public static final String MP_XMPP_USER_NAME = "xmpp_user_name";
+	public static final String MP_XMPP_PASSWORD = "xmpp_password";
+	public static final String MP_CR_ID = "cr_id";
 
 	/******************** Database Name ************/
 	public static final String DATABASE_NAME = "classified";
@@ -88,7 +89,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			U_CR_ID };
 	public static final String[] ALL_My_PROFILE = { MP_EMAIL_ID, MP_NAME,
 			MP_PH_NO, MP_XMPP_HOST, MP_XMPP_PORT, MP_XMPP_SERVER,
-			MP_XMPP_USER_NAME, KEY_ID };
+			MP_XMPP_USER_NAME, MP_XMPP_PASSWORD, KEY_ID };
 
 	/** Create table syntax */
 
@@ -125,7 +126,8 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			+ " text not null, " + MP_NAME + " text not null, " + MP_PH_NO
 			+ " text UNIQUE not null, " + MP_XMPP_PORT + " integer not null, "
 			+ MP_XMPP_HOST + " text not null, " + MP_XMPP_SERVER
-			+ " text not null, " + MP_XMPP_USER_NAME + " text not null );";
+			+ " text not null, " + MP_XMPP_USER_NAME + " text not null, "
+			+ MP_XMPP_PASSWORD + " text not null );";
 
 	public ChatRoomsDBAdapter(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -175,6 +177,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			cVal.put(MP_XMPP_PORT, mp.getXmpp_port());
 			cVal.put(MP_XMPP_SERVER, mp.getXmpp_server());
 			cVal.put(MP_XMPP_USER_NAME, mp.getXmpp_user_name());
+			cVal.put(MP_XMPP_PASSWORD, mp.getXmpp_password());
 			cVal.put(KEY_ID, 1l);
 
 			db.delete(TABLE_MY_PROFILE, null, null);
@@ -322,6 +325,29 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 		db.close();
 		return cursor;
+	}
+
+	public MyProfile getMyProfiledata() {
+		final SQLiteDatabase db = getReadableDatabase();
+
+		Cursor cursor = db.query(TABLE_MY_PROFILE, ALL_My_PROFILE, null, null,
+				null, null, null);
+		if (cursor != null)
+			cursor.moveToFirst();
+		if (cursor.getCount() == 0)
+			return null;
+		MyProfile myProfile = new MyProfile(cursor.getString(cursor
+				.getColumnIndex(MP_EMAIL_ID)), cursor.getString(cursor
+				.getColumnIndex(MP_NAME)), cursor.getString(cursor
+				.getColumnIndex(MP_PH_NO)), cursor.getString(cursor
+				.getColumnIndex(MP_XMPP_HOST)), cursor.getString(cursor
+				.getColumnIndex(MP_XMPP_SERVER)), cursor.getInt(cursor
+				.getColumnIndex(MP_XMPP_PORT)), cursor.getString(cursor
+				.getColumnIndex(MP_XMPP_USER_NAME)), cursor.getString(cursor
+				.getColumnIndex(MP_XMPP_PASSWORD)));
+
+		db.close();
+		return myProfile;
 	}
 
 	public void onCreate(SQLiteDatabase db) {

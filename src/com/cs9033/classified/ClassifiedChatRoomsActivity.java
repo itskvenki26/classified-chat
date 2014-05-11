@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.CreateChatRoomActivity;
 import com.cs9033.classified.create.JoinChatRoomUserActivity;
+import com.cs9033.classified.create.UpdateProfileActivity;
 
 public class ClassifiedChatRoomsActivity extends Activity {
 
@@ -64,6 +65,11 @@ public class ClassifiedChatRoomsActivity extends Activity {
 			// Open Join ChatRoom activity
 			i = new Intent(this, JoinChatRoomUserActivity.class);
 			startActivity(i);
+			break;
+		case R.id.classified_chat_rooms_menu_my_profile:
+			i = new Intent(this, UpdateProfileActivity.class);
+			startActivity(i);
+
 			break;
 		}
 		return super.onOptionsItemSelected(item);

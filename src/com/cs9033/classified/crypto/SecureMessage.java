@@ -41,7 +41,7 @@ public class SecureMessage {
 		// SecureRandom sr = new SecureRandom();
 		// this.next_mac_key = new byte[20];
 		// sr.nextBytes(this.next_mac_key);
-//		this.context = context;
+		// this.context = context;
 		messageString = message;
 		this.message = message;
 		initKeys();
@@ -50,8 +50,8 @@ public class SecureMessage {
 	private void initKeys() {
 		next_mac_key = getNewMacKey();
 		next_e_key = getNewEKey();
-//		DemoDBAdapter db = new DemoDBAdapter(context);
-//		String[] keys = db.getKeys();
+		// DemoDBAdapter db = new DemoDBAdapter(context);
+		// String[] keys = db.getKeys();
 
 		// current_mac_key = keys[0];
 		// current_e_key = keys[1];

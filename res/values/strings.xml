@@ -32,6 +32,9 @@
     <string name="server">Server</string>
     <string name="port">Port</string>
     <string name="user_name">User Name</string>
+    <string name="save">Save</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
 
     <!-- Common Strings -->
     <string name="posts_list">Posts</string>
