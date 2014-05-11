@@ -1,12 +1,8 @@
 package com.cs9033.classified;
 
-import com.cs9033.classified.ChatRoomDetailActivity.ShowPostsFragment;
-import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
-
 import Models.Comments;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -20,8 +16,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 
 public class PostsActivity extends Activity {
 
@@ -106,7 +103,7 @@ public class PostsActivity extends Activity {
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class ShowCommentsFragment extends Fragment {
-		PostsActivity par;
+		PostsActivity parent;
 		ChatRoomsDBAdapter cdb;
 
 		public ShowCommentsFragment() {
@@ -129,8 +126,9 @@ public class PostsActivity extends Activity {
 			String[] fro = new String[] { ChatRoomsDBAdapter.C_MSG };
 
 			int to[] = new int[] { android.R.id.text1 };
-			Cursor c = cdb.getCommentsCursor(par.crID, par.pID);
-			SimpleCursorAdapter sca = new SimpleCursorAdapter(par,
+			Cursor c = cdb.getCommentsCursor(parent.crID, parent.pID);
+			@SuppressWarnings("deprecation")
+			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent,
 					android.R.layout.simple_list_item_1, c, fro, to);
 			ListView ll = (ListView) rootView
 					.findViewById(R.id.comment_list_view);
@@ -141,8 +139,8 @@ public class PostsActivity extends Activity {
 
 		@Override
 		public void onAttach(Activity activity) {
-			par = (PostsActivity) activity;
-			cdb = new ChatRoomsDBAdapter(par);
+			parent = (PostsActivity) activity;
+			cdb = new ChatRoomsDBAdapter(parent);
 		}
 	}
 

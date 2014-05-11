@@ -10,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.JoinChatRoomUserActivity;
 
 public class UsersActivity extends Activity {
@@ -63,8 +65,8 @@ public class UsersActivity extends Activity {
 		Intent intent = null;
 		switch (id) {
 		case R.id.users_menu_add_user:
-			intent = (new Intent(this, JoinChatRoomUserActivity.class)).putExtra("CRID",
-					crID).putExtra("CRName", crName);
+			intent = (new Intent(this, JoinChatRoomUserActivity.class))
+					.putExtra("CRID", crID).putExtra("CRName", crName);
 			break;
 
 		default:
@@ -81,6 +83,8 @@ public class UsersActivity extends Activity {
 	 */
 	public static class ShowUsersFragment extends Fragment {
 
+		UsersActivity parent;
+
 		public ShowUsersFragment() {
 		}
 
@@ -89,7 +93,16 @@ public class UsersActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_users,
 					container, false);
+			ListView LV = (ListView) rootView
+					.findViewById(R.id.fragment_users_root);
+			ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(getActivity());
+			Cursor c = db.getUserData(id);
 			return rootView;
+		}
+
+		@Override
+		public void onAttach(Activity activity) {
+			parent = (UsersActivity) activity;
 		}
 	}
 

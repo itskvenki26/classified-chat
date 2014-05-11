@@ -37,18 +37,18 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f08000f;
-        public static final int action_settings=0x7f08001d;
+        public static final int action_settings=0x7f08001e;
         public static final int activity_posts=0x7f080005;
         public static final int activity_posts_add_comments_scroll_view=0x7f080007;
         public static final int activity_posts_show_comments_scroll_view=0x7f080006;
         public static final int add_comment_button=0x7f08000c;
         public static final int add_comment_edit_text=0x7f08000b;
         public static final int chat_room_detail_list_view=0x7f08000d;
-        public static final int chatroom_detail_menu_add_post=0x7f080020;
-        public static final int chatroom_detail_menu_add_user=0x7f08001f;
-        public static final int chatroom_detail_menu_view_users=0x7f08001e;
-        public static final int classified_chat_rooms_menu_create_chatroom=0x7f080022;
-        public static final int classified_chat_rooms_menu_join_chatroom=0x7f080021;
+        public static final int chatroom_detail_menu_add_post=0x7f080021;
+        public static final int chatroom_detail_menu_add_user=0x7f080020;
+        public static final int chatroom_detail_menu_view_users=0x7f08001f;
+        public static final int classified_chat_rooms_menu_create_chatroom=0x7f080023;
+        public static final int classified_chat_rooms_menu_join_chatroom=0x7f080022;
         public static final int comment_creator_text_view=0x7f080008;
         public static final int comment_list_view=0x7f080010;
         public static final int comment_message_text_view=0x7f080009;
@@ -56,13 +56,14 @@ public final class R {
         public static final int container=0x7f080000;
         public static final int create_chat_room_desc=0x7f080002;
         public static final int create_chat_room_name=0x7f080001;
-        public static final int create_chatroom_menu_save_chatroom=0x7f080023;
+        public static final int create_chatroom_menu_save_chatroom=0x7f080024;
         public static final int create_post_desc=0x7f080004;
-        public static final int create_post_menu_save_post=0x7f080024;
+        public static final int create_post_menu_save_post=0x7f080025;
         public static final int create_post_name=0x7f080003;
-        public static final int post_creator_text_view=0x7f08001a;
-        public static final int post_message_text_view=0x7f08001b;
-        public static final int post_time_text_view=0x7f08001c;
+        public static final int fragment_users_root=0x7f08001a;
+        public static final int post_creator_text_view=0x7f08001b;
+        public static final int post_message_text_view=0x7f08001c;
+        public static final int post_time_text_view=0x7f08001d;
         public static final int scan_qr1_initiate_add_user_button=0x7f08000e;
         public static final int show_qr1_initiate_join_cr_button=0x7f080011;
         public static final int show_qr1_next_button=0x7f080012;
@@ -73,7 +74,7 @@ public final class R {
         public static final int show_received_chat_room_posts=0x7f080017;
         public static final int show_received_chat_room_refresh_button=0x7f080015;
         public static final int show_received_chat_room_users=0x7f080018;
-        public static final int users_menu_add_user=0x7f080025;
+        public static final int users_menu_add_user=0x7f080026;
     }
     public static final class layout {
         public static final int activity_add_user=0x7f030000;
