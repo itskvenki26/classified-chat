@@ -6,7 +6,7 @@ import org.json.JSONObject;
 public class CurrentUser {
 
 	private static int id;
-	private static int crid;
+	private static long crid;
 	private static String Cur_Mak;
 	private static String Cur_Ekey;
 	private static String Old_Mak;
@@ -20,7 +20,7 @@ public class CurrentUser {
 	      
      }
      // constructor
-     public CurrentUser(int id,int crid, String Cur_Mak, String Cur_Ekey, String Old_Mak/*,ArrayList<Channel> Chlist*/){
+     public CurrentUser(int id,long crid, String Cur_Mak, String Cur_Ekey, String Old_Mak/*,ArrayList<Channel> Chlist*/){
          this.id      = id;
          this.crid=crid;
          this.Cur_Mak    = Cur_Mak;
@@ -41,11 +41,11 @@ public class CurrentUser {
 	public String getCur_Mak() {
 		return Cur_Mak;
 	}
-	public int getcrid() {
+	public long getcrid() {
 		return crid;
 	}
 
-	public static void setcrid(int crid) {
+	public static void setcrid(long crid) {
 		CurrentUser.crid = crid;
 	}
 

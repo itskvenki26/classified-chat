@@ -46,7 +46,7 @@ import org.json.JSONObject;
         }
         
      // getting imei
-        public int getP_id(){
+        public long getP_id(){
             return this.getP_id();
         }
       
@@ -55,7 +55,7 @@ import org.json.JSONObject;
             this.P_id = P_id;
         }
         
-        public int getCR_id(){
+        public long getCR_id(){
             return this.getCR_id();
         }
       

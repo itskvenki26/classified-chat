@@ -7,12 +7,12 @@ public class MyProfile {
 
 	// private variables
 	int id;
-	int usrid;
+	long usrid;
 	String type;
 	String phnum;
 	String Host;
 	String Service;
-	int port;
+	long port;
 	String username;
 	int pref_channel_boolean;
 	String name;
@@ -34,8 +34,8 @@ public class MyProfile {
 	}
 
 	// constructor
-	public MyProfile(int id, int usrid, String type, String phnum,
-			String Host, String Service, int port, String username,
+	public MyProfile(int id, long usrid, String type, String phnum,
+			String Host, String Service, long port, String username,
 			int pref_channel_boolean,String name) {
 		this.id = id;
         this.usrid=usrid;
@@ -59,11 +59,11 @@ public class MyProfile {
 		this.id = id;
 	}
 	
-	public int getusrid() {
+	public long getusrid() {
 		return this.usrid;
 	}
 	
-	public void setusrid(int usrid) {
+	public void setusrid(long usrid) {
 		this.usrid = usrid;
 	}
 	
@@ -75,11 +75,11 @@ public class MyProfile {
 		this.pref_channel_boolean = pref_channel_boolean;
 	}
 	
-	public int getport() {
+	public long getport() {
 		return this.port;
 	}
 	
-	public void setport(int port) {
+	public void setport(long port) {
 		this.port = port;
 	}
 	

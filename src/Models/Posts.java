@@ -11,7 +11,7 @@ import org.json.JSONObject;
 		public static final String P_MSG = "message";
         //private variables
         int id;
-        int CR_id;
+        long CR_id;
         //String creator;
         //String time;
         String message;
@@ -22,7 +22,7 @@ import org.json.JSONObject;
       
         }
         // constructor
-        public Posts(int id, int CR_id, String title, String message){
+        public Posts(int id, long CR_id, String title, String message){
             this.id      = id;
             this.CR_id   = CR_id;  
             this.title   = title;            
@@ -40,10 +40,10 @@ import org.json.JSONObject;
             this.id = id;
         }
         
-        public int getCR_id(){
+        public long getCR_id(){
             return this.CR_id;
         }
-        public void setCR_id(int CR_id){
+        public void setCR_id(long CR_id){
         	 this.CR_id =CR_id;
         }
         
