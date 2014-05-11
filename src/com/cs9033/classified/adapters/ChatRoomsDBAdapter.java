@@ -4,18 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import Models.Channel;
-import Models.ChatRoom_Profile;
 import Models.ChatRoom_User;
 import Models.ChatRooms;
 import Models.Comments;
-import Models.CurrentUser;
-import Models.MessageQ;
 import Models.MyProfile;
 import Models.MyProfile_Channel;
-import Models.User_Channel;
 import Models.Posts;
 import Models.User;
+import Models.User_Channel;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -35,35 +31,34 @@ public class ChatRoomsDBAdapter {
 	/******************** Table Fields ************/
 	public static final String KEY_ID = "_id";
 
-
 	public static final String U_EMAIL_ID = "user_email";
-  	public static final String U_NAME = "user_name";
-  	public static final String U_PH_NO = "user_phone_num";
-  	public static final String U_PREF_CHANNEL_ID ="ID of preferred channel";
-	
-	public static final String CRU_CRID="current user chat room id";
+	public static final String U_NAME = "user_name";
+	public static final String U_PH_NO = "user_phone_num";
+	public static final String U_PREF_CHANNEL_ID = "ID of preferred channel";
+
+	public static final String CRU_CRID = "current user chat room id";
 	public static final String CRU_CUR_MAK = "current user current MAK";
 	public static final String CRU_EKEY = "current user current EKEY";
 	public static final String CRU_USER_ID = "User Id";
 
-	//public static final String P_CREATOR = "creator";
+	// public static final String P_CREATOR = "creator";
 	public static final String P_CR_ID = "chat room it belongs to";
 	public static final String P_TITLE = "title";
-	//public static final String P_TIME = "time";
+	// public static final String P_TIME = "time";
 	public static final String P_MSG = "message";
 
 	public static final String C_P_ID = "post id comment belongs to";
 	public static final String C_CR_ID = "chat room comment belongs to";
-	//public static final String C_CREATOR = "comment_creator";
-	//public static final String C_TIME = "comment_time";
+	// public static final String C_CREATOR = "comment_creator";
+	// public static final String C_TIME = "comment_time";
 	public static final String C_MSG = "comment_message";
-	
-	public static final String CR_NAME="Chat_Room_Name";    	
-	public static final String CR_TIME="Chat_Room_time";
-	public static final String CR_DESCRIPTION="Chat_Room_text";    	
-	public static final String CR_CURRENT_MAC="Chat Room Current MAC";
-	public static final String CR_OLD_MAC="Chat Room Old MAC"; 
-	public static final String CR_CURRENT_E="Chat Room Current ENC Key";
+
+	public static final String CR_NAME = "Chat_Room_Name";
+	public static final String CR_TIME = "Chat_Room_time";
+	public static final String CR_DESCRIPTION = "Chat_Room_text";
+	public static final String CR_CURRENT_MAC = "Chat Room Current MAC";
+	public static final String CR_OLD_MAC = "Chat Room Old MAC";
+	public static final String CR_CURRENT_E = "Chat Room Current ENC Key";
 
 	public static final String CRP_CRID = "Chat Room Id";
 	public static final String CRP_MAC_CUR = "Current MAC key";
@@ -81,42 +76,43 @@ public class ChatRoomsDBAdapter {
 	public static final String MCH_USR_NAME = "My channel user name";
 	public static final String MCH_PWD = "My channel password";
 
-//	public static final String M_U_ID = "user id message belongs to";
-//	public static final String M_CR_ID = "Chat Room message belongs to";
-//	public static final String M_CH_ID = "Channel in which message need to send";
-//	public static final String M_ENC_MSG = "Encrypted Message";
-//	public static final String M_TIME = "Message Time";
-	
+	// public static final String M_U_ID = "user id message belongs to";
+	// public static final String M_CR_ID = "Chat Room message belongs to";
+	// public static final String M_CH_ID =
+	// "Channel in which message need to send";
+	// public static final String M_ENC_MSG = "Encrypted Message";
+	// public static final String M_TIME = "Message Time";
+
 	public static final String UCH_U_ID = "User channel user id";
-	public static final String UCH_TYPE="User Channel Type";
+	public static final String UCH_TYPE = "User Channel Type";
 	public static final String UCH_HOST = "User channel Host";
 	public static final String UCH_SERVICE = "User channel service";
 	public static final String UCH_USR_NAME = "User channel user name";
-//	public static final String UCH_PWD = "User channel password";
-	public static final String UCH_PH_NUM="User phone number";
-	public static final String UCH_PORT ="User Port number";
-	public static final String UCH_PRF_CHANNEL="User preferred channel(boolean)";
-	
+	// public static final String UCH_PWD = "User channel password";
+	public static final String UCH_PH_NUM = "User phone number";
+	public static final String UCH_PORT = "User Port number";
+	public static final String UCH_PRF_CHANNEL = "User preferred channel(boolean)";
+
 	public static final String MP_U_ID = "User channel user id";
-	public static final String MP_TYPE="User Channel Type";
+	public static final String MP_TYPE = "User Channel Type";
 	public static final String MP_HOST = "User channel Host";
 	public static final String MP_SERVICE = "User channel service";
 	public static final String MP_USR_NAME = "User channel user name";
-//	public static final String UCH_PWD = "User channel password";
-	public static final String MP_PH_NUM="User phone number";
-	public static final String MP_PORT ="User Port number";
-	public static final String MP_PRF_CHANNEL="User preferred channel(boolean)";
-	public static final String MP_NAME="User full name";
-	
+	// public static final String UCH_PWD = "User channel password";
+	public static final String MP_PH_NUM = "User phone number";
+	public static final String MP_PORT = "User Port number";
+	public static final String MP_PRF_CHANNEL = "User preferred channel(boolean)";
+	public static final String MP_NAME = "User full name";
+
 	public static final String MPC_U_ID = "User channel user id";
-	public static final String MPC_TYPE="User Channel Type";
+	public static final String MPC_TYPE = "User Channel Type";
 	public static final String MPC_HOST = "User channel Host";
 	public static final String MPC_SERVICE = "User channel service";
 	public static final String MPC_USR_NAME = "User channel user name";
-    //public static final String UCH_PWD = "User channel password";
-	public static final String MPC_PH_NUM="User phone number";
-	public static final String MPC_PORT ="User Port number";
-	public static final String MPC_PRF_CHANNEL="User preferred channel(boolean)";
+	// public static final String UCH_PWD = "User channel password";
+	public static final String MPC_PH_NUM = "User phone number";
+	public static final String MPC_PORT = "User Port number";
+	public static final String MPC_PRF_CHANNEL = "User preferred channel(boolean)";
 
 	/******************** Database Name ************/
 	public static final String DATABASE_NAME = "DB_sqllite";
@@ -126,35 +122,33 @@ public class ChatRoomsDBAdapter {
 
 	/** Table names */
 
-	
-	public static final String TABLE_CHATROOMS="Table Chat Room";
-	public static final String TABLE_CR_USER="Table Chat_Room_User";
-	public static final String TABLE_USER="Table User";
-	public static final String TABLE_USER_CHANNEL="Table Channel";
-	public static final String TABLE_POSTS="Table Posts";
-	public static final String TABLE_COMMENTS="Table Comments";
-	public static final String TABLE_MY_PROFILE="Table profile of the user";
-	public static final String TABLE_MY_PROFILE_CHANNEL="Table list of channels";
-	//public static final String TABLE_USER_CHANNEL="";
+	public static final String TABLE_CHATROOMS = "Table Chat Room";
+	public static final String TABLE_CR_USER = "Table Chat_Room_User";
+	public static final String TABLE_USER = "Table User";
+	public static final String TABLE_USER_CHANNEL = "Table Channel";
+	public static final String TABLE_POSTS = "Table Posts";
+	public static final String TABLE_COMMENTS = "Table Comments";
+	public static final String TABLE_MY_PROFILE = "Table profile of the user";
+	public static final String TABLE_MY_PROFILE_CHANNEL = "Table list of channels";
+	// public static final String TABLE_USER_CHANNEL="";
 
 	/*** Set all table with comma separated like USER_TABLE,ABC_TABLE ***/
 	private static final String[] ALL_TABLES = { TABLE_USER, TABLE_POSTS,
 			TABLE_COMMENTS };
-	public static final String[] ALL_POSTS = { P_CR_ID, P_TITLE,
-			P_MSG, KEY_ID };
+	public static final String[] ALL_POSTS = { P_CR_ID, P_TITLE, P_MSG, KEY_ID };
 	// public static final String[] ALL_USERS = { "_id", P_CREATOR, P_MSG,
 	// P_TIME };
 
-	public static final String[] ALL_COMMENTS = { C_P_ID, C_CR_ID, 
-			C_MSG, KEY_ID };
-	public static final String[] ALL_CR = { CR_NAME, CR_TIME,
-		CR_DESCRIPTION, CR_CURRENT_MAC, CR_OLD_MAC, CR_CURRENT_E, KEY_ID };
+	public static final String[] ALL_COMMENTS = { C_P_ID, C_CR_ID, C_MSG,
+			KEY_ID };
+	public static final String[] ALL_CR = { CR_NAME, CR_TIME, CR_DESCRIPTION,
+			CR_CURRENT_MAC, CR_OLD_MAC, CR_CURRENT_E, KEY_ID };
 	public static final String[] ALL_CRP = { CRP_CRID, CRP_MAC_CUR,
 			CRP_MAC_OLD, KEY_ID };
 	public static final String[] ALL_CHANNELS = { CH_U_ID, CH_TYPE, CH_PH_NUM,
 			CH_TIME, CH_PREF, KEY_ID };
-//	public static final String[] ALL_MESSAGES = { M_U_ID, M_CR_ID, M_CH_ID,
-//			M_ENC_MSG, M_TIME, KEY_ID };
+	// public static final String[] ALL_MESSAGES = { M_U_ID, M_CR_ID, M_CH_ID,
+	// M_ENC_MSG, M_TIME, KEY_ID };
 	public static final String[] ALL_MYCHANNELS = { MCH_HOST, MCH_SERVICE,
 			MCH_USR_NAME, MCH_PWD, KEY_ID };
 	public static final String[] ALL_USERS = { U_EMAIL_ID, U_NAME, U_PH_NO,
@@ -167,80 +161,77 @@ public class ChatRoomsDBAdapter {
 			+ TABLE_CR_USER + " (" + KEY_ID
 			+ " integer primary key autoincrement,  " + CRU_CRID
 			+ " integer not null,  " + CRU_CUR_MAK + "  integer not null, "
-			+ CRU_EKEY + "  integer not null, " + CRU_USER_ID + "  integer not null);";
+			+ CRU_EKEY + "  integer not null, " + CRU_USER_ID
+			+ "  integer not null);";
 
 	private static final String USER_CREATE = "create table " + TABLE_USER
 			+ " (" + KEY_ID + " integer primary key autoincrement,  "
 			+ U_EMAIL_ID + "  text not null, " + U_NAME + "  text not null, "
-			+ U_PH_NO + " text UNIQUE," + U_PREF_CHANNEL_ID + "integer not null);";
+			+ U_PH_NO + " text UNIQUE," + U_PREF_CHANNEL_ID
+			+ "integer not null);";
 
 	private static final String POSTS_CREATE = "create table " + TABLE_POSTS
-			+ " (" + KEY_ID + " integer primary key autoincrement,  "
-			+ P_CR_ID
-			+ "  integer UNIQUE, " +P_TITLE+ "text UNIQUE, " + P_MSG
+			+ " (" + KEY_ID + " integer primary key autoincrement,  " + P_CR_ID
+			+ "  integer UNIQUE, " + P_TITLE + "text UNIQUE, " + P_MSG
 			+ "  text not null);";
 
 	private static final String COMMENTS_CREATE = "create table "
 			+ TABLE_COMMENTS + " (" + KEY_ID
 			+ " integer primary key autoincrement,  " + C_P_ID
-			+ " integer not null,  " + C_CR_ID + " integer not null,  "
-			+ C_MSG + "  text not null);";
+			+ " integer not null,  " + C_CR_ID + " integer not null,  " + C_MSG
+			+ "  text not null);";
 
 	private static final String CR_CREATE = "create table " + TABLE_CHATROOMS
 			+ "(" + KEY_ID + "integer primary key autoincrement, " + CR_NAME
-			+ "text UNIQUE" + CR_TIME + "text not null"
-			+ CR_DESCRIPTION + "text not null" + CR_CURRENT_MAC
-			+ "integer not null" + CR_OLD_MAC + "integer not null"
-			+ CR_CURRENT_E + " integer not null);";
+			+ "text UNIQUE" + CR_TIME + "text not null" + CR_DESCRIPTION
+			+ "text not null" + CR_CURRENT_MAC + "integer not null"
+			+ CR_OLD_MAC + "integer not null" + CR_CURRENT_E
+			+ " integer not null);";
 
 	private static final String USER_CHANNELS_CREATE = "create table "
 			+ TABLE_USER_CHANNEL + "(" + KEY_ID
 			+ "integer primary key autoincrement, " + UCH_U_ID
-			+ "integer not null, " + UCH_TYPE + " text not null, "+ UCH_PH_NUM
-			+ " text not null," + UCH_HOST
-			+ " text not null, " + UCH_SERVICE + " text not null, " + UCH_PORT
-			+ " integer not null,"+ UCH_USR_NAME
-			+ " text not null,"+ UCH_PRF_CHANNEL
+			+ "integer not null, " + UCH_TYPE + " text not null, " + UCH_PH_NUM
+			+ " text not null," + UCH_HOST + " text not null, " + UCH_SERVICE
+			+ " text not null, " + UCH_PORT + " integer not null,"
+			+ UCH_USR_NAME + " text not null," + UCH_PRF_CHANNEL
 			+ " integer not null);";
-	
+
 	private static final String MY_PROFILE_CREATE = "create table "
 			+ TABLE_MY_PROFILE + "(" + KEY_ID
 			+ "integer primary key autoincrement, " + MP_U_ID
-			+ "integer not null, " + MP_TYPE + " text not null, "+ MP_PH_NUM
-			+ " text not null," + MP_HOST
-			+ " text not null, " + MP_SERVICE + " text not null, " + MP_PORT
-			+ " integer not null,"+ MP_USR_NAME
-			+ " text not null,"+ MP_PRF_CHANNEL
-			+ " integer not null,"+ MP_NAME
-			+ " text not null);";
-	
+			+ "integer not null, " + MP_TYPE + " text not null, " + MP_PH_NUM
+			+ " text not null," + MP_HOST + " text not null, " + MP_SERVICE
+			+ " text not null, " + MP_PORT + " integer not null," + MP_USR_NAME
+			+ " text not null," + MP_PRF_CHANNEL + " integer not null,"
+			+ MP_NAME + " text not null);";
+
 	private static final String MY_PROFILE_CHANNEL_CREATE = "create table "
 			+ TABLE_MY_PROFILE_CHANNEL + "(" + KEY_ID
 			+ "integer primary key autoincrement, " + MPC_U_ID
-			+ "integer not null, " + MPC_TYPE + " text not null, "+ MPC_PH_NUM
-			+ " text not null," + MPC_HOST
-			+ " text not null, " + MPC_SERVICE + " text not null, " + MPC_PORT
-			+ " integer not null,"+ MPC_USR_NAME
-			+ " text not null,"+ MPC_PRF_CHANNEL
+			+ "integer not null, " + MPC_TYPE + " text not null, " + MPC_PH_NUM
+			+ " text not null," + MPC_HOST + " text not null, " + MPC_SERVICE
+			+ " text not null, " + MPC_PORT + " integer not null,"
+			+ MPC_USR_NAME + " text not null," + MPC_PRF_CHANNEL
 			+ " integer not null);";
 
-//	private static final String MESSAGEQ_CREATE = "create table "
-//			+ TABLE_MESSAGEQ + "(" + KEY_ID
-//			+ "integer primary key autoincrement, " + M_U_ID
-//			+ "integer not null, " + M_CR_ID + " integer not null, " + M_CH_ID
-//			+ " text not null, " + M_ENC_MSG + " text not null, " + M_TIME
-//			+ " text not null);";
-//
-//	private static final String MYCHANNELS_CREATE = "create table "
-//			+ TABLE_MYCHANNELS + "(" + KEY_ID
-//			+ "integer primary key autoincrement, " + MCH_HOST
-//			+ "integer not null, " + MCH_SERVICE + " text not null, "
-//			+ MCH_USR_NAME + " text not null, " + MCH_PWD + " text not null);";
-//	private static final String CRP_CREATE = "create table "
-//			+ TABLE_CHAT_ROOMS_PROFILE + "(" + KEY_ID
-//			+ "integer primary key autoincrement, " + CRP_CRID
-//			+ "integer not null, " + CRP_MAC_CUR + " text not null, "
-//			+ CRP_MAC_OLD + " text not null);";
+	// private static final String MESSAGEQ_CREATE = "create table "
+	// + TABLE_MESSAGEQ + "(" + KEY_ID
+	// + "integer primary key autoincrement, " + M_U_ID
+	// + "integer not null, " + M_CR_ID + " integer not null, " + M_CH_ID
+	// + " text not null, " + M_ENC_MSG + " text not null, " + M_TIME
+	// + " text not null);";
+	//
+	// private static final String MYCHANNELS_CREATE = "create table "
+	// + TABLE_MYCHANNELS + "(" + KEY_ID
+	// + "integer primary key autoincrement, " + MCH_HOST
+	// + "integer not null, " + MCH_SERVICE + " text not null, "
+	// + MCH_USR_NAME + " text not null, " + MCH_PWD + " text not null);";
+	// private static final String CRP_CREATE = "create table "
+	// + TABLE_CHAT_ROOMS_PROFILE + "(" + KEY_ID
+	// + "integer primary key autoincrement, " + CRP_CRID
+	// + "integer not null, " + CRP_MAC_CUR + " text not null, "
+	// + CRP_MAC_OLD + " text not null);";
 
 	// private static final String DEVICE_CREATE =
 	// "create table tbl_device(_id integer primary key auto-increment, device_name text not null,device_email text not null,device_regid text not null,device_imei text not null);";
@@ -306,9 +297,9 @@ public class ChatRoomsDBAdapter {
 				db.execSQL(COMMENTS_CREATE);
 				db.execSQL(MY_PROFILE_CREATE);
 				db.execSQL(MY_PROFILE_CHANNEL_CREATE);
-				//db.execSQL(MESSAGEQ_CREATE);
-				//db.execSQL(MYCHANNELS_CREATE);
-				//db.execSQL(CRP_CREATE);
+				// db.execSQL(MESSAGEQ_CREATE);
+				// db.execSQL(MYCHANNELS_CREATE);
+				// db.execSQL(CRP_CREATE);
 				db.execSQL(CR_USER_CREATE);
 			} catch (Exception exception) {
 				if (DEBUG)
@@ -337,9 +328,6 @@ public class ChatRoomsDBAdapter {
 		}
 		return DBHelper.getWritableDatabase();
 	}
-	
-	
-
 
 	// Adding new user
 
@@ -347,15 +335,15 @@ public class ChatRoomsDBAdapter {
 		try {
 			final SQLiteDatabase db = open();
 			long crid = cru.getcrid();
-			long usrid =cru.getusrid();
+			long usrid = cru.getusrid();
 			long curmak = cru.getCur_Mak();
 			long cuerkey = cru.getCur_Ekey();
-			
+
 			// ArrayList<Channel> Chlist =uData.getChlist();
 
 			ContentValues cVal = new ContentValues();
 			cVal.put(CRU_CRID, crid);
-			cVal.put(CRU_USER_ID, usrid);			
+			cVal.put(CRU_USER_ID, usrid);
 			cVal.put(CRU_CUR_MAK, curmak);
 			cVal.put(CRU_EKEY, cuerkey);
 			// for(Channel c:Chlist)
@@ -369,8 +357,6 @@ public class ChatRoomsDBAdapter {
 		}
 	}
 
-	
-
 	public ChatRoom_User getChatRoomUserData(long id) {
 		final SQLiteDatabase db = open();
 
@@ -380,9 +366,9 @@ public class ChatRoomsDBAdapter {
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		ChatRoom_User data = new ChatRoom_User(
-				(cursor.getInt(0)), cursor.getInt(1), cursor.getInt(2),
-				cursor.getInt(3), cursor.getInt(4));
+		ChatRoom_User data = new ChatRoom_User((cursor.getInt(0)),
+				cursor.getInt(1), cursor.getInt(2), cursor.getInt(3),
+				cursor.getInt(4));
 		// return contact
 		return data;
 	}
@@ -394,7 +380,7 @@ public class ChatRoomsDBAdapter {
 			String email_id = sqlEscapeString(uData.getEMAIL());
 			String name = sqlEscapeString(uData.getName());
 			String ph_no = sqlEscapeString(uData.getPH_NO());
-			int pref_channel_id=sqlEscapeString(uData.getpref_channel_id());
+			int pref_channel_id = sqlEscapeString(uData.getpref_channel_id());
 			// ArrayList<Channel> Chlist =uData.getChlist();
 
 			ContentValues cVal = new ContentValues();
@@ -423,73 +409,61 @@ public class ChatRoomsDBAdapter {
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		User data = new User((cursor.getInt(0)),
-				cursor.getString(1), cursor.getString(2), cursor.getString(3),cursor.getInt(4));
+		User data = new User((cursor.getInt(0)), cursor.getString(1),
+				cursor.getString(2), cursor.getString(3), cursor.getInt(4));
 		// return contact
 		return data;
 	}
 
-//	public void getAllUsers() {
-//		User usr = new User();
-//
-//		final SQLiteDatabase db = open();
-//
-//		String from[] = getColsAllUsers();
-//		int to[] = new int[] {};
-//
-//		Cursor c = db
-//				.query(TABLE_USER, ALL_USERS, null, null, null, null, null);
+	// public void getAllUsers() {
+	// User usr = new User();
+	//
+	// final SQLiteDatabase db = open();
+	//
+	// String from[] = getColsAllUsers();
+	// int to[] = new int[] {};
+	//
+	// Cursor c = db
+	// .query(TABLE_USER, ALL_USERS, null, null, null, null, null);
 
-		// SimpleCursorAdapter sca = new SimpleCursorAdapter(this,
-		// R.layout.fragment_users, c, from, to, 0);
-		// setListAdapter(sca);
+	// SimpleCursorAdapter sca = new SimpleCursorAdapter(this,
+	// R.layout.fragment_users, c, from, to, 0);
+	// setListAdapter(sca);
 
-	//}
+	// }
 
-	/*public void addMessage(MessageQ msg) {
-		try {
-			if (DBHelper == null) {
-				init();
-				Log.d(TAG, "init with context");
-			}
-			final SQLiteDatabase db = open();
-
-			int uid = sqlEscapeString(msg.getU_id());
-			int crid = sqlEscapeString(msg.getCR_id());
-			int chid = sqlEscapeString(msg.getCH_id());
-			String emsg = sqlEscapeString(msg.getEncypt_Message());
-			String time = sqlEscapeString(msg.getTime());
-
-			ContentValues cVal = new ContentValues();
-			cVal.put(M_U_ID, uid);
-			cVal.put(M_CR_ID, crid);
-			cVal.put(M_CH_ID, chid);
-			cVal.put(M_ENC_MSG, emsg);
-			cVal.put(M_TIME, time);
-			db.insert(TABLE_MESSAGEQ, null, cVal);
-			db.close(); // Closing database connection
-
-			// Log.i("Database", "Added Post " + cr.get);
-		} catch (Throwable t) {
-			Log.i("Database", "Exception caught: " + t.getMessage(), t);
-		}
-	}
-
-	public MessageQ getMessageQData(int id) {
-		final SQLiteDatabase db = open();
-
-		Cursor cursor = db.query(TABLE_CHAT_ROOMS, new String[] { KEY_ID,
-				M_U_ID, M_CR_ID, M_CH_ID, M_ENC_MSG, M_TIME }, KEY_ID + "=?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
-		if (cursor != null)
-			cursor.moveToFirst();
-
-		MessageQ data = new MessageQ(Integer.parseInt(cursor.getString(0)),
-				cursor.getInt(1), cursor.getInt(2), cursor.getInt(3),
-				cursor.getString(4), cursor.getString(5));
-		// return contact
-		return data;
-	}*/
+	/*
+	 * public void addMessage(MessageQ msg) { try { if (DBHelper == null) {
+	 * init(); Log.d(TAG, "init with context"); } final SQLiteDatabase db =
+	 * open();
+	 * 
+	 * int uid = sqlEscapeString(msg.getU_id()); int crid =
+	 * sqlEscapeString(msg.getCR_id()); int chid =
+	 * sqlEscapeString(msg.getCH_id()); String emsg =
+	 * sqlEscapeString(msg.getEncypt_Message()); String time =
+	 * sqlEscapeString(msg.getTime());
+	 * 
+	 * ContentValues cVal = new ContentValues(); cVal.put(M_U_ID, uid);
+	 * cVal.put(M_CR_ID, crid); cVal.put(M_CH_ID, chid); cVal.put(M_ENC_MSG,
+	 * emsg); cVal.put(M_TIME, time); db.insert(TABLE_MESSAGEQ, null, cVal);
+	 * db.close(); // Closing database connection
+	 * 
+	 * // Log.i("Database", "Added Post " + cr.get); } catch (Throwable t) {
+	 * Log.i("Database", "Exception caught: " + t.getMessage(), t); } }
+	 * 
+	 * public MessageQ getMessageQData(int id) { final SQLiteDatabase db =
+	 * open();
+	 * 
+	 * Cursor cursor = db.query(TABLE_CHAT_ROOMS, new String[] { KEY_ID, M_U_ID,
+	 * M_CR_ID, M_CH_ID, M_ENC_MSG, M_TIME }, KEY_ID + "=?", new String[] {
+	 * String.valueOf(id) }, null, null, null, null); if (cursor != null)
+	 * cursor.moveToFirst();
+	 * 
+	 * MessageQ data = new MessageQ(Integer.parseInt(cursor.getString(0)),
+	 * cursor.getInt(1), cursor.getInt(2), cursor.getInt(3),
+	 * cursor.getString(4), cursor.getString(5)); // return contact return data;
+	 * }
+	 */
 
 	public void addUser_Channels(User_Channel uch) {
 		try {
@@ -498,14 +472,15 @@ public class ChatRoomsDBAdapter {
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
-            long usrid=uch.getusrid(); 
-            String type=sqlEscapeString(uch.gettype());
-            String phnum=sqlEscapeString(uch.getphnum());
+			long usrid = uch.getusrid();
+			String type = sqlEscapeString(uch.gettype());
+			String phnum = sqlEscapeString(uch.getphnum());
 			String host = sqlEscapeString(uch.getHost());
 			String service = sqlEscapeString(uch.getService());
 			String usrname = sqlEscapeString(uch.getusername());
-			long port=uch.getport();
-			int pref_channel_boolean=sqlEscapeString(uch.getpref_channel_boolean());
+			long port = uch.getport();
+			int pref_channel_boolean = sqlEscapeString(uch
+					.getpref_channel_boolean());
 			// String pref = sqlEscapeString(ch.getpreffered_Ch());
 
 			ContentValues cVal = new ContentValues();
@@ -531,18 +506,20 @@ public class ChatRoomsDBAdapter {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_USER_CHANNEL, new String[] { KEY_ID,
-				UCH_U_ID, UCH_TYPE, UCH_PH_NUM, UCH_HOST,UCH_SERVICE,UCH_PORT,UCH_USR_NAME,UCH_PRF_CHANNEL}, KEY_ID + "=?",
+				UCH_U_ID, UCH_TYPE, UCH_PH_NUM, UCH_HOST, UCH_SERVICE,
+				UCH_PORT, UCH_USR_NAME, UCH_PRF_CHANNEL }, KEY_ID + "=?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
 		User_Channel data = new User_Channel((cursor.getInt(0)),
 				cursor.getInt(1), cursor.getString(2), cursor.getString(3),
-				cursor.getString(4),cursor.getString(5),cursor.getInt(6),cursor.getString(7),cursor.getInt(8));
+				cursor.getString(4), cursor.getString(5), cursor.getInt(6),
+				cursor.getString(7), cursor.getInt(8));
 		// return contact
 		return data;
 	}
-	
+
 	public void addMyProfile(MyProfile mp) {
 		try {
 			if (DBHelper == null) {
@@ -550,14 +527,15 @@ public class ChatRoomsDBAdapter {
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
-            long usrid=mp.getusrid(); 
-            String type=sqlEscapeString(mp.gettype());
-            String phnum=sqlEscapeString(mp.getphnum());
+			long usrid = mp.getusrid();
+			String type = sqlEscapeString(mp.gettype());
+			String phnum = sqlEscapeString(mp.getphnum());
 			String host = sqlEscapeString(mp.getHost());
 			String service = sqlEscapeString(mp.getService());
 			String usrname = sqlEscapeString(mp.getusername());
-			long port=mp.getport();
-			int pref_channel_boolean=sqlEscapeString(mp.getpref_channel_boolean());
+			long port = mp.getport();
+			int pref_channel_boolean = sqlEscapeString(mp
+					.getpref_channel_boolean());
 			String name = sqlEscapeString(mp.getname());
 
 			ContentValues cVal = new ContentValues();
@@ -584,19 +562,20 @@ public class ChatRoomsDBAdapter {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_MY_PROFILE, new String[] { KEY_ID,
-				MP_U_ID, MP_TYPE, MP_PH_NUM, MP_HOST,MP_SERVICE,MP_PORT,MP_USR_NAME,MP_PRF_CHANNEL,MP_NAME}, KEY_ID + "=?",
+				MP_U_ID, MP_TYPE, MP_PH_NUM, MP_HOST, MP_SERVICE, MP_PORT,
+				MP_USR_NAME, MP_PRF_CHANNEL, MP_NAME }, KEY_ID + "=?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		MyProfile data = new MyProfile((cursor.getInt(0)),
-				cursor.getInt(1), cursor.getString(2), cursor.getString(3),
-				cursor.getString(4),cursor.getString(5),cursor.getInt(6),cursor.getString(7),cursor.getInt(8),cursor.getString(9));
+		MyProfile data = new MyProfile((cursor.getInt(0)), cursor.getInt(1),
+				cursor.getString(2), cursor.getString(3), cursor.getString(4),
+				cursor.getString(5), cursor.getInt(6), cursor.getString(7),
+				cursor.getInt(8), cursor.getString(9));
 		// return contact
 		return data;
 	}
 
-	
 	public void addMyProfileChannel(MyProfile_Channel mpc) {
 		try {
 			if (DBHelper == null) {
@@ -604,15 +583,16 @@ public class ChatRoomsDBAdapter {
 				Log.d(TAG, "init with context");
 			}
 			final SQLiteDatabase db = open();
-            long usrid=mpc.getusrid(); 
-            String type=sqlEscapeString(mpc.gettype());
-            String phnum=sqlEscapeString(mpc.getphnum());
+			long usrid = mpc.getusrid();
+			String type = sqlEscapeString(mpc.gettype());
+			String phnum = sqlEscapeString(mpc.getphnum());
 			String host = sqlEscapeString(mpc.getHost());
 			String service = sqlEscapeString(mpc.getService());
 			String usrname = sqlEscapeString(mpc.getusername());
-			long port=mpc.getport();
-			int pref_channel_boolean=sqlEscapeString(mpc.getpref_channel_boolean());
-			//String name = sqlEscapeString(mp.getname());
+			long port = mpc.getport();
+			int pref_channel_boolean = sqlEscapeString(mpc
+					.getpref_channel_boolean());
+			// String name = sqlEscapeString(mp.getname());
 
 			ContentValues cVal = new ContentValues();
 			// cVal.put(CH_U_ID, uid);
@@ -624,7 +604,7 @@ public class ChatRoomsDBAdapter {
 			cVal.put(MPC_PORT, port);
 			cVal.put(MPC_USR_NAME, usrname);
 			cVal.put(MPC_PRF_CHANNEL, pref_channel_boolean);
-			//cVal.put(MP_NAME, name);
+			// cVal.put(MP_NAME, name);
 			db.insert(TABLE_MY_PROFILE_CHANNEL, null, cVal);
 			db.close(); // Closing database connection
 
@@ -637,61 +617,49 @@ public class ChatRoomsDBAdapter {
 	public MyProfile_Channel getMyprofile_ChannelData(long id) {
 		final SQLiteDatabase db = open();
 
-		Cursor cursor = db.query(TABLE_MY_PROFILE_CHANNEL, new String[] { KEY_ID,
-				MPC_U_ID, MPC_TYPE, MPC_PH_NUM, MPC_HOST,MPC_SERVICE,MPC_PORT,MPC_USR_NAME,MPC_PRF_CHANNEL}, KEY_ID + "=?",
+		Cursor cursor = db.query(TABLE_MY_PROFILE_CHANNEL, new String[] {
+				KEY_ID, MPC_U_ID, MPC_TYPE, MPC_PH_NUM, MPC_HOST, MPC_SERVICE,
+				MPC_PORT, MPC_USR_NAME, MPC_PRF_CHANNEL }, KEY_ID + "=?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
 		MyProfile_Channel data = new MyProfile_Channel((cursor.getInt(0)),
 				cursor.getInt(1), cursor.getString(2), cursor.getString(3),
-				cursor.getString(4),cursor.getString(5),cursor.getInt(6),cursor.getString(7),cursor.getInt(8));
+				cursor.getString(4), cursor.getString(5), cursor.getInt(6),
+				cursor.getString(7), cursor.getInt(8));
 		// return contact
 		return data;
 	}
 
-	
-
-	/*public void addChatRoomProfileData(ChatRoom_Profile crp) {
-		try {
-			if (DBHelper == null) {
-				init();
-				Log.d(TAG, "init with context");
-			}
-			final SQLiteDatabase db = open();
-			int crid = sqlEscapeString(crp.getcrid());
-			String macold = sqlEscapeString(crp.getMAC_Old());
-			String maccur = sqlEscapeString(crp.getMAC_Cur());
-
-			ContentValues cVal = new ContentValues();
-			cVal.put(CRP_CRID, crid);
-			cVal.put(CRP_MAC_CUR, maccur);
-			cVal.put(CRP_MAC_OLD, macold);
-
-			db.insert(TABLE_CHAT_ROOMS_PROFILE, null, cVal);
-			db.close(); // Closing database connection
-
-			// Log.i("Database", "Added Post " + cr.get);
-		} catch (Throwable t) {
-			Log.i("Database", "Exception caught: " + t.getMessage(), t);
-		}
-	}
-
-	public ChatRoom_Profile getChatRoomsProfileData(int id) {
-		final SQLiteDatabase db = open();
-
-		Cursor cursor = db.query(TABLE_CHAT_ROOMS_PROFILE, new String[] {
-				KEY_ID, CRP_CRID, CRP_MAC_CUR, CRP_MAC_OLD }, KEY_ID + "=?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
-		if (cursor != null)
-			cursor.moveToFirst();
-
-		ChatRoom_Profile data = new ChatRoom_Profile(Integer.parseInt(cursor
-				.getString(0)), cursor.getInt(1), cursor.getString(2),
-				cursor.getString(3));
-		// return contact
-		return data;
-	}*/
+	/*
+	 * public void addChatRoomProfileData(ChatRoom_Profile crp) { try { if
+	 * (DBHelper == null) { init(); Log.d(TAG, "init with context"); } final
+	 * SQLiteDatabase db = open(); int crid = sqlEscapeString(crp.getcrid());
+	 * String macold = sqlEscapeString(crp.getMAC_Old()); String maccur =
+	 * sqlEscapeString(crp.getMAC_Cur());
+	 * 
+	 * ContentValues cVal = new ContentValues(); cVal.put(CRP_CRID, crid);
+	 * cVal.put(CRP_MAC_CUR, maccur); cVal.put(CRP_MAC_OLD, macold);
+	 * 
+	 * db.insert(TABLE_CHAT_ROOMS_PROFILE, null, cVal); db.close(); // Closing
+	 * database connection
+	 * 
+	 * // Log.i("Database", "Added Post " + cr.get); } catch (Throwable t) {
+	 * Log.i("Database", "Exception caught: " + t.getMessage(), t); } }
+	 * 
+	 * public ChatRoom_Profile getChatRoomsProfileData(int id) { final
+	 * SQLiteDatabase db = open();
+	 * 
+	 * Cursor cursor = db.query(TABLE_CHAT_ROOMS_PROFILE, new String[] { KEY_ID,
+	 * CRP_CRID, CRP_MAC_CUR, CRP_MAC_OLD }, KEY_ID + "=?", new String[] {
+	 * String.valueOf(id) }, null, null, null, null); if (cursor != null)
+	 * cursor.moveToFirst();
+	 * 
+	 * ChatRoom_Profile data = new ChatRoom_Profile(Integer.parseInt(cursor
+	 * .getString(0)), cursor.getInt(1), cursor.getString(2),
+	 * cursor.getString(3)); // return contact return data; }
+	 */
 
 	public void addChatRoomsData(ChatRooms cr) {
 		try {
@@ -702,8 +670,8 @@ public class ChatRoomsDBAdapter {
 			final SQLiteDatabase db = open();
 			long curmac = cr.getcurrent_mac();
 			long cur_e = cr.getcurrent_e();
-			long oldmac = cr.getold_mac();			
-			String CRName = sqlEscapeString(cr.getCR_name());			
+			long oldmac = cr.getold_mac();
+			String CRName = sqlEscapeString(cr.getCR_name());
 			String time = sqlEscapeString(cr.getTIME());
 			String txt = sqlEscapeString(cr.getdescription());
 
@@ -727,34 +695,32 @@ public class ChatRoomsDBAdapter {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_CHATROOMS, new String[] { KEY_ID,
-				CR_CURRENT_MAC, CR_CURRENT_E, CR_OLD_MAC, CR_NAME,
-				CR_TIME, CR_DESCRIPTION }, KEY_ID + "=?", new String[] { String.valueOf(id) },
-				null, null, null, null);
+				CR_CURRENT_MAC, CR_CURRENT_E, CR_OLD_MAC, CR_NAME, CR_TIME,
+				CR_DESCRIPTION }, KEY_ID + "=?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		ChatRooms data = new ChatRooms((cursor.getInt(0)),
-				cursor.getInt(1), cursor.getInt(2),
-				 cursor.getInt(3),
-				cursor.getString(4), cursor.getString(5), cursor.getString(6));
+		ChatRooms data = new ChatRooms((cursor.getInt(0)), cursor.getInt(1),
+				cursor.getInt(2), cursor.getInt(3), cursor.getString(4),
+				cursor.getString(5), cursor.getString(6));
 		// return contact
 		return data;
 	}
-	
+
 	public Cursor getChatRoomsCursor() {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_CHATROOMS, new String[] { KEY_ID,
-				CR_CURRENT_MAC, CR_CURRENT_E, CR_OLD_MAC, CR_NAME,
-				CR_TIME, CR_DESCRIPTION },null, null,
-				null, null, null, null);
+				CR_CURRENT_MAC, CR_CURRENT_E, CR_OLD_MAC, CR_NAME, CR_TIME,
+				CR_DESCRIPTION }, null, null, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
-//		ChatRooms data = new ChatRooms((cursor.getInt(0)),
-//				cursor.getInt(1), cursor.getInt(2),
-//				 cursor.getInt(3),
-//				cursor.getString(4), cursor.getString(5), cursor.getString(6));
+		// ChatRooms data = new ChatRooms((cursor.getInt(0)),
+		// cursor.getInt(1), cursor.getInt(2),
+		// cursor.getInt(3),
+		// cursor.getString(4), cursor.getString(5), cursor.getString(6));
 		// return contact
 		return cursor;
 	}
@@ -767,17 +733,17 @@ public class ChatRoomsDBAdapter {
 			}
 			final SQLiteDatabase db = open();
 
-			long crid =pt.getCR_id();
+			long crid = pt.getCR_id();
 			String title = sqlEscapeString(pt.getTitle());
-			//String creator = sqlEscapeString(pt.getCREATOR());
-			//String time = sqlEscapeString(pt.getTIME());
+			// String creator = sqlEscapeString(pt.getCREATOR());
+			// String time = sqlEscapeString(pt.getTIME());
 			String msg = sqlEscapeString(pt.getMessage());
 
 			ContentValues cVal = new ContentValues();
 			cVal.put(P_CR_ID, crid);
 			cVal.put(P_TITLE, title);
-			//cVal.put(P_CREATOR, creator);
-			//cVal.put(P_TIME, time);
+			// cVal.put(P_CREATOR, creator);
+			// cVal.put(P_TIME, time);
 			cVal.put(P_MSG, msg);
 			db.insert(TABLE_POSTS, null, cVal);
 			db.close(); // Closing database connection
@@ -788,6 +754,7 @@ public class ChatRoomsDBAdapter {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private String getTime() {
 
 		Calendar c = Calendar.getInstance();
@@ -809,29 +776,30 @@ public class ChatRoomsDBAdapter {
 	public Posts getPostsData(long id) {
 		final SQLiteDatabase db = open();
 
-		Cursor cursor = db.query(TABLE_POSTS, new String[] { KEY_ID, P_TITLE, P_MSG }, KEY_ID + "=?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
+		Cursor cursor = db.query(TABLE_POSTS, new String[] { KEY_ID, P_TITLE,
+				P_MSG }, KEY_ID + "=?", new String[] { String.valueOf(id) },
+				null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		Posts data = new Posts((cursor.getInt(0)),
-				cursor.getInt(1), cursor.getString(2), cursor.getString(3)
-				);
+		Posts data = new Posts((cursor.getInt(0)), cursor.getInt(1),
+				cursor.getString(2), cursor.getString(3));
 		// return contact
 		return data;
 	}
-	
+
 	public Cursor getPostsCursor(long crid) {
 		final SQLiteDatabase db = open();
 
-		Cursor cursor = db.query(TABLE_POSTS, new String[] { KEY_ID, P_TITLE, P_MSG }, P_CR_ID + "=?",
-				new String[] { String.valueOf(crid) }, null, null, null, null);
+		Cursor cursor = db.query(TABLE_POSTS, new String[] { KEY_ID, P_TITLE,
+				P_MSG }, P_CR_ID + "=?", new String[] { String.valueOf(crid) },
+				null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
-//		Posts data = new Posts((cursor.getInt(0)),
-//				cursor.getInt(1), cursor.getString(2), cursor.getString(3)
-//				);
+		// Posts data = new Posts((cursor.getInt(0)),
+		// cursor.getInt(1), cursor.getString(2), cursor.getString(3)
+		// );
 		// return contact
 		return cursor;
 	}
@@ -861,8 +829,8 @@ public class ChatRoomsDBAdapter {
 		Log.d(TAG, "addCommentsData ct: got db");
 
 		long crid = ct.getCR_id();
-		//String creator = sqlEscapeString(ct.getCREATOR());
-		//String time = getTime();
+		// String creator = sqlEscapeString(ct.getCREATOR());
+		// String time = getTime();
 		String msg = sqlEscapeString(ct.getMessage());
 		long post_id = ct.getP_id();
 		Log.d(TAG, "addCommentsData ct: set comment values");
@@ -870,8 +838,8 @@ public class ChatRoomsDBAdapter {
 		ContentValues cVal = new ContentValues();
 		cVal.put(C_CR_ID, crid);
 		cVal.put(C_P_ID, post_id);
-		//cVal.put(C_CREATOR, creator);
-		//cVal.put(C_TIME, time);
+		// cVal.put(C_CREATOR, creator);
+		// cVal.put(C_TIME, time);
 		cVal.put(C_MSG, msg);
 		// cVal.put(C_P_ID, post_id);
 		db.insert(TABLE_COMMENTS, null, cVal);
@@ -900,23 +868,24 @@ public class ChatRoomsDBAdapter {
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		Comments data = new Comments((cursor.getInt(0)),
-				cursor.getInt(1), cursor.getInt(2), cursor.getString(3));
+		Comments data = new Comments((cursor.getInt(0)), cursor.getInt(1),
+				cursor.getInt(2), cursor.getString(3));
 		// return contact
 		return data;
 	}
-	
+
 	public Cursor getCommentsCursor(long crid, long postid) {
 		final SQLiteDatabase db = open();
 
 		Cursor cursor = db.query(TABLE_COMMENTS, new String[] { KEY_ID, C_P_ID,
-				C_CR_ID, C_MSG }, C_CR_ID + "=?"+C_P_ID + "=?",new String[] { String.valueOf(crid),String.valueOf(postid) },
-				null, null, null);
+				C_CR_ID, C_MSG }, C_CR_ID + "=?" + C_P_ID + "=?", new String[] {
+				String.valueOf(crid), String.valueOf(postid) }, null, null,
+				null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
-//		Comments data = new Comments((cursor.getInt(0)),
-//				cursor.getInt(1), cursor.getInt(2), cursor.getString(3));
+		// Comments data = new Comments((cursor.getInt(0)),
+		// cursor.getInt(1), cursor.getInt(2), cursor.getString(3));
 		// return contact
 		return cursor;
 	}

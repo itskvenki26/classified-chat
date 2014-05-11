@@ -21,11 +21,11 @@ public class CurrentUser {
      }
      // constructor
      public CurrentUser(int id,long crid, String Cur_Mak, String Cur_Ekey, String Old_Mak/*,ArrayList<Channel> Chlist*/){
-         this.id      = id;
-         this.crid=crid;
-         this.Cur_Mak    = Cur_Mak;
-         this.Cur_Ekey    = Cur_Ekey;
-         this.Old_Mak = Old_Mak;
+         CurrentUser.id      = id;
+         CurrentUser.crid=crid;
+         CurrentUser.Cur_Mak    = Cur_Mak;
+         CurrentUser.Cur_Ekey    = Cur_Ekey;
+         CurrentUser.Old_Mak = Old_Mak;
         // this.Chlist=Chlist;
           
      }

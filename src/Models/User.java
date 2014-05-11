@@ -1,7 +1,5 @@
 package Models;
 
-import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
  public  class User {
