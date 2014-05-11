@@ -6,7 +6,7 @@
 
     <!-- Activity Title Strings -->
     <string name="title_activity_comments_view">Comments</string>
-    <string name="title_activity_posts_view">Post</string>
+    <string name="title_activity_posts_view">Posts</string>
     <string name="title_activity_demo_post">DemoPost</string>
     <string name="title_activity_demo_keys">DemoKeys</string>
     <string name="title_activity_demo_xkeys">DemoXKeys</string>
@@ -14,6 +14,8 @@
     <string name="title_activity_create_chat_room">Create Chat Room</string>
     <string name="title_activity_chat_room_detail">Chat Room</string>
     <string name="title_activity_create_post">Add Post</string>
+    <string name="title_activity_users">Users</string>
+    <string name="title_activity_add_user">Add User</string>
 
     <!-- Generic Strings -->
     <string name="blank" />
@@ -21,8 +23,10 @@
     <string name="desc">Description</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="initiate_add_user">Initiate Add User</string>
+    <string name="initiate">Initiate</string>
     <string name="verify_add_user_key">Verify Key</string>
+    <string name="next">Next</string>
+    <string name="refresh">Refresh</string>
 
     <!-- Common Strings -->
     <string name="posts_list">Posts</string>
@@ -37,7 +41,5 @@
     <!-- Unused Strings -->
     <!-- <string name="create_chat_room">Create Chat Room</string> -->
     <!-- <string name="add_post">Add Post</string> -->
-    <string name="title_activity_users">Users</string>
-    <string name="title_activity_add_user">Add User</string>
 
 </resources>

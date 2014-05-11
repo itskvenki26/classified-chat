@@ -5,9 +5,15 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/initiate_add_user"
+        android:id="@+id/show_qr1_initiate_join_cr_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/initiate_add_user" />
+        android:text="@string/initiate" />
+
+    <Button
+        android:id="@+id/show_qr1_next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next" />
 
 </LinearLayout>
