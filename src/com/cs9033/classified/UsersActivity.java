@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.cs9033.classified.create.AddUserActivity;
+import com.cs9033.classified.create.JoinChatRoomUserActivity;
 
 public class UsersActivity extends Activity {
 	private static final String TAG = "UsersActivity";
@@ -63,7 +63,7 @@ public class UsersActivity extends Activity {
 		Intent intent = null;
 		switch (id) {
 		case R.id.users_menu_add_user:
-			intent = (new Intent(this, AddUserActivity.class)).putExtra("CRID",
+			intent = (new Intent(this, JoinChatRoomUserActivity.class)).putExtra("CRID",
 					crID).putExtra("CRName", crName);
 			break;
 

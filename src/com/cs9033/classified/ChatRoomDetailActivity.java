@@ -21,8 +21,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.AddUserActivity;
+=======
+import com.cs9033.classified.create.JoinChatRoomUserActivity;
+>>>>>>> 8e9222f80be369d39406646e2c4ddb175abcad85
 import com.cs9033.classified.create.CreatePostActivity;
 
 public class ChatRoomDetailActivity extends Activity {
@@ -81,7 +85,7 @@ public class ChatRoomDetailActivity extends Activity {
 			break;
 		case R.id.chatroom_detail_menu_add_user:
 			// Go to Add User view
-			intent = (new Intent(this, AddUserActivity.class)).putExtra("CRID",
+			intent = (new Intent(this, JoinChatRoomUserActivity.class)).putExtra("CRID",
 					crID).putExtra("CRName", crName);
 			break;
 		case R.id.chatroom_detail_menu_view_users:

@@ -74,11 +74,10 @@ public class PostsActivity extends Activity {
 		// Messager.sendSMS(this, "+13476561714", "Test Message");
 
 	}
-	
+
 	private void refresh() {
-		if(showCommentsFragment!=null)
-		{
-		showCommentsFragment.refresh();
+		if (showCommentsFragment != null) {
+			showCommentsFragment.refresh();
 		}
 
 	}
@@ -108,18 +107,16 @@ public class PostsActivity extends Activity {
 	 */
 	public static class ShowCommentsFragment extends Fragment {
 		PostsActivity par;
-        ChatRoomsDBAdapter cdb;
+		ChatRoomsDBAdapter cdb;
 
 		public ShowCommentsFragment() {
 		}
-		
-		public void refresh()
-		{
-		if(cdb!=null)
-		{
-			cdb.notifyAll();
-			
-		}
+
+		public void refresh() {
+			if (cdb != null) {
+				cdb.notifyAll();
+
+			}
 		}
 
 		@Override
@@ -128,30 +125,33 @@ public class PostsActivity extends Activity {
 			View rootView = inflater.inflate(
 					R.layout.fragment_show_comments_view, container, false);
 			// Load adapter with posts of current chat room
-			
-           String [] fro = new String[]{ChatRoomsDBAdapter.C_MSG} ;
-			
-			int to[] = new int[]{android.R.id.text1};
-			Cursor c = cdb.getCommentsCursor(par.crID,par.pID);
-			SimpleCursorAdapter sca = new SimpleCursorAdapter(par ,android.R.layout.simple_list_item_1, c, fro, to);
-			ListView ll = (ListView) rootView.findViewById(R.id.comment_list_view);
-            ll.setAdapter(sca);
-            //ll.setOnItemClickListener(this);
+
+			String[] fro = new String[] { ChatRoomsDBAdapter.C_MSG };
+
+			int to[] = new int[] { android.R.id.text1 };
+			Cursor c = cdb.getCommentsCursor(par.crID, par.pID);
+			SimpleCursorAdapter sca = new SimpleCursorAdapter(par,
+					android.R.layout.simple_list_item_1, c, fro, to);
+			ListView ll = (ListView) rootView
+					.findViewById(R.id.comment_list_view);
+			ll.setAdapter(sca);
+			// ll.setOnItemClickListener(this);
 			return rootView;
 		}
-		
+
 		@Override
 		public void onAttach(Activity activity) {
-			par=(PostsActivity)activity;
-			cdb= new ChatRoomsDBAdapter(par);
+			par = (PostsActivity) activity;
+			cdb = new ChatRoomsDBAdapter(par);
 		}
 	}
 
 	public static class AddCommentsFragment extends Fragment implements
 			OnClickListener {
 		ImageButton button;
-        PostsActivity parent;
-        ChatRoomsDBAdapter cdb= new ChatRoomsDBAdapter(parent);
+		PostsActivity parent;
+		ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(parent);
+
 		public AddCommentsFragment() {
 		}
 
@@ -163,32 +163,33 @@ public class PostsActivity extends Activity {
 			button = (ImageButton) rootView
 					.findViewById(R.id.add_comment_button);
 			button.setOnClickListener(this);
-			
+
 			return rootView;
 		}
-		
+
 		@Override
 		public void onAttach(Activity activity) {
-			
-			parent = (PostsActivity) activity;				
-			
+
+			parent = (PostsActivity) activity;
+
 		}
 
 		@Override
 		public void onClick(View v) {
 			int id = v.getId();
-            Comments c=new Comments();
-            
+			Comments c = new Comments();
+
 			switch (id) {
 			case R.id.add_comment_button:
-				// Check the comment and add it to comments table				
-				EditText t1=(EditText) v.findViewById(R.id.add_comment_edit_text);
-				String msg=(String) t1.getText().toString();				
+				// Check the comment and add it to comments table
+				EditText t1 = (EditText) v
+						.findViewById(R.id.add_comment_edit_text);
+				String msg = (String) t1.getText().toString();
 				c.setCR_id(parent.crID);
 				c.setP_id(parent.pID);
 				c.setMessage(msg);
 				cdb.addCommentsData(c);
-				//startActivity(in);
+				// startActivity(in);
 				parent.refresh();
 				break;
 			}
