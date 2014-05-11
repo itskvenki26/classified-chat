@@ -1,7 +1,5 @@
 package com.cs9033.classified;
 
-import org.w3c.dom.Text;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -16,18 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-<<<<<<< HEAD
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
-import com.cs9033.classified.create.AddUserActivity;
-=======
-import com.cs9033.classified.create.JoinChatRoomUserActivity;
->>>>>>> 8e9222f80be369d39406646e2c4ddb175abcad85
 import com.cs9033.classified.create.CreatePostActivity;
+import com.cs9033.classified.create.JoinChatRoomUserActivity;
+
+;
 
 public class ChatRoomDetailActivity extends Activity {
 	private static final String TAG = "ChatRoomDetailActivity";
@@ -85,8 +80,8 @@ public class ChatRoomDetailActivity extends Activity {
 			break;
 		case R.id.chatroom_detail_menu_add_user:
 			// Go to Add User view
-			intent = (new Intent(this, JoinChatRoomUserActivity.class)).putExtra("CRID",
-					crID).putExtra("CRName", crName);
+			intent = (new Intent(this, JoinChatRoomUserActivity.class))
+					.putExtra("CRID", crID).putExtra("CRName", crName);
 			break;
 		case R.id.chatroom_detail_menu_view_users:
 			// List all users for current chat room
@@ -125,6 +120,7 @@ public class ChatRoomDetailActivity extends Activity {
 
 			int to[] = new int[] { android.R.id.text1, android.R.id.text2 };
 			Cursor c = cdb.getPostsCursor(parent.crID);
+			@SuppressWarnings("deprecation")
 			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent,
 					android.R.layout.simple_list_item_2, c, fro, to);
 			ListView ll = (ListView) rootView
