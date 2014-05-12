@@ -48,7 +48,7 @@ public class MessagePollService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-
+		Log.d(TAG, "Intent Received");
 		ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
 		MyProfile myProfile = adapter.getMyProfiledata();
