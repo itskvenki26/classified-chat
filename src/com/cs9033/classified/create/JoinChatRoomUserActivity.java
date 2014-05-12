@@ -1,15 +1,5 @@
 package com.cs9033.classified.create;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +26,7 @@ import android.widget.Toast;
 
 import com.cs9033.classified.R;
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.controllers.MessagePollService;
 import com.cs9033.classified.crypto.SecureMessage;
 import com.cs9033.classified.models.MyProfile;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -269,36 +260,40 @@ public class JoinChatRoomUserActivity extends Activity {
 			int id = v.getId();
 			switch (id) {
 			case R.id.show_qr2_verify_key_button:
-				try {
-					SharedPreferences sharedPreferences = getActivity()
-							.getSharedPreferences(JOIN_CHAT,
-									Context.MODE_PRIVATE);
-					String key1 = sharedPreferences.getString("KEY1", null);
-					String key2 = sharedPreferences.getString("KEY2", null);
-					Log.d(TAG, "key1=" + key1);
-					Log.d(TAG, "key2=" + key2);
-					if (key1 != null && key2 != null) {
-						byte[] key1bytes = Hex.decodeHex(key1.toCharArray());
-						// String key2 = parent.getKey2();
-						byte[] key2bytes = Hex.decodeHex(key2.toCharArray());
-						SecretKeySpec skeySpec = new SecretKeySpec(key1bytes,
-								"AES");
+				Intent intent = new Intent(getActivity(),
+						MessagePollService.class);
+				getActivity().startService(intent);
 
-						Cipher cipher = Cipher.getInstance("AES");
-						cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-						byte[] decryptedbytes = cipher.doFinal(key2bytes);
-						String decrypted = new String(decryptedbytes);
-
-						IntentIntegrator integrator = new IntentIntegrator(this);
-						integrator.shareText(decrypted);
-						((Button) getView().findViewById(R.id.show_qr2_next))
-								.setEnabled(true);
-					}
-				} catch (DecoderException | InvalidKeyException
-						| NoSuchAlgorithmException | NoSuchPaddingException
-						| IllegalBlockSizeException | BadPaddingException e) {
-					Log.e(TAG, e.getClass().getName(), e);
-				}
+				// try {
+				// SharedPreferences sharedPreferences = getActivity()
+				// .getSharedPreferences(JOIN_CHAT,
+				// Context.MODE_PRIVATE);
+				// String key1 = sharedPreferences.getString("KEY1", null);
+				// String key2 = sharedPreferences.getString("KEY2", null);
+				// Log.d(TAG, "key1=" + key1);
+				// Log.d(TAG, "key2=" + key2);
+				// if (key1 != null && key2 != null) {
+				// byte[] key1bytes = Hex.decodeHex(key1.toCharArray());
+				// // String key2 = parent.getKey2();
+				// byte[] key2bytes = Hex.decodeHex(key2.toCharArray());
+				// SecretKeySpec skeySpec = new SecretKeySpec(key1bytes,
+				// "AES");
+				//
+				// Cipher cipher = Cipher.getInstance("AES");
+				// cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+				// byte[] decryptedbytes = cipher.doFinal(key2bytes);
+				// String decrypted = new String(decryptedbytes);
+				//
+				// IntentIntegrator integrator = new IntentIntegrator(this);
+				// integrator.shareText(decrypted);
+				// ((Button) getView().findViewById(R.id.show_qr2_next))
+				// .setEnabled(true);
+				// }
+				// } catch (DecoderException | InvalidKeyException
+				// | NoSuchAlgorithmException | NoSuchPaddingException
+				// | IllegalBlockSizeException | BadPaddingException e) {
+				// Log.e(TAG, e.getClass().getName(), e);
+				// }
 				break;
 
 			case R.id.show_qr2_next:
