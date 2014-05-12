@@ -128,11 +128,27 @@ public class SecureMessage {
 					"AES"));
 			// encrypt json message
 			String clearText = json.toString();
+			Log.d(TAG, clearText);
+
 			byte[] cipherText = cipher.doFinal(clearText.getBytes());
 
 			String message = new String(Hex.encodeHex(cipherText));
-			return new JSONObject().put(TYPE, CHAT_ROOM).put(MESSAGE, message)
-					.toString();
+			String finalJSON = new JSONObject().put(TYPE, CHAT_ROOM)
+					.put(MESSAGE, message).toString();
+
+			try {
+				String rmessage = new JSONObject(finalJSON).getString(MESSAGE);
+				Log.d(TAG, "rMessage:" + rmessage);
+				cipher.init(Cipher.DECRYPT_MODE,
+						new SecretKeySpec(Key.getBytes(), "AES"));
+				byte[] rcipherText = Hex.decodeHex(rmessage.toCharArray());
+				String rclearText = new String(cipher.doFinal(rcipherText));
+				Log.d(TAG, "Clear again:" + clearText);
+			} catch (DecoderException e) {
+				Log.e(TAG, e.getClass().getName(), e);
+			}
+
+			return finalJSON;
 		} catch (JSONException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeyException
 				| NoSuchAlgorithmException | NoSuchPaddingException e) {
@@ -258,6 +274,8 @@ public class SecureMessage {
 			throws JSONException {
 		JSONObject json = new JSONObject(message);
 
+		Log.d(TAG, "Got JSON: " + json.toString());
+
 		if (json.getString(TYPE).equals(CHAT_ROOM)) {
 			String e_message = json.getString(MESSAGE);
 			String key3 = list[0];
@@ -267,6 +285,7 @@ public class SecureMessage {
 				cipher.init(Cipher.DECRYPT_MODE, skeySpec);
 				Log.d(TAG, "Cipher ready");
 
+				Log.d(TAG, "e_message:" + e_message);
 				byte[] cipherText = Hex.decodeHex(e_message.toCharArray());
 				String clearText = new String(cipher.doFinal(cipherText));
 				Log.d(TAG, clearText);
