@@ -127,8 +127,10 @@ public class SecureMessage {
 			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(Key.getBytes(),
 					"AES"));
 			// encrypt json message
-			String message = new String(Hex.encodeHex(cipher.doFinal(json
-					.toString().getBytes())));
+			String clearText = json.toString();
+			byte[] cipherText = cipher.doFinal(clearText.getBytes());
+
+			String message = new String(Hex.encodeHex(cipherText));
 			return new JSONObject().put(TYPE, CHAT_ROOM).put(MESSAGE, message)
 					.toString();
 		} catch (JSONException | IllegalBlockSizeException
@@ -264,11 +266,11 @@ public class SecureMessage {
 				Cipher cipher = Cipher.getInstance("AES");
 				cipher.init(Cipher.DECRYPT_MODE, skeySpec);
 				Log.d(TAG, "Cipher ready");
-				processAddChatRoom(
-						context,
-						new JSONObject(new String(Hex.decodeHex(new String(
-								cipher.doFinal(e_message.getBytes()))
-								.toCharArray()))));
+
+				byte[] cipherText = Hex.decodeHex(e_message.toCharArray());
+				String clearText = new String(cipher.doFinal(cipherText));
+				Log.d(TAG, clearText);
+				processAddChatRoom(context, new JSONObject(clearText));
 			} catch (InvalidKeyException | NoSuchAlgorithmException
 					| NoSuchPaddingException | IllegalBlockSizeException
 					| BadPaddingException | DecoderException e) {
