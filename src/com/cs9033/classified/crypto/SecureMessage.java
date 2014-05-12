@@ -136,7 +136,7 @@ public class SecureMessage {
 
 			byte[] cipherText = cipher.doFinal(clearText.getBytes());
 
-			String message = new String(cipherText);
+			String message = new String(Hex.encodeHex(cipherText));
 			String finalJSON = json.put(VALUE, message).toString();
 
 			return finalJSON;
@@ -277,13 +277,14 @@ public class SecureMessage {
 	}
 
 	public void processMessage(JSONObject json, User user, String... list)
-			throws JSONException {
+			throws JSONException, DecoderException {
 		// JSONObject json = new JSONObject(message);
 
 		Log.d(TAG, "Got JSON: " + json.toString());
 
 		if (json.getString(TYPE).equals(CHAT_ROOM)) {
-			String e_message = json.getString(VALUE);
+			byte[] e_message = Hex.decodeHex(json.getString(VALUE)
+					.toCharArray());
 			String key3 = list[0];
 			SecretKeySpec skeySpec = new SecretKeySpec(key3.getBytes(), "AES");
 			try {
@@ -292,8 +293,9 @@ public class SecureMessage {
 				Log.d(TAG, "Cipher ready");
 
 				Log.d(TAG, "e_message:" + e_message);
-				byte[] cipherText = e_message.getBytes();
+				byte[] cipherText = e_message;
 				String clearText = new String(cipher.doFinal(cipherText));
+				Log.d(TAG, clearText);
 				Log.d(TAG, clearText);
 				processAddChatRoom(context, new JSONObject(clearText));
 			} catch (InvalidKeyException | NoSuchAlgorithmException

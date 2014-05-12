@@ -61,7 +61,7 @@ public class SendMessage extends IntentService {
 						.getString(JoinChatRoomUserActivity.SERVER);
 				String to = extras
 						.getString(JoinChatRoomUserActivity.USER_NAME);
-
+				Log.d(TAG, json.toString());
 				String message = new String(Hex.encodeHex(json.toString()
 						.getBytes()));
 				Messager.sendChatMessage(host, port, server, message, to,
