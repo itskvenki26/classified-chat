@@ -6,6 +6,7 @@
 
     <Button
         android:id="@+id/scan_qr1_initiate_add_user_button"
+        android:background="@drawable/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/initiate" />

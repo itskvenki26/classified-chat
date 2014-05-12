@@ -108,7 +108,7 @@ public class SecureMessage {
 
 			jsonUsers.put(myProfile.toUserJSON()
 					.put(User.U_CURRENT_MAC, chatRoom.getCurrent_e())
-					.put(User.U_CURRENT_MAC, chatRoom.getCurrent_mac()));
+					.put(User.U_CURRENT_E, chatRoom.getCurrent_mac()));
 
 			Log.d(TAG, jsonUsers.toString());
 			if (users != null) {
@@ -153,32 +153,39 @@ public class SecureMessage {
 		Log.d(TAG, "In processAddChatRoom, JSON: " + json.toString());
 
 		String current_e = json.getString(ChatRoom.CR_CURRENT_E);
-		Log.d(TAG, current_e);
+		Log.d(TAG, "current_e = " + current_e);
 		String current_mac = json.getString(ChatRoom.CR_CURRENT_MAC);
-		Log.d(TAG, current_mac);
+		Log.d(TAG, "current_mac = " + current_mac);
 		ChatRoom chatRoom = ChatRoom.fromString(json.toString());
+
 		chatRoom.setCurrent_e(current_e);
 		chatRoom.setCurrent_mac(current_mac);
+
 		chatRoom.saveToDB(context);
+		Log.d(TAG, "Chat Room is saved");
 		Log.d(TAG, chatRoom.toJSON().toString());
+		if (json.has(USER_ARRAY)) {
+			JSONArray jsonUsers = json.getJSONArray(USER_ARRAY);
 
-		JSONArray jsonUsers = json.getJSONArray(USER_ARRAY);
-
-		int length = 0;
-
-		length = jsonUsers.length();
-		for (int i = 0; i < length; i++) {
-			User u = User.fromString(jsonUsers.get(i).toString());
-			u.setCr_id(chatRoom.getId());
-			u.saveToDB(context);
+			int length = 0;
+			length = jsonUsers.length();
+			Log.d(TAG, length + " Users found");
+			for (int i = 0; i < length; i++) {
+				User u = User.fromString(jsonUsers.get(i).toString());
+				u.setCr_id(chatRoom.getId());
+				u.saveToDB(context);
+			}
+			Log.d(TAG, "Users are saved");
 		}
-
-		JSONArray jsonPosts = json.getJSONArray(POST_ARRAY);
-		length = jsonPosts.length();
-		for (int i = 0; i < length; i++) {
-			Post p = Post.fromString(jsonPosts.get(i).toString());
-			p.setCR_id(chatRoom.getId());
-			p.saveToDB(context);
+		if (json.has(POST_ARRAY)) {
+			JSONArray jsonPosts = json.getJSONArray(POST_ARRAY);
+			int length = jsonPosts.length();
+			for (int i = 0; i < length; i++) {
+				Post p = Post.fromString(jsonPosts.get(i).toString());
+				p.setCR_id(chatRoom.getId());
+				p.saveToDB(context);
+			}
+			Log.d(TAG, "Posts are saved");
 		}
 
 		return chatRoom.getId();

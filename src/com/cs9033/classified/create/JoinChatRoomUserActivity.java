@@ -138,8 +138,6 @@ public class JoinChatRoomUserActivity extends Activity {
 			((Button) rootView
 					.findViewById(R.id.show_qr1_initiate_join_cr_button))
 					.setOnClickListener(this);
-			((Button) rootView.findViewById(R.id.show_qr1_next_button))
-					.setOnClickListener(this);
 			Log.d(TAG, "Created View");
 
 			return rootView;
@@ -204,9 +202,6 @@ public class JoinChatRoomUserActivity extends Activity {
 					Log.e(TAG, e.getClass().getName(), e);
 				}
 
-				break;
-			case R.id.show_qr1_next_button:
-				parent.gotoPhase2();
 				break;
 			default:
 				break;
@@ -274,12 +269,6 @@ public class JoinChatRoomUserActivity extends Activity {
 			int id = v.getId();
 			switch (id) {
 			case R.id.show_qr2_verify_key_button:
-				// SharedPreferences sharedPreferences = getActivity()
-				// .getSharedPreferences(
-				// JoinChatRoomUserActivity.JOIN_CHAT,
-				// Context.MODE_PRIVATE);
-				// sharedPreferences.getString(
-				// AddUserActivity.PHASE2KEY, null);
 				try {
 					String xChange2 = parent.key2;
 					String xChange3 = parent.key3 = SecureMessage.getNewEKey();
@@ -303,10 +292,6 @@ public class JoinChatRoomUserActivity extends Activity {
 				s.registerOnSharedPreferenceChangeListener(this);
 
 				break;
-
-			// case R.id.show_qr2_next:
-			// parent.gotoPhase3();
-			// break;
 
 			default:
 				break;
