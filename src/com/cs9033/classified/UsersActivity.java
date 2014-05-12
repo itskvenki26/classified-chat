@@ -3,13 +3,17 @@ package com.cs9033.classified;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -81,9 +85,11 @@ public class UsersActivity extends Activity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class ShowUsersFragment extends Fragment {
+	public static class ShowUsersFragment extends Fragment implements
+			OnItemClickListener {
 
 		UsersActivity parent;
+		View rootView;
 
 		public ShowUsersFragment() {
 		}
@@ -93,16 +99,43 @@ public class UsersActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_users,
 					container, false);
+			this.rootView = rootView;
+			renderView();
+			return rootView;
+		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+			renderView();
+		}
+
+		void renderView() {
 			ListView LV = (ListView) rootView
 					.findViewById(R.id.fragment_users_root);
-			ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(getActivity());
-			// Cursor c = db.getUserData(id);
-			return rootView;
+			LV.removeAllViewsInLayout();
+			ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(parent);
+			String[] fro = new String[] { ChatRoomsDBAdapter.U_NAME,
+					ChatRoomsDBAdapter.U_PH_NO };
+
+			int to[] = new int[] { android.R.id.text1, android.R.id.text2 };
+			Cursor c = cdb.getChatRoomsCursor();
+			@SuppressWarnings("deprecation")
+			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent,
+					android.R.layout.simple_list_item_2, c, fro, to);
+			LV.setAdapter(sca);
+			LV.setOnItemClickListener(this);
 		}
 
 		@Override
 		public void onAttach(Activity activity) {
 			parent = (UsersActivity) activity;
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+
 		}
 	}
 

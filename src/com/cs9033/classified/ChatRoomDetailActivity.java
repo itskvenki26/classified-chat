@@ -101,7 +101,7 @@ public class ChatRoomDetailActivity extends Activity {
 	 */
 	public static class ShowPostsFragment extends Fragment implements
 			OnItemClickListener {
-
+		View rootView;
 		ChatRoomDetailActivity parent;
 
 		public ShowPostsFragment() {
@@ -114,7 +114,20 @@ public class ChatRoomDetailActivity extends Activity {
 			View rootView = inflater.inflate(
 					R.layout.fragment_chat_room_detail, container, false);
 			// Load adapter with posts of current chat room
+			this.rootView = rootView;
+			renderView();
 
+			return rootView;
+		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+
+			renderView();
+		}
+
+		void renderView() {
 			ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(parent);
 			String[] fro = new String[] { ChatRoomsDBAdapter.P_TITLE,
 					ChatRoomsDBAdapter.P_MSG };
@@ -128,7 +141,6 @@ public class ChatRoomDetailActivity extends Activity {
 					.findViewById(R.id.chat_room_detail_list_view);
 			ll.setAdapter(sca);
 			ll.setOnItemClickListener(this);
-			return rootView;
 		}
 
 		@Override

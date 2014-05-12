@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
-import com.cs9033.classified.controllers.MessagePollService;
 import com.cs9033.classified.create.CreateChatRoomActivity;
 import com.cs9033.classified.create.JoinChatRoomUserActivity;
 import com.cs9033.classified.create.UpdateProfileActivity;
@@ -85,20 +84,12 @@ public class ClassifiedChatRoomsActivity extends Activity {
 	public static class ShowChatRoomFragment extends Fragment implements
 			OnItemClickListener {
 		ClassifiedChatRoomsActivity parent;
+		View rootView;
 
 		public ShowChatRoomFragment() {
 		}
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(
-					R.layout.fragment_classified_chat_rooms, container, false);
-
-			// Load SQL cursor for all Chatrooms
-
-			// Implement on click for cursor to load Chat Room Detail view
-
+		void renderView() {
 			ChatRoomsDBAdapter cdb = new ChatRoomsDBAdapter(parent);
 			String[] fro = new String[] { ChatRoomsDBAdapter.CR_NAME,
 					ChatRoomsDBAdapter.CR_DESCRIPTION };
@@ -112,8 +103,26 @@ public class ClassifiedChatRoomsActivity extends Activity {
 					.findViewById(R.id.classified_chat_room_list_view);
 			ll.setAdapter(sca);
 			ll.setOnItemClickListener(this);
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(
+					R.layout.fragment_classified_chat_rooms, container, false);
+			this.rootView = rootView;
+			renderView();
+			// Load SQL cursor for all Chatrooms
+
+			// Implement on click for cursor to load Chat Room Detail view
 
 			return rootView;
+		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+			renderView();
 		}
 
 		@Override
