@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.AddUserActivity;
@@ -67,6 +68,7 @@ public class MessagePollService extends IntentService {
 			Message message = (Message) packet;
 			if (message != null && message.getBody() != null) {
 				String body = message.getBody();
+				Toast.makeText(this, body, Toast.LENGTH_SHORT).show();
 				try {
 					String msg = new String(Hex.decodeHex(body.toCharArray()));
 					JSONObject json = new JSONObject(msg);
