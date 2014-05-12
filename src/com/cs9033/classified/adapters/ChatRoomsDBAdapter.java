@@ -35,6 +35,8 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 	public static final String U_XMPP_PORT = "xmpp_port";
 	public static final String U_XMPP_USER_NAME = "xmpp_user_name";
 	public static final String U_CR_ID = "user_cr_id";
+	public static final String U_CURRENT_MAC="user_current_mac";
+	public static final String U_CURRENT_E="user_current_Enc_key";
 
 	public static final String P_CR_ID = "cr_id";
 	public static final String P_TITLE = "title";
@@ -86,7 +88,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			CR_CURRENT_MAC, CR_OLD_MAC, CR_CURRENT_E, KEY_ID };
 	public static final String[] ALL_USERS = { U_EMAIL_ID, U_NAME, U_PH_NO,
 			U_XMPP_HOST, U_XMPP_PORT, U_XMPP_SERVER, U_XMPP_USER_NAME, KEY_ID,
-			U_CR_ID };
+			U_CR_ID,U_CURRENT_MAC,U_CURRENT_E };
 	public static final String[] ALL_My_PROFILE = { MP_EMAIL_ID, MP_NAME,
 			MP_PH_NO, MP_XMPP_HOST, MP_XMPP_PORT, MP_XMPP_SERVER,
 			MP_XMPP_USER_NAME, MP_XMPP_PASSWORD, KEY_ID };
@@ -99,7 +101,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			+ U_PH_NO + " text not null, " + U_XMPP_PORT + "integer not null, "
 			+ U_XMPP_HOST + " text not null, " + U_XMPP_SERVER
 			+ " text not null, " + U_XMPP_USER_NAME + " text not null, "
-			+ U_CR_ID + ", integer not null , CONSTARINT unq2 UNIQUE ( "
+			+ U_CR_ID + ", integer not null ," + U_CURRENT_MAC + " text not null, " + U_CURRENT_E + " text not null, CONSTARINT unq2 UNIQUE ( "
 			+ U_CR_ID + " , " + U_PH_NO + " ) );";
 
 	private static final String POSTS_CREATE = "create table " + TABLE_POSTS
@@ -149,6 +151,8 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			cVal.put(U_XMPP_SERVER, uData.getXmpp_server());
 			cVal.put(U_XMPP_USER_NAME, uData.getXmpp_user_name());
 			cVal.put(U_CR_ID, uData.getCr_id());
+			cVal.put(U_CURRENT_MAC, uData.getCurrent_mac());
+			cVal.put(U_CURRENT_E, uData.getCurrent_e());
 			if (uData.getId() != -1) {
 				cVal.put(KEY_ID, uData.getId());
 				db.update(TABLE_USER, cVal, KEY_ID + "=?",
@@ -178,7 +182,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			cVal.put(MP_XMPP_PORT, mp.getXmpp_port());
 			cVal.put(MP_XMPP_SERVER, mp.getXmpp_server());
 			cVal.put(MP_XMPP_USER_NAME, mp.getXmpp_user_name());
-			cVal.put(MP_XMPP_PASSWORD, mp.getXmpp_password());
+			cVal.put(MP_XMPP_PASSWORD, mp.getXmpp_password());			
 			cVal.put(KEY_ID, 1l);
 
 			db.delete(TABLE_MY_PROFILE, null, null);
@@ -363,6 +367,39 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 		db.close();
 		return cursor;
 	}
+	
+	public long getChatRoomId(String cr_name)
+	{
+	
+		final SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(TABLE_CHATROOMS, ALL_CR, CR_NAME + "=?",
+				new String[] { cr_name }, null, null, null);	
+		long crid=cursor.getLong(cursor.getColumnIndex(KEY_ID));
+		return crid;
+		
+	}
+	
+	public long getPostId(String ptitle,String cr_name)
+	{
+	    long crid=getChatRoomId(cr_name);
+		final SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(TABLE_POSTS, ALL_POSTS, P_CR_ID + "=? AND " + P_TITLE + "=?",
+				new String[] { Long.toString(crid),ptitle }, null, null, null);	
+		long postid=cursor.getLong(cursor.getColumnIndex(KEY_ID));
+		return postid;
+		
+	}
+	
+	public long getUserId(String cr_name,String usrname)
+	{
+	    long crid=getChatRoomId(cr_name);
+		final SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(TABLE_USER, ALL_USERS, U_CR_ID + "=? AND " + U_NAME + "=?",
+				new String[] { Long.toString(crid),usrname }, null, null, null);	
+		long usrid=cursor.getLong(cursor.getColumnIndex(KEY_ID));
+		return usrid;
+		
+	}
 
 	public User[] getUsersData(long crid) {
 		Cursor cursor = getUsersCursor(crid);
@@ -380,7 +417,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 						.getColumnIndex(U_XMPP_SERVER)), cursor.getInt(cursor
 						.getColumnIndex(U_XMPP_PORT)), cursor.getString(cursor
 						.getColumnIndex(U_XMPP_USER_NAME)),
-						cursor.getLong(cursor.getColumnIndex(U_CR_ID)));
+						cursor.getLong(cursor.getColumnIndex(U_CR_ID)),cursor.getString(cursor.getColumnIndex(U_CURRENT_MAC)),cursor.getString(cursor.getColumnIndex(U_CURRENT_E)));
 
 			}
 		}
