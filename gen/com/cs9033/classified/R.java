@@ -22,19 +22,27 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_action_add_group=0x7f020000;
-        public static final int ic_action_add_person=0x7f020001;
-        public static final int ic_action_cancel=0x7f020002;
-        public static final int ic_action_chat=0x7f020003;
-        public static final int ic_action_discard=0x7f020004;
-        public static final int ic_action_group=0x7f020005;
-        public static final int ic_action_new=0x7f020006;
-        public static final int ic_action_person=0x7f020007;
-        public static final int ic_action_remove=0x7f020008;
-        public static final int ic_action_save=0x7f020009;
-        public static final int ic_action_send_now=0x7f02000a;
-        public static final int ic_action_settings=0x7f02000b;
-        public static final int ic_launcher=0x7f02000c;
+        public static final int background=0x7f020000;
+        public static final int bckimage=0x7f020001;
+        public static final int btn=0x7f020002;
+        public static final int btn_gray_std=0x7f020003;
+        public static final int btn_green_pressed=0x7f020004;
+        public static final int btn_green_std=0x7f020005;
+        public static final int classified=0x7f020006;
+        public static final int ic_action_add_group=0x7f020007;
+        public static final int ic_action_add_person=0x7f020008;
+        public static final int ic_action_cancel=0x7f020009;
+        public static final int ic_action_chat=0x7f02000a;
+        public static final int ic_action_discard=0x7f02000b;
+        public static final int ic_action_group=0x7f02000c;
+        public static final int ic_action_new=0x7f02000d;
+        public static final int ic_action_person=0x7f02000e;
+        public static final int ic_action_remove=0x7f02000f;
+        public static final int ic_action_save=0x7f020010;
+        public static final int ic_action_send_now=0x7f020011;
+        public static final int ic_action_settings=0x7f020012;
+        public static final int ic_launcher=0x7f020013;
+        public static final int mybutton=0x7f020014;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f08001f;
