@@ -96,10 +96,11 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 	private static final String USER_CREATE = "create table " + TABLE_USER
 			+ " (" + KEY_ID + " integer primary key autoincrement,  "
 			+ U_EMAIL_ID + "  text not null, " + U_NAME + "  text not null, "
-			+ U_PH_NO + " text UNIQUE not null, " + U_XMPP_PORT
-			+ "integer not null, " + U_XMPP_HOST + " text not null, "
-			+ U_XMPP_SERVER + " text not null, " + U_XMPP_USER_NAME
-			+ " text not null, " + U_CR_ID + ", integer not null );";
+			+ U_PH_NO + " text not null, " + U_XMPP_PORT + "integer not null, "
+			+ U_XMPP_HOST + " text not null, " + U_XMPP_SERVER
+			+ " text not null, " + U_XMPP_USER_NAME + " text not null, "
+			+ U_CR_ID + ", integer not null , CONSTARINT unq2 UNIQUE ( "
+			+ U_CR_ID + " , " + U_PH_NO + " ) );";
 
 	private static final String POSTS_CREATE = "create table " + TABLE_POSTS
 			+ " ( " + KEY_ID + " integer primary key autoincrement, " + P_CR_ID
@@ -332,20 +333,22 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 		db.close();
 		return cursor;
 	}
-	
-	public Comment[] getCommentsData(long crid,long postid) {
-		Cursor cursor = getCommentsCursor(crid,postid);
+
+	public Comment[] getCommentsData(long crid, long postid) {
+		Cursor cursor = getCommentsCursor(crid, postid);
 		int count;
-		Comment[] commentsArray = null; 
+		Comment[] commentsArray = null;
 		if (cursor != null) {
 			count = cursor.getCount();
-			commentsArray= new Comment[count];
-			for(int i=0;i<count;i++)
-			{
-				commentsArray[i]=new Comment(cursor.getLong(cursor.getColumnIndex(C_P_ID)), cursor.getLong(cursor.getColumnIndex(C_CR_ID)),cursor.getString(cursor.getColumnIndex(C_MSG)));
-				
+			commentsArray = new Comment[count];
+			for (int i = 0; i < count; i++) {
+				commentsArray[i] = new Comment(cursor.getLong(cursor
+						.getColumnIndex(C_P_ID)), cursor.getLong(cursor
+						.getColumnIndex(C_CR_ID)), cursor.getString(cursor
+						.getColumnIndex(C_MSG)));
+
 			}
-		}		
+		}
 
 		return commentsArray;
 	}

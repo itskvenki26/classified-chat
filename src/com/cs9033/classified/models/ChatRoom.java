@@ -129,9 +129,6 @@ public class ChatRoom {
 		json.put(CR_NAME, cr_name);
 		json.put(CR_TIME, time);
 		json.put(CR_DESCRIPTION, description);
-		json.put(CR_CURRENT_E, current_e);
-		json.put(CR_CURRENT_MAC, current_mac);
-		json.put(CR_OLD_MAC, old_mac);
 
 		return json;
 	}

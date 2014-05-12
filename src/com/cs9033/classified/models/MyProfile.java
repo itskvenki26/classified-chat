@@ -130,8 +130,20 @@ public class MyProfile {
 		json.put(MP_EMAIL_ID, email_id).put(MP_NAME, name).put(MP_PH_NO, ph_no)
 				.put(MP_XMPP_HOST, xmpp_host).put(MP_XMPP_PORT, xmpp_port)
 				.put(MP_XMPP_SERVER, xmpp_server)
-				.put(MP_XMPP_USER_NAME, xmpp_user_name)
-				.put(MP_XMPP_PASSWORD, xmpp_password);
+				.put(MP_XMPP_USER_NAME, xmpp_user_name);
+
+		return json;
+	}
+
+	public JSONObject toUserJSON() throws JSONException {
+		JSONObject json = new JSONObject();
+		json.put(User.U_EMAIL_ID, email_id);
+		json.put(User.U_NAME, name);
+		json.put(User.U_PH_NO, ph_no);
+		json.put(User.U_XMPP_HOST, xmpp_host);
+		json.put(User.U_XMPP_PORT, xmpp_port);
+		json.put(User.U_XMPP_SERVER, xmpp_server);
+		json.put(User.U_XMPP_USER_NAME, xmpp_user_name);
 
 		return json;
 	}

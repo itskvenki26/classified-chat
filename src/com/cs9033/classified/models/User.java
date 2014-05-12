@@ -138,7 +138,6 @@ public class User {
 		json.put(U_XMPP_PORT, xmpp_port);
 		json.put(U_XMPP_SERVER, xmpp_server);
 		json.put(U_XMPP_USER_NAME, xmpp_user_name);
-		json.put(U_CR_ID, cr_id);
 
 		return json;
 	}

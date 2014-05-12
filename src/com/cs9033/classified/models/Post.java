@@ -75,7 +75,6 @@ public class Post {
 
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		json.put(P_CR_ID, CR_id);
 		json.put(P_TITLE, title);
 		json.put(P_MSG, message);
 		return json;

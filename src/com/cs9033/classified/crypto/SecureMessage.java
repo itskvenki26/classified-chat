@@ -16,6 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,10 +26,29 @@ import android.util.Log;
 
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.models.ChatRoom;
+import com.cs9033.classified.models.Comment;
 import com.cs9033.classified.models.MyProfile;
+import com.cs9033.classified.models.Post;
+import com.cs9033.classified.models.User;
 
 public class SecureMessage {
 	public static final String TAG = "SecureMessage";
+
+	public static final String CHAT_ROOM = "CHAT_ROOM";
+	public static final String POST = "POST";
+	public static final String COMMENT = "COMMENT";
+	public static final String POST_ARRAY = "POST";
+	public static final String USER_ARRAY = "USER_ARRAY";
+	public static final String USER = "USER";
+	public static final String TYPE = "TYPE";
+	public static final String VALUE = "VALUE";
+	public static final String NEXT_MAC_KEY = "NEXT_MAC_KEY";
+	public static final String CURRENT_MAC_KEY = "CURRENT_MAC_KEY";
+	public static final String OLD_MAC_KEY = "OLD_MAC_KEY";
+	public static final String NEXT_E_KEY = "NEXT_E_KEY";
+	public static final String CRYPT = "CRYPT";
+	public static final String MAC_OF_CRYPT = "MAC_OF_CRYPT";
+	public static final String FROM = "FROM";
 
 	Context context;
 	ChatRoomsDBAdapter adapter;
@@ -53,7 +73,7 @@ public class SecureMessage {
 		this.context = context;
 	}
 
-	private void init(ChatRoom chatRoom) {
+	public void init(ChatRoom chatRoom) {
 		this.chatRoom = chatRoom;
 		old_mac_key = chatRoom.getOld_mac();
 		current_e_key = chatRoom.getCurrent_e();
@@ -62,60 +82,137 @@ public class SecureMessage {
 		next_e_key = getNewEKey();
 	}
 
-	String addChatRoomMessage(String Key) {
+	public String getAddChatRoomMessage(String Key) {
 		long crid = chatRoom.getId();
-		// adap
+		User[] users = adapter.getUsersData(crid);
+		Post[] posts = adapter.getPostData(crid);
 
-		return Key;
+		try {
+			JSONObject json = new JSONObject();
 
+			json.put(TYPE, CHAT_ROOM);
+
+			JSONObject jsonChatRoom = chatRoom.toJSON();
+
+			JSONArray jsonUsers = new JSONArray();
+			JSONArray jsonPosts = new JSONArray();
+
+			jsonUsers.put(myProfile.toUserJSON());
+			for (User u : users) {
+				jsonUsers.put(u.toJSON());
+			}
+			for (Post p : posts) {
+				jsonPosts.put(p.toJSON());
+			}
+
+			jsonChatRoom.put(USER_ARRAY, jsonUsers).put(POST_ARRAY, jsonPosts);
+
+			json.put(VALUE, jsonChatRoom);
+			// .put(FROM, myProfile.getPh_no());
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(Key.getBytes(),
+					"AES"));
+			// encrypt json message
+			return new String(Hex.encodeHex(cipher.doFinal(json.toString()
+					.getBytes())));
+		} catch (JSONException | IllegalBlockSizeException
+				| BadPaddingException | InvalidKeyException
+				| NoSuchAlgorithmException | NoSuchPaddingException e) {
+			Log.e(TAG, e.getClass().getName(), e);
+		}
+
+		return null;
 	}
 
-	public String getOld_mac_key() {
-		return old_mac_key;
+	public String getAddPostMessage(Post post) {
+
+		try {
+			JSONObject json = new JSONObject();
+
+			json.put(TYPE, POST).put(CHAT_ROOM, chatRoom.getCR_name())
+					.put(VALUE, post.toJSON());
+			// .put(FROM, myProfile.getPh_no());
+
+			return encrypt(json);
+		} catch (JSONException | IllegalBlockSizeException
+				| BadPaddingException | InvalidKeyException
+				| NoSuchAlgorithmException | NoSuchPaddingException e) {
+			Log.e(TAG, e.getClass().getName(), e);
+		}
+
+		return null;
 	}
 
-	public String getCurrent_mac_key() {
-		return current_mac_key;
+	public String getAddUserMessage(User user) {
+		try {
+			JSONObject json = new JSONObject();
+
+			json.put(TYPE, USER).put(CHAT_ROOM, chatRoom.getCR_name())
+					.put(VALUE, user.toJSON());
+			// .put(FROM, myProfile.getPh_no());
+
+			return encrypt(json);
+		} catch (JSONException | IllegalBlockSizeException
+				| BadPaddingException | InvalidKeyException
+				| NoSuchAlgorithmException | NoSuchPaddingException e) {
+			Log.e(TAG, e.getClass().getName(), e);
+		}
+
+		return null;
 	}
 
-	public String getCurrent_e_key() {
-		return current_e_key;
+	public String getAddCommentMessage(Post post, Comment comment) {
+
+		try {
+			JSONObject json = new JSONObject();
+
+			json.put(TYPE, COMMENT).put(CHAT_ROOM, chatRoom.getCR_name())
+					.put(POST, post.getTitle()).put(VALUE, post.toJSON());
+			// .put(FROM, myProfile.getPh_no());
+
+			return encrypt(json);
+		} catch (JSONException | IllegalBlockSizeException
+				| BadPaddingException | InvalidKeyException
+				| NoSuchAlgorithmException | NoSuchPaddingException e) {
+			Log.e(TAG, e.getClass().getName(), e);
+		}
+		return null;
 	}
 
-	public String getNext_mac_key() {
-		return next_mac_key;
-	}
+	public static void processMessage(String message,User user) {
+		// verify if message is right
+		try {
+			JSONObject jsonCrypt = new JSONObject(message);
+			Log.d(TAG, jsonCrypt.toString());
+			if (jsonCrypt.has(CRYPT) && jsonCrypt.has(MAC_OF_CRYPT)
+					&& jsonCrypt.has(OLD_MAC_KEY)) {
+				String crypt = jsonCrypt.getString(CRYPT);
+				String mac_of_crypt = jsonCrypt.getString(MAC_OF_CRYPT);
+				
+//				verifyMAC(user.get, encryptedMessage)
+				
+				
+			}
 
-	public String getNext_e_key() {
-		return next_e_key;
-	}
-
-	public String getMessage() {
-		return message;
+		} catch (JSONException e) {
+			Log.e(TAG, e.getClass().getName(), e);
+		}
 	}
 
 	@SuppressLint("TrulyRandom")
-	public String encrypt() throws NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException,
-			IllegalBlockSizeException, BadPaddingException, JSONException {
+	public String encrypt(JSONObject jsonCrypt)
+			throws NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeyException, IllegalBlockSizeException,
+			BadPaddingException, JSONException {
 		// initKeys();
 		byte[] current_e_key_bytes;
 		Log.d(TAG, "current_e_key:" + current_e_key);
 		try {
 			current_e_key_bytes = Hex.decodeHex(current_e_key.toCharArray());
 
-			// Replace with
-			// current user
-			// key
+			next_mac_key = getNewMacKey();
+			next_e_key = getNewEKey();
 
-			/*
-			 * Prepare JSON { crypt: AES(current_e_key,{message,
-			 * next_mac_key,next_e_key}), mac_code:mac(current_mac_key,crypt) }
-			 */
-
-			JSONObject jsonCrypt = new JSONObject();
-
-			jsonCrypt.accumulate("message", new String(message));
 			jsonCrypt.accumulate("next_mac_key", next_mac_key);
 			jsonCrypt.accumulate("next_e_key", next_e_key);
 			Log.d(TAG, "Sending Message:" + jsonCrypt.toString());
@@ -138,9 +235,9 @@ public class SecureMessage {
 			// new String(mac_of_crypt, "UTF8");
 
 			JSONObject jsonMessage = new JSONObject();
-			jsonMessage.accumulate("crypt", crypt_string);
-			jsonMessage.accumulate("mac_of_crypt", mac_of_crypt_string);
-			jsonMessage.accumulate("old_mac_key", old_mac_key);
+			jsonMessage.accumulate(CRYPT, crypt_string);
+			jsonMessage.accumulate(MAC_OF_CRYPT, mac_of_crypt_string);
+			jsonMessage.accumulate(OLD_MAC_KEY, old_mac_key);
 
 			return jsonMessage.toString();
 		} catch (DecoderException e) {
