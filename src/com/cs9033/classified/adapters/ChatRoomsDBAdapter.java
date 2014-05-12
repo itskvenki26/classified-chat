@@ -284,12 +284,14 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 	}
 
 	public Post[] getPostData(long crid) {
+		Log.d(TAG, "getPostsCursor(" + crid + ")");
 		Cursor cursor = getPostsCursor(crid);
 		int count;
 		Post[] postsArray = null;
 		if (cursor != null) {
 			cursor.moveToFirst();
 			count = cursor.getCount();
+			Log.d(TAG, "Cursor Count = " + count);
 			postsArray = new Post[count];
 			for (int i = 0; i < count; i++) {
 				postsArray[i] = new Post(cursor.getLong(cursor
@@ -389,12 +391,14 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 				new String[] { cr_name }, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
-			return new ChatRoom(cursor.getString(cursor
+			ChatRoom cr = new ChatRoom(cursor.getString(cursor
 					.getColumnIndex(CR_CURRENT_MAC)), cursor.getString(cursor
 					.getColumnIndex(CR_CURRENT_E)), cursor.getString(cursor
 					.getColumnIndex(CR_OLD_MAC)), cursor.getString(cursor
 					.getColumnIndex(CR_NAME)), cursor.getString(cursor
 					.getColumnIndex(CR_DESCRIPTION)));
+			cr.setId(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
+			return cr;
 		}
 		return null;
 

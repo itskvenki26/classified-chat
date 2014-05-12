@@ -32,10 +32,9 @@ public class UsersActivity extends Activity {
 
 		if (savedInstanceState == null) {
 			Bundle extras = getIntent().getExtras();
-
-			String chatRoomName = "Test";
+			String chatRoomName = null;
 			if (extras != null) {
-				chatRoomName = extras.getString("ChatRoomName", null);
+				chatRoomName = extras.getString("CRName", null);
 			}
 			Log.d(TAG, "Chatroom Name = " + chatRoomName);
 			if (chatRoomName != null) {
@@ -119,7 +118,7 @@ public class UsersActivity extends Activity {
 					ChatRoomsDBAdapter.U_PH_NO };
 
 			int to[] = new int[] { android.R.id.text1, android.R.id.text2 };
-			Cursor c = cdb.getChatRoomsCursor();
+			Cursor c = cdb.getUsersCursor(parent.crID);
 			@SuppressWarnings("deprecation")
 			SimpleCursorAdapter sca = new SimpleCursorAdapter(parent,
 					android.R.layout.simple_list_item_2, c, fro, to);
@@ -129,6 +128,7 @@ public class UsersActivity extends Activity {
 
 		@Override
 		public void onAttach(Activity activity) {
+			super.onAttach(activity);
 			parent = (UsersActivity) activity;
 		}
 
