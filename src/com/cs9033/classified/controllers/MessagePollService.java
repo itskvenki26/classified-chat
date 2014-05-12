@@ -3,7 +3,6 @@ package com.cs9033.classified.controllers;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -26,6 +25,7 @@ import android.util.Log;
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.AddUserActivity;
 import com.cs9033.classified.create.JoinChatRoomUserActivity;
+import com.cs9033.classified.crypto.SecureMessage;
 import com.cs9033.classified.models.MyProfile;
 
 //implements FileTransferListener
@@ -37,6 +37,9 @@ public class MessagePollService extends IntentService {
 	public static final String BLOCK_WAIT = "BLOCK_WAIT";
 	public static final String LONG_POLL = "LONG_POLL";
 	public static final int POLL_INTERVAL = 60 * 1000;
+
+	private static XMPPConnection xmppConnection = null;
+	private static ClassifiedPacketListener packetListener = null;
 
 	public MessagePollService() {
 		super(null);
@@ -51,79 +54,107 @@ public class MessagePollService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Log.d(TAG, "Intent Received");
-		String action = intent.getAction();
-		ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
-		MyProfile myProfile = adapter.getMyProfiledata();
+		if (xmppConnection.isConnected() == false || xmppConnection != null) {
+			ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
-		ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration(
-				myProfile.getXmpp_host(), myProfile.getXmpp_port(),
-				myProfile.getXmpp_server());
+			MyProfile myProfile = adapter.getMyProfiledata();
 
-		XMPPConnection connection = new XMPPConnection(connectionConfiguration);
-		try {
-			SASLAuthentication.supportSASLMechanism("PLAIN", 0);
-			connection.connect();
+			ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration(
+					myProfile.getXmpp_host(), myProfile.getXmpp_port(),
+					myProfile.getXmpp_server());
 
-			Log.d(TAG, "Connected");
-			connection.login(myProfile.getXmpp_user_name(),
-					myProfile.getXmpp_password());
-			Log.d(TAG, "Logged in");
-		} catch (XMPPException e) {
-			Log.e(TAG, e.getClass().getName(), e);
+			XMPPConnection connection = new XMPPConnection(
+					connectionConfiguration);
+			try {
+				SASLAuthentication.supportSASLMechanism("PLAIN", 0);
+				connection.connect();
+
+				Log.d(TAG, "Connected");
+				connection.login(myProfile.getXmpp_user_name(),
+						myProfile.getXmpp_password());
+				Log.d(TAG, "Logged in");
+			} catch (XMPPException e) {
+				Log.e(TAG, e.getClass().getName(), e);
+			}
+
+			PacketFilter filter = new AndFilter(new PacketTypeFilter(
+					Message.class));
+
+			packetListener = new ClassifiedPacketListener();
+
+			xmppConnection.addPacketListener(packetListener, filter);
 		}
 
-		PacketFilter filter = new AndFilter(new PacketTypeFilter(Message.class));
-		PacketCollector collector = connection.createPacketCollector(filter);
-		Packet packet = null;
+		// String action = intent.getAction();
 
-		if (action.equals(LONG_POLL)) {
-			packet = collector.pollResult();
+		// PacketCollector collector = connection.createPacketCollector(filter);
 
-		} else {
-			packet = collector.nextResult();
-		}
-		if (packet != null) {
-			Log.d(TAG, "Packet Found");
-		} else {
-			return;
-		}
-		if (packet instanceof Message) {
-			Message message = (Message) packet;
-			if (message != null && message.getBody() != null) {
-				String body = message.getBody();
+		// packetListener.get
 
-				Log.d(TAG, "Body is " + body);
-				try {
-					String msg = new String(Hex.decodeHex(body.toCharArray()));
-					JSONObject json = new JSONObject(msg);
-					Log.d(TAG, json.toString());
-					if (json.has("TYPE")) {
-						String type = json.getString("TYPE");
+		// Packet packet = null;
 
-						switch (type) {
-						case SendMessage.IKE_ACTION_PHASE1:
-							SharedPreferences sharedPreferences = getSharedPreferences(
-									JoinChatRoomUserActivity.JOIN_CHAT,
-									Context.MODE_PRIVATE);
-							sharedPreferences
-									.edit()
-									.putString(
-											AddUserActivity.PHASE2KEY,
-											json.getString(AddUserActivity.PHASE2KEY))
-									.commit();
-							break;
+		// if (action.equals(LONG_POLL)) {
+		// packet = collector.pollResult();
+		//
+		// } else {
+		// packet = collector.nextResult();
+		// }
 
-						case SendMessage.IKE_ACTION_PHASE2:
+		Packet[] packetList = packetListener.getPacketList();
+		for (Packet packet : packetList) {
 
-						default:
-							break;
+			if (packet != null) {
+				Log.d(TAG, "Packet Found");
+			} else {
+				return;
+			}
+			if (packet instanceof Message) {
+				Message message = (Message) packet;
+				if (message != null && message.getBody() != null) {
+					String body = message.getBody();
+
+					Log.d(TAG, "Body is " + body);
+					try {
+						String msg = new String(Hex.decodeHex(body
+								.toCharArray()));
+						JSONObject json = new JSONObject(msg);
+						Log.d(TAG, json.toString());
+						if (json.has("TYPE")) {
+							String type = json.getString("TYPE");
+
+							switch (type) {
+							case SendMessage.IKE_ACTION_PHASE1:
+								SharedPreferences sharedPreferences = getSharedPreferences(
+										JoinChatRoomUserActivity.JOIN_CHAT,
+										Context.MODE_PRIVATE);
+								sharedPreferences
+										.edit()
+										.putString(
+												AddUserActivity.PHASE2KEY,
+												json.getString(AddUserActivity.PHASE2KEY))
+										.commit();
+								break;
+
+							case SendMessage.IKE_ACTION_PHASE2:
+								break;
+							case SendMessage.IKE_ACTION_PHASE3:
+								break;
+							case SecureMessage.CHAT:
+
+								SecureMessage.processMessage(json.toString(),
+										null);
+								break;
+
+							default:
+								break;
+							}
 						}
-					}
 
-				} catch (DecoderException | JSONException e) {
-					Log.e(TAG, e.getClass().getName(), e);
-					return;
+					} catch (DecoderException | JSONException e) {
+						Log.e(TAG, e.getClass().getName(), e);
+						return;
+					}
 				}
 			}
 		}

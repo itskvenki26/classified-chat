@@ -69,14 +69,20 @@ public class Comment {
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		try {
-			json.put(C_P_ID, P_id);
-			json.put(C_CR_ID, CR_id);
 			json.put(C_MSG, message);
 		} catch (JSONException e) {
 			Log.e(TAG, e.getClass().getName(), e);
 		}
 
 		return json;
+	}
+
+	public static Comment fromString(String jsonString) throws JSONException {
+
+		Comment comment = new Comment();
+		JSONObject jsonObject = new JSONObject(jsonString);
+		comment.setMessage(jsonObject.getString(C_MSG));
+		return comment;
 	}
 
 	public String toHexString() {

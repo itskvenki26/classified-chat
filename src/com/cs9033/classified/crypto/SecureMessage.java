@@ -49,6 +49,7 @@ public class SecureMessage {
 	public static final String CRYPT = "CRYPT";
 	public static final String MAC_OF_CRYPT = "MAC_OF_CRYPT";
 	public static final String FROM = "FROM";
+	public static final String CHAT = "CHAT";
 
 	Context context;
 	ChatRoomsDBAdapter adapter;
@@ -82,7 +83,7 @@ public class SecureMessage {
 		next_e_key = getNewEKey();
 	}
 
-	public String getAddChatRoomMessage(String Key) {
+	public String getAddChatRoomMessage(String Key, String E, String MAC) {
 		long crid = chatRoom.getId();
 		User[] users = adapter.getUsersData(crid);
 		Post[] posts = adapter.getPostData(crid);
@@ -92,7 +93,9 @@ public class SecureMessage {
 
 			json.put(TYPE, CHAT_ROOM);
 
-			JSONObject jsonChatRoom = chatRoom.toJSON();
+			JSONObject jsonChatRoom = chatRoom.toJSON()
+					.put(ChatRoom.CR_CURRENT_E, E)
+					.put(ChatRoom.CR_CURRENT_MAC, MAC);
 
 			JSONArray jsonUsers = new JSONArray();
 			JSONArray jsonPosts = new JSONArray();
@@ -167,7 +170,7 @@ public class SecureMessage {
 			JSONObject json = new JSONObject();
 
 			json.put(TYPE, COMMENT).put(CHAT_ROOM, chatRoom.getCR_name())
-					.put(POST, post.getTitle()).put(VALUE, post.toJSON());
+					.put(POST, post.getTitle()).put(VALUE, comment.toJSON());
 			// .put(FROM, myProfile.getPh_no());
 
 			return encrypt(json);
@@ -179,7 +182,37 @@ public class SecureMessage {
 		return null;
 	}
 
-	public static void processMessage(String message,User user) {
+	private static long processAddChatRoom(JSONObject json) {
+		Log.d(TAG, "Adding Chat Room");
+		return 0;
+
+	}
+
+	private static long processAddUser(JSONObject json) {
+		Log.d(TAG, "Adding User");
+		return 0;
+
+	}
+
+	private static long processAddPost(JSONObject json) {
+		Log.d(TAG, "Adding Post");
+		return 0;
+
+	}
+
+	private static long processAddComment(JSONObject json) throws JSONException {
+
+		String chatRoomName = json.getString(CHAT_ROOM);
+		String postTitle = json.getString(POST);
+
+		// String
+
+		Log.d(TAG, "Adding Comment");
+		return 0;
+
+	}
+
+	public static void processMessage(String message, User user) {
 		// verify if message is right
 		try {
 			JSONObject jsonCrypt = new JSONObject(message);
@@ -188,10 +221,37 @@ public class SecureMessage {
 					&& jsonCrypt.has(OLD_MAC_KEY)) {
 				String crypt = jsonCrypt.getString(CRYPT);
 				String mac_of_crypt = jsonCrypt.getString(MAC_OF_CRYPT);
-				
-//				verifyMAC(user.get, encryptedMessage)
-				
-				
+
+				if (verifyMAC("user.getCurrentMac()", crypt)) {
+					Log.d(TAG, "Verified MAC");
+
+					String decryptedMessage = decrypt("user.getCurrentE()",
+							crypt);
+					JSONObject json = new JSONObject(decryptedMessage);
+					Log.d(TAG, json.toString());
+					String type = json.getString(TYPE);
+					String value = json.getString(VALUE);
+
+					switch (type) {
+					case CHAT_ROOM:
+						processAddChatRoom(json);
+						break;
+					case POST:
+						processAddPost(json);
+						break;
+					case COMMENT:
+						processAddComment(json);
+						break;
+					case USER:
+						processAddUser(json);
+						break;
+
+					default:
+						break;
+					}
+
+				}
+
 			}
 
 		} catch (JSONException e) {
@@ -235,9 +295,11 @@ public class SecureMessage {
 			// new String(mac_of_crypt, "UTF8");
 
 			JSONObject jsonMessage = new JSONObject();
-			jsonMessage.accumulate(CRYPT, crypt_string);
-			jsonMessage.accumulate(MAC_OF_CRYPT, mac_of_crypt_string);
-			jsonMessage.accumulate(OLD_MAC_KEY, old_mac_key);
+			jsonMessage.accumulate(CRYPT, crypt_string)
+					.accumulate(MAC_OF_CRYPT, mac_of_crypt_string)
+					.accumulate(OLD_MAC_KEY, old_mac_key)
+					.accumulate(TYPE, CHAT)
+					.accumulate(FROM, myProfile.getPh_no());
 
 			return jsonMessage.toString();
 		} catch (DecoderException e) {

@@ -125,10 +125,8 @@ public class ChatRoom {
 
 	public JSONObject toJSON() throws JSONException {
 
-		JSONObject json = new JSONObject();
-		json.put(CR_NAME, cr_name);
-		json.put(CR_TIME, time);
-		json.put(CR_DESCRIPTION, description);
+		JSONObject json = new JSONObject().put(CR_NAME, cr_name)
+				.put(CR_TIME, time).put(CR_DESCRIPTION, description);
 
 		return json;
 	}
@@ -153,6 +151,25 @@ public class ChatRoom {
 					json.getString(CR_DESCRIPTION));
 
 		} catch (JSONException | DecoderException e) {
+			Log.e(TAG, e.getClass().getName(), e);
+		}
+
+		return null;
+	}
+
+	public static ChatRoom fromString(String jsonString) {
+
+		try {
+			JSONObject json = new JSONObject(jsonString);
+			ChatRoom cr = new ChatRoom();
+
+			cr.setCR_name(json.getString(CR_NAME));
+			cr.setTime(json.getString(CR_TIME));
+			cr.setDescription(json.getString(CR_DESCRIPTION));
+			cr.setCurrent_e(json.getString(CR_CURRENT_E));
+			cr.setCurrent_mac(json.getString(CR_CURRENT_MAC));
+
+		} catch (JSONException e) {
 			Log.e(TAG, e.getClass().getName(), e);
 		}
 
