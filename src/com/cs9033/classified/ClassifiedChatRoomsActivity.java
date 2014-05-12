@@ -40,7 +40,7 @@ public class ClassifiedChatRoomsActivity extends Activity {
 					.add(R.id.container, showChatRoomFragment).commit();
 		}
 
-		MessagePollService.setServiceAlarm(this, true);
+		// MessagePollService.setServiceAlarm(this, true);
 
 	}
 

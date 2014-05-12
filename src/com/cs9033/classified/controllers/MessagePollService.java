@@ -53,12 +53,14 @@ public class MessagePollService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.d(TAG, "Intent Received");
+		Log.d(TAG, "Intent Received" + intent.getClass());
 
 		if (xmppConnection == null || xmppConnection.isConnected() == false) {
 			ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
 			MyProfile myProfile = adapter.getMyProfiledata();
+			if (myProfile == null)
+				return;
 
 			ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration(
 					myProfile.getXmpp_host(), myProfile.getXmpp_port(),

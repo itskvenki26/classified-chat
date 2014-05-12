@@ -61,6 +61,8 @@ public class JoinChatRoomUserActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new ShowQRPhase1Fragment()).commit();
 		}
+		MessagePollService.setServiceAlarm(this, true);
+
 	}
 
 	@Override

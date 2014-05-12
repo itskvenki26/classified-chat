@@ -275,6 +275,7 @@ public class AddUserActivity extends Activity {
 								Toast.LENGTH_SHORT).show();
 						Log.d(TAG, "Verified Key2");
 
+//						Log.d(TAG,"");
 						SecureMessage s = new SecureMessage(getActivity());
 						String cr = null;
 						ChatRoomsDBAdapter a = new ChatRoomsDBAdapter(
