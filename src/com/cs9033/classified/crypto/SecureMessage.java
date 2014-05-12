@@ -148,7 +148,7 @@ public class SecureMessage {
 				Log.e(TAG, e.getClass().getName(), e);
 			}
 
-			return finalJSON;
+			return new String(Hex.encodeHex(finalJSON.getBytes()));
 		} catch (JSONException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeyException
 				| NoSuchAlgorithmException | NoSuchPaddingException e) {

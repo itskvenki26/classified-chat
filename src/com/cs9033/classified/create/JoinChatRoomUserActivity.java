@@ -321,6 +321,7 @@ public class JoinChatRoomUserActivity extends Activity {
 				SecureMessage s = new SecureMessage(getActivity());
 				String xChange3 = sharedPreferences.getString(
 						AddUserActivity.PHASE3KEY, null);
+				Log.d(TAG, "Message is : " + xChange3);
 				if (xChange3 != null) {
 					try {
 						s.processMessage(xChange3, null, parent.key3);
