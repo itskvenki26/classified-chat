@@ -33,6 +33,7 @@ public class AddUserActivity extends Activity {
 	private static final String TAG = "AddUserActivity";
 	public static final String PHASE1KEY = "PHASE1KEY";
 	public static final String PHASE2KEY = "PHASE2KEY";
+	public static final String PHASE3KEY = "PHASE3KEY";
 
 	public static final String ADD_USER = "ADD_USER";
 
@@ -155,6 +156,7 @@ public class AddUserActivity extends Activity {
 		String ph_num;
 		JSONObject json;
 		String key2;
+		String key3;
 
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -171,7 +173,7 @@ public class AddUserActivity extends Activity {
 
 					Log.d(TAG, json.toString());
 
-					key1 = json.getString(JoinChatRoomUserActivity.KEY1);
+					key1 = json.getString(AddUserActivity.PHASE1KEY);
 					name = json.getString(JoinChatRoomUserActivity.NAME);
 					ph_num = json
 							.getString(JoinChatRoomUserActivity.PHONE_NUMBER);
@@ -234,7 +236,7 @@ public class AddUserActivity extends Activity {
 				intent.putExtra(JoinChatRoomUserActivity.PORT, port);
 				intent.putExtra(JoinChatRoomUserActivity.SERVER, server);
 				intent.putExtra(JoinChatRoomUserActivity.USER_NAME, userName);
-				intent.setAction(SendMessage.IKE_ACTION);
+				intent.setAction(SendMessage.IKE_ACTION_PHASE1);
 				getActivity().startService(intent);
 				key2 = xChange2;
 
@@ -256,19 +258,24 @@ public class AddUserActivity extends Activity {
 			Log.d(TAG, "back to Add User Activity");
 			IntentResult scanResult = IntentIntegrator.parseActivityResult(
 					requestCode, resultCode, data);
-			try {
-				if (scanResult != null) {
-					Log.d(TAG, "Scan Results is not null");
-					String contents = scanResult.getContents();
+			if (scanResult != null) {
+				Log.d(TAG, "Scan Results is not null");
+				String contents = scanResult.getContents();
+				try {
+					JSONObject json = new JSONObject(contents);
+					String xChange2 = json.getString(AddUserActivity.PHASE2KEY);
+					String xChange3 = json.getString(AddUserActivity.PHASE3KEY);
 					Log.d(TAG, contents);
-					if (contents.equals(key2)) {
+					if (xChange2.equals(key2)) {
+						key3 = xChange3;
 						Toast.makeText(getActivity(), "Verified",
 								Toast.LENGTH_SHORT).show();
+						Log.d(TAG, "Verified Key2");
 
 					}
+				} catch (JSONException e) {
+					Log.e(TAG, e.getClass().getName(), e);
 				}
-			} catch (Exception e) {
-				Log.e(TAG, e.getClass().getName(), e);
 			}
 		}
 	}

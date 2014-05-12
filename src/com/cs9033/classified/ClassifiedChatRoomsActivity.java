@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.controllers.MessagePollService;
 import com.cs9033.classified.create.CreateChatRoomActivity;
 import com.cs9033.classified.create.JoinChatRoomUserActivity;
 import com.cs9033.classified.create.UpdateProfileActivity;
@@ -38,6 +39,8 @@ public class ClassifiedChatRoomsActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, showChatRoomFragment).commit();
 		}
+
+		MessagePollService.setServiceAlarm(this, true);
 
 	}
 

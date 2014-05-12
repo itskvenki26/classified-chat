@@ -12,16 +12,16 @@ import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.AddUserActivity;
@@ -34,9 +34,9 @@ public class MessagePollService extends IntentService {
 	private static final String TAG = "MessagePollService";
 	public static final String MESSAGE_RECEIVED_ACTION = "MESSAGE_RECEIVED_ACTION";
 	public static final String CHAT_RECEIVED_ACTION = "CHAT_RECEIVED_ACTION";
-	private static boolean running = false;
-	static XMPPConnection connection;
-	FileTransferManager manager;
+	public static final String BLOCK_WAIT = "BLOCK_WAIT";
+	public static final String LONG_POLL = "LONG_POLL";
+	public static final int POLL_INTERVAL = 60 * 1000;
 
 	public MessagePollService() {
 		super(null);
@@ -51,6 +51,7 @@ public class MessagePollService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Log.d(TAG, "Intent Received");
+		String action = intent.getAction();
 		ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
 		MyProfile myProfile = adapter.getMyProfiledata();
@@ -74,10 +75,18 @@ public class MessagePollService extends IntentService {
 
 		PacketFilter filter = new AndFilter(new PacketTypeFilter(Message.class));
 		PacketCollector collector = connection.createPacketCollector(filter);
+		Packet packet = null;
 
-		Packet packet = collector.nextResult();
+		if (action.equals(LONG_POLL)) {
+			packet = collector.pollResult();
+
+		} else {
+			packet = collector.nextResult();
+		}
 		if (packet != null) {
 			Log.d(TAG, "Packet Found");
+		} else {
+			return;
 		}
 		if (packet instanceof Message) {
 			Message message = (Message) packet;
@@ -93,17 +102,19 @@ public class MessagePollService extends IntentService {
 						String type = json.getString("TYPE");
 
 						switch (type) {
-						case SendMessage.IKE_ACTION:
+						case SendMessage.IKE_ACTION_PHASE1:
 							SharedPreferences sharedPreferences = getSharedPreferences(
 									JoinChatRoomUserActivity.JOIN_CHAT,
 									Context.MODE_PRIVATE);
 							sharedPreferences
 									.edit()
 									.putString(
-											JoinChatRoomUserActivity.KEY2,
+											AddUserActivity.PHASE2KEY,
 											json.getString(AddUserActivity.PHASE2KEY))
 									.commit();
 							break;
+
+						case SendMessage.IKE_ACTION_PHASE2:
 
 						default:
 							break;
@@ -117,19 +128,23 @@ public class MessagePollService extends IntentService {
 			}
 		}
 
-		// try {
-		// SASLAuthentication.supportSASLMechanism("PLAIN", 0);
-		// connection.connect();
-		//
-		// Log.d(TAG, "Connected");
-		// connection.login(myProfile.getXmpp_user_name(),
-		// myProfile.getXmpp_password());
-		// Log.d(TAG, "Logged in");
-		// Message
-		// } catch (XMPPException e) {
-		// Log.e(TAG, e.getClass().getName(), e);
-		// Toast.makeText(null, "Error Sending Message", Toast.LENGTH_SHORT)
-		// .show();
-		// }
+	}
+
+	public static void setServiceAlarm(Context context, boolean isON) {
+		Intent i = new Intent(context, MessagePollService.class);
+		i.setAction(LONG_POLL);
+		PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+		AlarmManager alarmManager = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
+
+		if (isON) {
+			Log.d(TAG, "Setting alarm to " + POLL_INTERVAL + "ms");
+			alarmManager.setRepeating(AlarmManager.RTC, 0, POLL_INTERVAL, pi);
+			Log.d(TAG, "Finished Set Alarm");
+		} else {
+			Log.d(TAG, "Clear Alarm");
+			alarmManager.cancel(pi);
+			pi.cancel();
+		}
 	}
 }

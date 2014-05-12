@@ -42,12 +42,14 @@ public class JoinChatRoomUserActivity extends Activity {
 	public static final String PHONE_NUMBER = "PH";
 	public static final String NAME = "N";
 
-	public static final String KEY1 = "KEY1";
-	public static final String KEY2 = "KEY2";
+	// public static final String KEY1 = "KEY1";
+	// public static final String KEY2 = "KEY2";
 
 	long crID;
 	String crName;
-	private String key2;
+	String key2;
+	String key1;
+	String key3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +156,8 @@ public class JoinChatRoomUserActivity extends Activity {
 					MyProfile myProfile = dbAdapter.getMyProfiledata();
 					if (myProfile != null) {
 						String xChange1 = SecureMessage.getNewEKey();
-						json.accumulate(KEY1, xChange1);
+						parent.key1 = xChange1;
+						json.accumulate(AddUserActivity.PHASE1KEY, xChange1);
 						json.accumulate(PHONE_NUMBER, myProfile.getPh_no());
 						json.accumulate(HOST, myProfile.getXmpp_host());
 						json.accumulate(SERVER, myProfile.getXmpp_server());
@@ -169,7 +172,8 @@ public class JoinChatRoomUserActivity extends Activity {
 										Context.MODE_PRIVATE);
 
 						boolean edit = sharedPreferences.edit()
-								.putString(KEY1, xChange1).commit();
+								.putString(AddUserActivity.PHASE1KEY, xChange1)
+								.commit();
 						if (edit) {
 							IntentIntegrator integrator = new IntentIntegrator(
 									this);
@@ -179,6 +183,7 @@ public class JoinChatRoomUserActivity extends Activity {
 									.registerOnSharedPreferenceChangeListener(this);
 							Intent intent = new Intent(getActivity(),
 									MessagePollService.class);
+							intent.setAction(MessagePollService.BLOCK_WAIT);
 							getActivity().startService(intent);
 
 							// ((Button) getView().findViewById(
@@ -210,8 +215,10 @@ public class JoinChatRoomUserActivity extends Activity {
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
 			switch (key) {
-			case KEY2:
-				String key2 = sharedPreferences.getString(KEY2, null);
+			case AddUserActivity.PHASE2KEY:
+				String key2 = sharedPreferences.getString(
+						AddUserActivity.PHASE2KEY, null);
+				parent.key2 = key2;
 				Log.d(TAG, "KEY2 is :" + key2);
 				parent.gotoPhase2();
 				break;
@@ -263,15 +270,28 @@ public class JoinChatRoomUserActivity extends Activity {
 			int id = v.getId();
 			switch (id) {
 			case R.id.show_qr2_verify_key_button:
-				SharedPreferences sharedPreferences = getActivity()
-						.getSharedPreferences(
-								JoinChatRoomUserActivity.JOIN_CHAT,
-								Context.MODE_PRIVATE);
-				String xChange2 = sharedPreferences.getString(KEY2, null);
-				if (xChange2 != null) {
-					IntentIntegrator integrator = new IntentIntegrator(this);
-					integrator.shareText(xChange2);
+				// SharedPreferences sharedPreferences = getActivity()
+				// .getSharedPreferences(
+				// JoinChatRoomUserActivity.JOIN_CHAT,
+				// Context.MODE_PRIVATE);
+				// sharedPreferences.getString(
+				// AddUserActivity.PHASE2KEY, null);
+				try {
+					String xChange2 = parent.key2;
+					String xChange3 = SecureMessage.getNewEKey();
+					JSONObject json = new JSONObject();
+					json.put(AddUserActivity.PHASE2KEY, xChange2);
+					json.put(AddUserActivity.PHASE3KEY, xChange3);
+					Log.d(TAG, "Key2 is " + xChange2);
+					Log.d(TAG, "Key3 is " + xChange3);
+					if (xChange2 != null) {
+						IntentIntegrator integrator = new IntentIntegrator(this);
+						integrator.shareText(json.toString());
+					}
+				} catch (JSONException e) {
+					Log.e(TAG, e.getClass().getName(), e);
 				}
+
 				break;
 
 			case R.id.show_qr2_next:
@@ -282,7 +302,6 @@ public class JoinChatRoomUserActivity extends Activity {
 				break;
 			}
 		}
-
 	}
 
 	public static class ShowReceivedChatRoom extends Fragment implements

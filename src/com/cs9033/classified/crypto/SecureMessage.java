@@ -23,40 +23,50 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.models.ChatRoom;
+import com.cs9033.classified.models.MyProfile;
+
 public class SecureMessage {
 	public static final String TAG = "SecureMessage";
 
 	Context context;
+	ChatRoomsDBAdapter adapter;
+	ChatRoom chatRoom;
 	String old_mac_key;
 	String current_mac_key;
 	String current_e_key;
 	String next_mac_key;
 	String next_e_key;
+	MyProfile myProfile;
 
 	String messageString;
 	String message;
 
-	@SuppressLint("TrulyRandom")
-	public SecureMessage(Context context, String message) {
-		// SecureRandom sr = new SecureRandom();
-		// this.next_mac_key = new byte[20];
-		// sr.nextBytes(this.next_mac_key);
-		// this.context = context;
-		messageString = message;
-		this.message = message;
-		initKeys();
+	public SecureMessage(Context context) {
+		super();
+		this.context = context;
+		adapter = new ChatRoomsDBAdapter(context);
 	}
 
-	private void initKeys() {
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	private void init(ChatRoom chatRoom) {
+		this.chatRoom = chatRoom;
+		old_mac_key = chatRoom.getOld_mac();
+		current_e_key = chatRoom.getCurrent_e();
+		current_mac_key = chatRoom.getCurrent_mac();
 		next_mac_key = getNewMacKey();
 		next_e_key = getNewEKey();
-		// DemoDBAdapter db = new DemoDBAdapter(context);
-		// String[] keys = db.getKeys();
+	}
 
-		// current_mac_key = keys[0];
-		// current_e_key = keys[1];
-		//
-		// old_mac_key = keys[2];
+	String addChatRoomMessage(String Key) {
+		long crid = chatRoom.getId();
+		// adap
+
+		return Key;
 
 	}
 

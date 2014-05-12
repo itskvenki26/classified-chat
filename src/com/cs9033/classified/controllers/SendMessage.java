@@ -19,7 +19,9 @@ public class SendMessage extends IntentService {
 	public static final String ADD_CHAT_ROOM_ACTION = "ADD_CHAT_ROOM_ACTION";
 	public static final String ADD_POST_ACTION = "ADD_POST_ACTION";
 	public static final String ADD_COMMENT_ACTION = "ADD_COMMENT_ACTION";
-	public static final String IKE_ACTION = "IKE_ACTION";
+	public static final String IKE_ACTION_PHASE1 = "IKE_ACTION_PHASE1";
+	public static final String IKE_ACTION_PHASE2 = "IKE_ACTION_PHASE2";
+	public static final String IKE_ACTION_PHASE3 = "IKE_ACTION_PHASE3";
 
 	public static final String TAG = "SendMessage";
 
@@ -41,14 +43,14 @@ public class SendMessage extends IntentService {
 		MyProfile myProfile = adapter.getMyProfiledata();
 
 		switch (action) {
-		case IKE_ACTION:
+		case IKE_ACTION_PHASE1:
 			try {
 				Bundle extras = intent.getExtras();
 				String xChange2 = extras.getString(AddUserActivity.PHASE2KEY);
 
 				JSONObject json = new JSONObject();
-				json.put("TYPE", IKE_ACTION).put(AddUserActivity.PHASE2KEY,
-						xChange2);
+				json.put("TYPE", IKE_ACTION_PHASE1).put(
+						AddUserActivity.PHASE2KEY, xChange2);
 
 				String host = extras.getString(JoinChatRoomUserActivity.HOST);
 				int port = extras.getInt(JoinChatRoomUserActivity.PORT);
