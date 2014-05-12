@@ -48,7 +48,7 @@ public class MessagePollService extends IntentService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d(TAG, "Service Created");
+		// Log.d(TAG, "Service Created");
 	}
 
 	@Override

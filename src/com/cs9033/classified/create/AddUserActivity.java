@@ -304,7 +304,7 @@ public class AddUserActivity extends Activity {
 						intent.putExtra(JoinChatRoomUserActivity.SERVER, server);
 						intent.putExtra(JoinChatRoomUserActivity.USER_NAME,
 								userName);
-						intent.setAction(SendMessage.IKE_ACTION_PHASE2);
+						intent.setAction(SecureMessage.CHAT);
 						getActivity().startService(intent);
 					}
 				} catch (JSONException e) {
