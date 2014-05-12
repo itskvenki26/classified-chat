@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,8 +49,10 @@ public class JoinChatRoomUserActivity extends Activity {
 	public static final String USER_NAME = "UN";
 	public static final String SERVER = "SERVER";
 	public static final String PHONE_NUMBER = "PH";
-	public static final String KEY1 = "KEY1";
 	public static final String NAME = "N";
+
+	public static final String KEY1 = "KEY1";
+	public static final String KEY2 = "KEY2";
 
 	long crID;
 	String crName;
@@ -118,7 +121,7 @@ public class JoinChatRoomUserActivity extends Activity {
 	 *         Show initial Secret with contact details
 	 */
 	public static class ShowQRPhase1Fragment extends Fragment implements
-			OnClickListener {
+			OnClickListener, OnSharedPreferenceChangeListener {
 		private static final String TAG = "ShowQRPhase1Fragment";
 		JoinChatRoomUserActivity parent;
 
@@ -174,11 +177,14 @@ public class JoinChatRoomUserActivity extends Activity {
 										Context.MODE_PRIVATE);
 
 						boolean edit = sharedPreferences.edit()
-								.putString("KEY1", xChange1).commit();
+								.putString(KEY1, xChange1).commit();
 						if (edit) {
 							IntentIntegrator integrator = new IntentIntegrator(
 									this);
 							integrator.shareText(xChange1);
+
+							sharedPreferences
+									.registerOnSharedPreferenceChangeListener(this);
 							((Button) getView().findViewById(
 									R.id.show_qr1_next_button))
 									.setEnabled(true);
@@ -203,6 +209,24 @@ public class JoinChatRoomUserActivity extends Activity {
 				break;
 			}
 		}
+
+		@Override
+		public void onSharedPreferenceChanged(
+				SharedPreferences sharedPreferences, String key) {
+			switch (key) {
+			case KEY2:
+				String key2 = sharedPreferences.getString(KEY2, null);
+				Log.d(TAG, "KEY2 is :" + key2);
+				Toast.makeText(getActivity(), "KEY2 is :" + key2,
+						Toast.LENGTH_SHORT).show();
+				break;
+
+			default:
+				break;
+			}
+
+		}
+
 	}
 
 	/**

@@ -1,22 +1,26 @@
 package com.cs9033.classified.controllers;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
+import org.apache.commons.codec.binary.Hex;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cs9033.classified.crypto.SecureMessage;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.create.AddUserActivity;
+import com.cs9033.classified.create.JoinChatRoomUserActivity;
+import com.cs9033.classified.models.MyProfile;
 
 public class SendMessage extends IntentService {
+
+	public static final String ADD_CHAT_ROOM_ACTION = "ADD_CHAT_ROOM_ACTION";
+	public static final String ADD_POST_ACTION = "ADD_POST_ACTION";
+	public static final String ADD_COMMENT_ACTION = "ADD_COMMENT_ACTION";
+	public static final String IKE_ACTION = "IKE_ACTION";
+
 	public static final String TAG = "SendMessage";
 
 	public SendMessage(String name) {
@@ -31,55 +35,42 @@ public class SendMessage extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		// get Message and session
-		// Bundle bundle = intent.getExtras();
-		// String message = bundle.getString("message");
-		// String chaatroom_id = bundle.getString("chatroom_id");
+		String action = intent.getAction();
+		ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
-		// Create SecureMessage Object
-		// Get ClearTextMessage from Inent
-		Log.d(TAG, "Started Service");
-		Bundle extras = intent.getExtras();
+		MyProfile myProfile = adapter.getMyProfiledata();
 
-		String message = extras.getString("message");
-		Log.d(TAG, "Message is " + message);
-		SecureMessage secureMessage = new SecureMessage(this, message);
+		switch (action) {
+		case IKE_ACTION:
+			try {
+				Bundle extras = intent.getExtras();
+				String xChange2 = extras.getString(AddUserActivity.PHASE2KEY);
 
-		// Generate Mac
-		String mac_new = secureMessage.getNext_mac_key();
-		Log.d(TAG, "mac_new is " + mac_new);
-		String e_new = secureMessage.getNext_e_key();
-		Log.d(TAG, "e_new is " + e_new);
-		String mac_current = secureMessage.getCurrent_mac_key();
-		Log.d(TAG, "mac_current is " + mac_current);
-		String e_current = secureMessage.getCurrent_e_key();
-		Log.d(TAG, "e_current is " + e_current);
-		try {
-			// Encrypt Message
-			String ciphertext = secureMessage.encrypt();
-			Log.d(TAG, "ciphertext is  " + ciphertext);
-			// Get Preferred Channels
-			// For each channel, send the encrypted text
-			// Update mac and EKeys
-			// Messager.sendSMS(this, "+19177176181", ciphertext);
-			MessagePollService.start();
-			Messager.sendChatMessage(null, 0, null, ciphertext, null);
+				JSONObject json = new JSONObject();
+				json.put("TYPE", IKE_ACTION).put(AddUserActivity.PHASE2KEY,
+						xChange2);
 
-			// DemoDBAdapter db = new DemoDBAdapter(this);
+				String host = extras.getString(JoinChatRoomUserActivity.HOST);
+				int port = extras.getInt(JoinChatRoomUserActivity.PORT);
+				String server = extras
+						.getString(JoinChatRoomUserActivity.SERVER);
+				String to = extras
+						.getString(JoinChatRoomUserActivity.USER_NAME);
 
-			// old_mac = current_mac
-			// current_key = new_key
-			// current_mac = new_mac
-
-			// String clearText = SecureMessage.decrypt(e_current, ciphertext);
-			// Log.d(TAG, "Decrypted");
-			// Log.d(TAG, "Clear Text:" + clearText);
-			// db.updateKeys(mac_new, e_new, mac_current);
-
-		} catch (InvalidKeyException | NoSuchAlgorithmException
-				| NoSuchPaddingException | IllegalBlockSizeException
-				| BadPaddingException | JSONException e) {
-			Log.e(TAG, e.getClass().getName(), e);
+				String message = new String(Hex.encodeHex(json.toString()
+						.getBytes()));
+				Messager.sendChatMessage(host, port, server, message, to,
+						myProfile);
+			} catch (JSONException e) {
+				Log.e(TAG, e.getClass().getName(), e);
+			}
+			break;
+		case ADD_COMMENT_ACTION:
+			break;
+		case ADD_POST_ACTION:
+			break;
+		case ADD_CHAT_ROOM_ACTION:
+			break;
 		}
 
 	}

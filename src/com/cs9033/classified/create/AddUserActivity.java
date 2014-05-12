@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cs9033.classified.R;
+import com.cs9033.classified.controllers.SendMessage;
+import com.cs9033.classified.crypto.SecureMessage;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -29,6 +31,7 @@ public class AddUserActivity extends Activity {
 	@SuppressWarnings("unused")
 	private static final String TAG = "AddUserActivity";
 	public static final String PHASE1KEY = "PHASE1KEY";
+	public static final String PHASE2KEY = "PHASE2KEY";
 
 	public static final String ADD_USER = "ADD_USER";
 
@@ -101,12 +104,9 @@ public class AddUserActivity extends Activity {
 					requestCode, resultCode, data);
 			try {
 				if (scanResult != null) {
-					// Log.d(TAG, "Scan Result is not null");
 					String contents = scanResult.getContents();
-					// Log.d(TAG, "Contents = " + contents);
 					String result = new String(Hex.decodeHex(contents
 							.toCharArray()));
-					// Log.d(TAG, "Result = " + result);
 					SharedPreferences sharedPreferences = getActivity()
 							.getSharedPreferences(ADD_USER,
 									Context.MODE_PRIVATE);
@@ -169,10 +169,6 @@ public class AddUserActivity extends Activity {
 
 					Log.d(TAG, json.toString());
 
-					// ((TextView) rootView
-					// .findViewById(R.id.fragment_scan_qr2_email_text_view))
-					// .setText(json
-					// .getString(JoinChatRoomUserActivity.EMAIL));
 					key1 = json.getString(JoinChatRoomUserActivity.KEY1);
 					name = json.getString(JoinChatRoomUserActivity.NAME);
 					ph_num = json
@@ -222,7 +218,20 @@ public class AddUserActivity extends Activity {
 
 			switch (id) {
 			case R.id.fragment_scan_qr2_next_button:
+
+				Log.d(TAG, "Creating Key2");
+				String xChange2 = SecureMessage.getNewEKey();
 				Log.d(TAG, "Send XMPP Message here");
+
+				Intent intent = new Intent(getActivity(), SendMessage.class);
+				intent.putExtra(PHASE2KEY, xChange2);
+				intent.putExtra(JoinChatRoomUserActivity.HOST, host);
+				intent.putExtra(JoinChatRoomUserActivity.PORT, port);
+				intent.putExtra(JoinChatRoomUserActivity.SERVER, server);
+				intent.putExtra(JoinChatRoomUserActivity.USER_NAME, userName);
+				intent.setAction(SendMessage.IKE_ACTION);
+				getActivity().startService(intent);
+
 				break;
 			}
 
