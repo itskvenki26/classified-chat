@@ -176,9 +176,13 @@ public class JoinChatRoomUserActivity extends Activity {
 
 							sharedPreferences
 									.registerOnSharedPreferenceChangeListener(this);
-							((Button) getView().findViewById(
-									R.id.show_qr1_next_button))
-									.setEnabled(true);
+							Intent intent = new Intent(getActivity(),
+									MessagePollService.class);
+							getActivity().startService(intent);
+
+							// ((Button) getView().findViewById(
+							// R.id.show_qr1_next_button))
+							// .setEnabled(true);
 						}
 					} else {
 						Intent i = new Intent(getActivity(),
@@ -210,6 +214,8 @@ public class JoinChatRoomUserActivity extends Activity {
 				Log.d(TAG, "KEY2 is :" + key2);
 				Toast.makeText(getActivity(), "KEY2 is :" + key2,
 						Toast.LENGTH_SHORT).show();
+				((Button) getView().findViewById(R.id.show_qr1_next_button))
+						.setEnabled(true);
 				break;
 
 			default:
@@ -260,40 +266,15 @@ public class JoinChatRoomUserActivity extends Activity {
 			int id = v.getId();
 			switch (id) {
 			case R.id.show_qr2_verify_key_button:
-				Intent intent = new Intent(getActivity(),
-						MessagePollService.class);
-				getActivity().startService(intent);
-
-				// try {
-				// SharedPreferences sharedPreferences = getActivity()
-				// .getSharedPreferences(JOIN_CHAT,
-				// Context.MODE_PRIVATE);
-				// String key1 = sharedPreferences.getString("KEY1", null);
-				// String key2 = sharedPreferences.getString("KEY2", null);
-				// Log.d(TAG, "key1=" + key1);
-				// Log.d(TAG, "key2=" + key2);
-				// if (key1 != null && key2 != null) {
-				// byte[] key1bytes = Hex.decodeHex(key1.toCharArray());
-				// // String key2 = parent.getKey2();
-				// byte[] key2bytes = Hex.decodeHex(key2.toCharArray());
-				// SecretKeySpec skeySpec = new SecretKeySpec(key1bytes,
-				// "AES");
-				//
-				// Cipher cipher = Cipher.getInstance("AES");
-				// cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-				// byte[] decryptedbytes = cipher.doFinal(key2bytes);
-				// String decrypted = new String(decryptedbytes);
-				//
-				// IntentIntegrator integrator = new IntentIntegrator(this);
-				// integrator.shareText(decrypted);
-				// ((Button) getView().findViewById(R.id.show_qr2_next))
-				// .setEnabled(true);
-				// }
-				// } catch (DecoderException | InvalidKeyException
-				// | NoSuchAlgorithmException | NoSuchPaddingException
-				// | IllegalBlockSizeException | BadPaddingException e) {
-				// Log.e(TAG, e.getClass().getName(), e);
-				// }
+				SharedPreferences sharedPreferences = getActivity()
+						.getSharedPreferences(
+								JoinChatRoomUserActivity.JOIN_CHAT,
+								Context.MODE_PRIVATE);
+				String xChange2 = sharedPreferences.getString(KEY2, null);
+				if (xChange2 != null) {
+					IntentIntegrator integrator = new IntentIntegrator(this);
+					integrator.shareText(xChange2);
+				}
 				break;
 
 			case R.id.show_qr2_next:

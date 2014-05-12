@@ -36,6 +36,7 @@
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="key">Key</string>
+    <string name="share_secret">Share Secret</string>
 
     <!-- Common Strings -->
     <string name="posts_list">Posts</string>

@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cs9033.classified.R;
 import com.cs9033.classified.controllers.SendMessage;
@@ -153,6 +154,7 @@ public class AddUserActivity extends Activity {
 		String email;
 		String ph_num;
 		JSONObject json;
+		String key2;
 
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -217,7 +219,7 @@ public class AddUserActivity extends Activity {
 			int id = v.getId();
 
 			switch (id) {
-			case R.id.fragment_scan_qr2_next_button:
+			case R.id.fragment_scan_qr2_share_secret_button:
 
 				Log.d(TAG, "Creating Key2");
 				String xChange2 = SecureMessage.getNewEKey();
@@ -231,10 +233,38 @@ public class AddUserActivity extends Activity {
 				intent.putExtra(JoinChatRoomUserActivity.USER_NAME, userName);
 				intent.setAction(SendMessage.IKE_ACTION);
 				getActivity().startService(intent);
+				key2 = xChange2;
+
+				break;
+			case R.id.fragment_scan_qr2_next_button:
+				IntentIntegrator integrator = new IntentIntegrator(this);
+
+				integrator.initiateScan(IntentIntegrator.QR_CODE_TYPES);
 
 				break;
 			}
 
+		}
+
+		@Override
+		public void onActivityResult(int requestCode, int resultCode,
+				Intent data) {
+			super.onActivityResult(requestCode, resultCode, data);
+			Log.d(TAG, "back to Add User Activity");
+			IntentResult scanResult = IntentIntegrator.parseActivityResult(
+					requestCode, resultCode, data);
+			try {
+				if (scanResult != null) {
+					String contents = scanResult.getContents();
+					if (contents == key2) {
+						Toast.makeText(getActivity(), "Verified",
+								Toast.LENGTH_SHORT).show();
+
+					}
+				}
+			} catch (Exception e) {
+				Log.e(TAG, e.getClass().getName(), e);
+			}
 		}
 	}
 

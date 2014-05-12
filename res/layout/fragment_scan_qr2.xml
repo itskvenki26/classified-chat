@@ -155,12 +155,20 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
         <Button
+            android:id="@+id/fragment_scan_qr2_share_secret_button"
+            style="@android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/share_secret" />
+
+        <Button
             android:id="@+id/fragment_scan_qr2_next_button"
+            style="@android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

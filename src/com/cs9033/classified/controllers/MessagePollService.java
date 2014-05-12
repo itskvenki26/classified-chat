@@ -4,7 +4,9 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketCollector;
+import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
@@ -58,20 +60,35 @@ public class MessagePollService extends IntentService {
 				myProfile.getXmpp_server());
 
 		XMPPConnection connection = new XMPPConnection(connectionConfiguration);
+		try {
+			SASLAuthentication.supportSASLMechanism("PLAIN", 0);
+			connection.connect();
+
+			Log.d(TAG, "Connected");
+			connection.login(myProfile.getXmpp_user_name(),
+					myProfile.getXmpp_password());
+			Log.d(TAG, "Logged in");
+		} catch (XMPPException e) {
+			Log.e(TAG, e.getClass().getName(), e);
+		}
 
 		PacketFilter filter = new AndFilter(new PacketTypeFilter(Message.class));
 		PacketCollector collector = connection.createPacketCollector(filter);
 
-		Packet packet = collector.pollResult();
-
+		Packet packet = collector.nextResult();
+		if (packet != null) {
+			Log.d(TAG, "Packet Found");
+		}
 		if (packet instanceof Message) {
 			Message message = (Message) packet;
 			if (message != null && message.getBody() != null) {
 				String body = message.getBody();
-				Toast.makeText(this, body, Toast.LENGTH_SHORT).show();
+
+				Log.d(TAG, "Body is " + body);
 				try {
 					String msg = new String(Hex.decodeHex(body.toCharArray()));
 					JSONObject json = new JSONObject(msg);
+					Log.d(TAG, json.toString());
 					if (json.has("TYPE")) {
 						String type = json.getString("TYPE");
 

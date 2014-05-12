@@ -70,6 +70,7 @@ public final class R {
         public static final int fragment_scan_qr2_ph_num_text_view=0x7f080012;
         public static final int fragment_scan_qr2_port_text_view=0x7f080015;
         public static final int fragment_scan_qr2_server_text_view=0x7f080014;
+        public static final int fragment_scan_qr2_share_secret_button=0x7f080018;
         public static final int fragment_scan_qr2_user_name_text_view=0x7f080016;
         public static final int fragment_users_root=0x7f08002d;
         public static final int post_creator_text_view=0x7f08002e;
@@ -86,7 +87,6 @@ public final class R {
         public static final int show_received_chat_room_posts=0x7f080022;
         public static final int show_received_chat_room_refresh_button=0x7f080020;
         public static final int show_received_chat_room_users=0x7f080023;
-        public static final int tableRow1=0x7f080018;
         public static final int update_profile_email_edit_text=0x7f080026;
         public static final int update_profile_host_edit_text=0x7f080028;
         public static final int update_profile_menu_save=0x7f08003a;
@@ -138,8 +138,8 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f050010;
-        public static final int add_comment=0x7f050025;
-        public static final int add_user=0x7f050023;
+        public static final int add_comment=0x7f050026;
+        public static final int add_user=0x7f050024;
         /**  Application String 
          */
         public static final int app_name=0x7f050000;
@@ -151,7 +151,7 @@ public final class R {
         public static final int hello_world=0x7f05000f;
         public static final int host=0x7f050016;
         public static final int initiate=0x7f050011;
-        public static final int join_chat_room=0x7f050020;
+        public static final int join_chat_room=0x7f050021;
         public static final int key=0x7f05001d;
         public static final int name=0x7f05000d;
         public static final int next=0x7f050013;
@@ -160,12 +160,13 @@ public final class R {
         public static final int port=0x7f050018;
         /**  Common Strings 
          */
-        public static final int posts_list=0x7f05001e;
+        public static final int posts_list=0x7f05001f;
         public static final int refresh=0x7f050014;
         public static final int save=0x7f05001a;
-        public static final int save_chat_room=0x7f050021;
+        public static final int save_chat_room=0x7f050022;
         public static final int server=0x7f050017;
-        public static final int show_chat_room=0x7f05001f;
+        public static final int share_secret=0x7f05001e;
+        public static final int show_chat_room=0x7f050020;
         public static final int title_activity_add_user=0x7f05000b;
         public static final int title_activity_chat_room_detail=0x7f050008;
         public static final int title_activity_classified_chat_rooms=0x7f050006;
@@ -182,12 +183,12 @@ public final class R {
  <string name="create_chat_room">Create Chat Room</string> 
  <string name="add_post">Add Post</string> 
          */
-        public static final int title_activity_update_profile=0x7f050026;
+        public static final int title_activity_update_profile=0x7f050027;
         public static final int title_activity_users=0x7f05000a;
         public static final int user_name=0x7f050019;
         public static final int verify_add_user_key=0x7f050012;
-        public static final int view_post=0x7f050024;
-        public static final int view_users=0x7f050022;
+        public static final int view_post=0x7f050025;
+        public static final int view_users=0x7f050023;
     }
     public static final class style {
         /** 
