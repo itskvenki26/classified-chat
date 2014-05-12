@@ -108,6 +108,18 @@ public class SendMessage extends IntentService {
 		case ADD_POST_ACTION:
 			break;
 		case ADD_CHAT_ROOM_ACTION:
+			Log.d(TAG, "case: " + ADD_CHAT_ROOM_ACTION);
+			Bundle extras = intent.getExtras();
+			String host = extras.getString(JoinChatRoomUserActivity.HOST);
+			int port = extras.getInt(JoinChatRoomUserActivity.PORT);
+			String server = extras.getString(JoinChatRoomUserActivity.SERVER);
+			String to = extras.getString(JoinChatRoomUserActivity.USER_NAME);
+			String message = extras.getString(AddUserActivity.PHASE3KEY);
+			Messager.sendChatMessage(host, port, server, message, to, myProfile);
+			Log.d(TAG, host);
+			Log.d(TAG, "" + port);
+			Log.d(TAG, server);
+			Log.d(TAG, to);
 			break;
 		}
 

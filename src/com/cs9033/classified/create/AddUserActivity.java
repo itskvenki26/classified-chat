@@ -296,6 +296,9 @@ public class AddUserActivity extends Activity {
 
 						String p3Key = s.getAddChatRoomMessage(key3,
 								user_e_key, user_mac_key);
+
+						Log.d(TAG, "p3key = " + p3Key);
+
 						Intent intent = new Intent(getActivity(),
 								SendMessage.class);
 						intent.putExtra(PHASE3KEY, p3Key);
@@ -304,7 +307,7 @@ public class AddUserActivity extends Activity {
 						intent.putExtra(JoinChatRoomUserActivity.SERVER, server);
 						intent.putExtra(JoinChatRoomUserActivity.USER_NAME,
 								userName);
-						intent.setAction(SecureMessage.CHAT);
+						intent.setAction(SendMessage.ADD_CHAT_ROOM_ACTION);
 						getActivity().startService(intent);
 					}
 				} catch (JSONException e) {

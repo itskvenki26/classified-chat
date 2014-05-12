@@ -127,13 +127,8 @@ public class SecureMessage {
 			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(Key.getBytes(),
 					"AES"));
 			// encrypt json message
-			Log.d(TAG, "Clear:" + json.toString());
 			String message = new String(Hex.encodeHex(cipher.doFinal(json
 					.toString().getBytes())));
-			Log.d(TAG,
-					"Sent: "
-							+ new JSONObject().put(TYPE, CHAT_ROOM)
-									.put(MESSAGE, message).toString());
 			return new JSONObject().put(TYPE, CHAT_ROOM).put(MESSAGE, message)
 					.toString();
 		} catch (JSONException | IllegalBlockSizeException
