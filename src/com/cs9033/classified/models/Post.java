@@ -104,7 +104,13 @@ public class Post {
 		return null;
 	}
 
-	boolean saveToDB(Context context) {
+	public static Post fromString(String jsonString) throws JSONException {
+
+		JSONObject json = new JSONObject(jsonString);
+		return new Post(-1, json.getString(P_MSG), json.getString(P_TITLE));
+	}
+
+	public boolean saveToDB(Context context) {
 
 		ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(context);
 		db.addPostsData(this);

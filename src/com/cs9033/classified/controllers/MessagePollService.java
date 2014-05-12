@@ -55,7 +55,7 @@ public class MessagePollService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		Log.d(TAG, "Intent Received");
 
-		if (xmppConnection.isConnected() == false || xmppConnection != null) {
+		if (xmppConnection != null || xmppConnection.isConnected() == false) {
 			ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
 			MyProfile myProfile = adapter.getMyProfiledata();
@@ -84,6 +84,7 @@ public class MessagePollService extends IntentService {
 			packetListener = new ClassifiedPacketListener();
 
 			xmppConnection.addPacketListener(packetListener, filter);
+			Log.d(TAG, "Registered Packet Listener");
 		}
 
 		// String action = intent.getAction();
@@ -141,9 +142,13 @@ public class MessagePollService extends IntentService {
 							case SendMessage.IKE_ACTION_PHASE3:
 								break;
 							case SecureMessage.CHAT:
+							case SecureMessage.CHAT_ROOM:
 
-								SecureMessage.processMessage(json.toString(),
-										null);
+								SharedPreferences sharedPreferences2 = getSharedPreferences(
+										JoinChatRoomUserActivity.JOIN_CHAT,
+										Context.MODE_PRIVATE);
+								sharedPreferences2.edit().putString(
+										AddUserActivity.PHASE3KEY, msg);
 								break;
 
 							default:

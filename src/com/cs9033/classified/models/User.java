@@ -36,10 +36,10 @@ public class User {
 	public static final String U_XMPP_PORT = "user_xmpp_port";
 	public static final String U_XMPP_USER_NAME = "user_xmpp_user_name";
 	public static final String U_CR_ID = "user_cr_id";
-	public static final String U_CURRENT_MAC="user_current_mac";
-	public static final String U_CURRENT_E="user_current_Enc_key";
+	public static final String U_CURRENT_MAC = "user_current_mac";
+	public static final String U_CURRENT_E = "user_current_Enc_key";
+
 	// public static final String U_CHANNELS="list of user channels";
-	
 
 	// Empty constructor
 	public User() {
@@ -47,7 +47,7 @@ public class User {
 	}
 
 	// constructor
-		
+
 	public User(String email_id, String name, String ph_no, String xmpp_host,
 			String xmpp_server, int xmpp_port, String xmpp_user_name,
 			long cr_id, String current_mac, String current_e) {
@@ -63,7 +63,7 @@ public class User {
 		this.current_mac = current_mac;
 		this.current_e = current_e;
 	}
-	
+
 	public String getCurrent_mac() {
 		return current_mac;
 	}
@@ -79,8 +79,6 @@ public class User {
 	public void setCurrent_e(String current_e) {
 		this.current_e = current_e;
 	}
-
-	
 
 	public long getCr_id() {
 		return cr_id;
@@ -169,6 +167,16 @@ public class User {
 		return json;
 	}
 
+	public static User fromString(String jsonString) throws JSONException {
+
+		JSONObject json = new JSONObject(jsonString);
+		return new User(json.getString(U_EMAIL_ID), json.getString(U_NAME),
+				json.getString(U_PH_NO), json.getString(U_XMPP_HOST),
+				json.getString(U_XMPP_SERVER), json.getInt(U_XMPP_PORT),
+				json.getString(U_XMPP_USER_NAME), -1,
+				json.getString(U_CURRENT_MAC), json.getString(U_CURRENT_E));
+	}
+
 	public String toHexString() {
 		try {
 			return new String(Hex.encodeHex(toJSON().toString().getBytes()));
@@ -186,7 +194,8 @@ public class User {
 			return new User(json.getString(U_EMAIL_ID), json.getString(U_NAME),
 					json.getString(U_PH_NO), json.getString(U_XMPP_HOST),
 					json.getString(U_XMPP_SERVER), json.getInt(U_XMPP_PORT),
-					json.getString(U_XMPP_USER_NAME), json.getLong(U_CR_ID),json.getString(U_CURRENT_MAC),json.getString(U_CURRENT_E));
+					json.getString(U_XMPP_USER_NAME), json.getLong(U_CR_ID),
+					json.getString(U_CURRENT_MAC), json.getString(U_CURRENT_E));
 
 		} catch (JSONException | DecoderException e) {
 			Log.e(TAG, e.getClass().getName(), e);
@@ -195,7 +204,7 @@ public class User {
 		return null;
 	}
 
-	boolean saveToDB(Context context) {
+	public boolean saveToDB(Context context) {
 
 		ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(context);
 		db.addUserData(this);

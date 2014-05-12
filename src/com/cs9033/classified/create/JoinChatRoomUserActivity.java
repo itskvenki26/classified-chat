@@ -220,6 +220,8 @@ public class JoinChatRoomUserActivity extends Activity {
 						AddUserActivity.PHASE2KEY, null);
 				parent.key2 = key2;
 				Log.d(TAG, "KEY2 is :" + key2);
+				sharedPreferences
+						.unregisterOnSharedPreferenceChangeListener(this);
 				parent.gotoPhase2();
 				break;
 
@@ -238,7 +240,7 @@ public class JoinChatRoomUserActivity extends Activity {
 	 * 
 	 */
 	public static class ShowQRPhase2Fragment extends Fragment implements
-			OnClickListener {
+			OnClickListener, OnSharedPreferenceChangeListener {
 		private static final String TAG = "ShowQRPhase2Fragment";
 
 		JoinChatRoomUserActivity parent;
@@ -278,7 +280,7 @@ public class JoinChatRoomUserActivity extends Activity {
 				// AddUserActivity.PHASE2KEY, null);
 				try {
 					String xChange2 = parent.key2;
-					String xChange3 = SecureMessage.getNewEKey();
+					String xChange3 = parent.key3 = SecureMessage.getNewEKey();
 					JSONObject json = new JSONObject();
 					json.put(AddUserActivity.PHASE2KEY, xChange2);
 					json.put(AddUserActivity.PHASE3KEY, xChange3);
@@ -288,17 +290,42 @@ public class JoinChatRoomUserActivity extends Activity {
 						IntentIntegrator integrator = new IntentIntegrator(this);
 						integrator.shareText(json.toString());
 					}
+
 				} catch (JSONException e) {
 					Log.e(TAG, e.getClass().getName(), e);
 				}
 
+				SharedPreferences s = getActivity().getSharedPreferences(
+						JOIN_CHAT, Context.MODE_PRIVATE);
+
+				s.registerOnSharedPreferenceChangeListener(this);
+
 				break;
 
-			case R.id.show_qr2_next:
-				parent.gotoPhase3();
-				break;
+			// case R.id.show_qr2_next:
+			// parent.gotoPhase3();
+			// break;
 
 			default:
+				break;
+			}
+		}
+
+		@Override
+		public void onSharedPreferenceChanged(
+				SharedPreferences sharedPreferences, String key) {
+			switch (key) {
+			case AddUserActivity.PHASE3KEY:
+				SecureMessage s = new SecureMessage(getActivity());
+				String xChange3 = sharedPreferences.getString(
+						AddUserActivity.PHASE3KEY, null);
+				if (xChange3 != null) {
+					try {
+						s.processMessage(xChange3, null, parent.key3);
+					} catch (JSONException e) {
+						Log.e(TAG, e.getClass().getName(), e);
+					}
+				}
 				break;
 			}
 		}

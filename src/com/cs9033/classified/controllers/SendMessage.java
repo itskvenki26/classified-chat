@@ -72,6 +72,37 @@ public class SendMessage extends IntentService {
 				Log.e(TAG, e.getClass().getName(), e);
 			}
 			break;
+		case IKE_ACTION_PHASE2:
+
+			try {
+				Bundle extras = intent.getExtras();
+				String xChange3 = extras.getString(AddUserActivity.PHASE3KEY);
+
+				JSONObject json = new JSONObject();
+				json.put("TYPE", IKE_ACTION_PHASE2).put(
+						AddUserActivity.PHASE3KEY, xChange3);
+
+				String host = extras.getString(JoinChatRoomUserActivity.HOST);
+				int port = extras.getInt(JoinChatRoomUserActivity.PORT);
+				String server = extras
+						.getString(JoinChatRoomUserActivity.SERVER);
+				String to = extras
+						.getString(JoinChatRoomUserActivity.USER_NAME);
+
+				Log.d(TAG, host);
+				Log.d(TAG, "" + port);
+				Log.d(TAG, server);
+				Log.d(TAG, to);
+				Log.d(TAG, json.toString());
+				String message = new String(Hex.encodeHex(json.toString()
+						.getBytes()));
+				Messager.sendChatMessage(host, port, server, message, to,
+						myProfile);
+			} catch (JSONException e) {
+				Log.e(TAG, e.getClass().getName(), e);
+			}
+
+			break;
 		case ADD_COMMENT_ACTION:
 			break;
 		case ADD_POST_ACTION:

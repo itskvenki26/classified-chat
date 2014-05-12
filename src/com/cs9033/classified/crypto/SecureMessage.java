@@ -50,6 +50,7 @@ public class SecureMessage {
 	public static final String MAC_OF_CRYPT = "MAC_OF_CRYPT";
 	public static final String FROM = "FROM";
 	public static final String CHAT = "CHAT";
+	public static final String MESSAGE = "MESSAGE";
 
 	Context context;
 	ChatRoomsDBAdapter adapter;
@@ -116,8 +117,10 @@ public class SecureMessage {
 			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(Key.getBytes(),
 					"AES"));
 			// encrypt json message
-			return new String(Hex.encodeHex(cipher.doFinal(json.toString()
-					.getBytes())));
+			String message = new String(Hex.encodeHex(cipher.doFinal(json
+					.toString().getBytes())));
+			return new JSONObject().put(TYPE, CHAT_ROOM).put(MESSAGE, message)
+					.toString();
 		} catch (JSONException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeyException
 				| NoSuchAlgorithmException | NoSuchPaddingException e) {
@@ -125,6 +128,39 @@ public class SecureMessage {
 		}
 
 		return null;
+	}
+
+	private static long processAddChatRoom(Context context, JSONObject json)
+			throws JSONException {
+		Log.d(TAG, "In processAddChatRoom, JSON: " + json.toString());
+		String current_e = json.getString(ChatRoom.CR_CURRENT_E);
+		String current_mac = json.getString(ChatRoom.CR_CURRENT_MAC);
+		ChatRoom chatRoom = ChatRoom.fromString(json.toString());
+		chatRoom.setCurrent_e(current_e);
+		chatRoom.setCurrent_mac(current_mac);
+		chatRoom.saveToDB(context);
+
+		JSONArray jsonUsers = json.getJSONArray(USER_ARRAY);
+
+		int length = 0;
+
+		length = jsonUsers.length();
+		for (int i = 0; i < length; i++) {
+			User u = User.fromString(jsonUsers.get(i).toString());
+			u.setCr_id(chatRoom.getId());
+			u.saveToDB(context);
+		}
+
+		JSONArray jsonPosts = json.getJSONArray(POST_ARRAY);
+		length = jsonPosts.length();
+		for (int i = 0; i < length; i++) {
+			Post p = Post.fromString(jsonPosts.get(i).toString());
+			p.setCR_id(chatRoom.getId());
+			p.saveToDB(context);
+		}
+
+		return chatRoom.getId();
+
 	}
 
 	public String getAddPostMessage(Post post) {
@@ -182,12 +218,6 @@ public class SecureMessage {
 		return null;
 	}
 
-	private static long processAddChatRoom(JSONObject json) {
-		Log.d(TAG, "Adding Chat Room");
-		return 0;
-
-	}
-
 	private static long processAddUser(JSONObject json) {
 		Log.d(TAG, "Adding User");
 		return 0;
@@ -200,7 +230,7 @@ public class SecureMessage {
 
 	}
 
-	private static long processAddComment(JSONObject json) throws JSONException {
+	private long processAddComment(JSONObject json) throws JSONException {
 
 		String chatRoomName = json.getString(CHAT_ROOM);
 		String postTitle = json.getString(POST);
@@ -212,51 +242,73 @@ public class SecureMessage {
 
 	}
 
-	public static void processMessage(String message, User user) {
-		// verify if message is right
-		try {
-			JSONObject jsonCrypt = new JSONObject(message);
-			Log.d(TAG, jsonCrypt.toString());
-			if (jsonCrypt.has(CRYPT) && jsonCrypt.has(MAC_OF_CRYPT)
-					&& jsonCrypt.has(OLD_MAC_KEY)) {
-				String crypt = jsonCrypt.getString(CRYPT);
-				String mac_of_crypt = jsonCrypt.getString(MAC_OF_CRYPT);
+	public void processMessage(String message, User user, String... list)
+			throws JSONException {
+		JSONObject json = new JSONObject(message);
 
-				if (verifyMAC("user.getCurrentMac()", crypt)) {
-					Log.d(TAG, "Verified MAC");
+		if (json.getString(TYPE).equals(CHAT_ROOM)) {
+			String e_message = json.getString(MESSAGE);
+			String key3 = list[0];
+			SecretKeySpec skeySpec = new SecretKeySpec(key3.getBytes(), "AES");
+			try {
+				Cipher cipher = Cipher.getInstance("AES");
+				cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+				Log.d(TAG, "Cipher ready");
+				processAddChatRoom(
+						context,
+						new JSONObject(new String(Hex.decodeHex(new String(
+								cipher.doFinal(e_message.getBytes()))
+								.toCharArray()))));
+			} catch (InvalidKeyException | NoSuchAlgorithmException
+					| NoSuchPaddingException | IllegalBlockSizeException
+					| BadPaddingException | DecoderException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-					String decryptedMessage = decrypt("user.getCurrentE()",
-							crypt);
-					JSONObject json = new JSONObject(decryptedMessage);
-					Log.d(TAG, json.toString());
-					String type = json.getString(TYPE);
-					String value = json.getString(VALUE);
+		} else if (json.getString(TYPE).equals(CHAT)) {
+			try {
+				JSONObject jsonCrypt = new JSONObject(message);
+				Log.d(TAG, jsonCrypt.toString());
+				if (jsonCrypt.has(CRYPT) && jsonCrypt.has(MAC_OF_CRYPT)
+						&& jsonCrypt.has(OLD_MAC_KEY)) {
+					String crypt = jsonCrypt.getString(CRYPT);
+					String mac_of_crypt = jsonCrypt.getString(MAC_OF_CRYPT);
 
-					switch (type) {
-					case CHAT_ROOM:
-						processAddChatRoom(json);
-						break;
-					case POST:
-						processAddPost(json);
-						break;
-					case COMMENT:
-						processAddComment(json);
-						break;
-					case USER:
-						processAddUser(json);
-						break;
+					if (verifyMAC("user.getCurrentMac()", crypt)) {
+						Log.d(TAG, "Verified MAC");
 
-					default:
-						break;
+						String decryptedMessage = decrypt("user.getCurrentE()",
+								crypt);
+						JSONObject jsonChat = new JSONObject(decryptedMessage);
+						Log.d(TAG, jsonChat.toString());
+						String type = jsonChat.getString(TYPE);
+						String value = jsonChat.getString(VALUE);
+
+						switch (type) {
+						case POST:
+							processAddPost(jsonChat);
+							break;
+						case COMMENT:
+							processAddComment(jsonChat);
+							break;
+						case USER:
+							processAddUser(jsonChat);
+							break;
+
+						default:
+							break;
+						}
+
 					}
 
 				}
 
+			} catch (JSONException e) {
+				Log.e(TAG, e.getClass().getName(), e);
 			}
-
-		} catch (JSONException e) {
-			Log.e(TAG, e.getClass().getName(), e);
 		}
+
 	}
 
 	@SuppressLint("TrulyRandom")
@@ -298,7 +350,6 @@ public class SecureMessage {
 			jsonMessage.accumulate(CRYPT, crypt_string)
 					.accumulate(MAC_OF_CRYPT, mac_of_crypt_string)
 					.accumulate(OLD_MAC_KEY, old_mac_key)
-					.accumulate(TYPE, CHAT)
 					.accumulate(FROM, myProfile.getPh_no());
 
 			return jsonMessage.toString();

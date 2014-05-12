@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cs9033.classified.R;
+import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.controllers.SendMessage;
 import com.cs9033.classified.crypto.SecureMessage;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -268,10 +269,30 @@ public class AddUserActivity extends Activity {
 					Log.d(TAG, contents);
 					if (xChange2.equals(key2)) {
 						key3 = xChange3;
+						String user_e_key = SecureMessage.getNewEKey();
+						String user_mac_key = SecureMessage.getNewMacKey();
 						Toast.makeText(getActivity(), "Verified",
 								Toast.LENGTH_SHORT).show();
 						Log.d(TAG, "Verified Key2");
 
+						SecureMessage s = new SecureMessage(getActivity());
+						String cr = null;
+						ChatRoomsDBAdapter a = new ChatRoomsDBAdapter(
+								getActivity());
+						s.init(a.getChatRoom(cr));
+
+						String p3Key = s.getAddChatRoomMessage(key3,
+								user_e_key, user_mac_key);
+						Intent intent = new Intent(getActivity(),
+								SendMessage.class);
+						intent.putExtra(PHASE3KEY, p3Key);
+						intent.putExtra(JoinChatRoomUserActivity.HOST, host);
+						intent.putExtra(JoinChatRoomUserActivity.PORT, port);
+						intent.putExtra(JoinChatRoomUserActivity.SERVER, server);
+						intent.putExtra(JoinChatRoomUserActivity.USER_NAME,
+								userName);
+						intent.setAction(SendMessage.IKE_ACTION_PHASE2);
+						getActivity().startService(intent);
 					}
 				} catch (JSONException e) {
 					Log.e(TAG, e.getClass().getName(), e);

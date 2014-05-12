@@ -176,11 +176,10 @@ public class ChatRoom {
 		return null;
 	}
 
-	boolean saveToDB(Context context) {
+	public void saveToDB(Context context) {
 
 		ChatRoomsDBAdapter db = new ChatRoomsDBAdapter(context);
 		db.addChatRoomData(this);
-		return false;
 
 	}
 
