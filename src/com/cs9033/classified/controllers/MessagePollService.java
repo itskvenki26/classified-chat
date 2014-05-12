@@ -36,7 +36,7 @@ public class MessagePollService extends IntentService {
 	public static final String CHAT_RECEIVED_ACTION = "CHAT_RECEIVED_ACTION";
 	public static final String BLOCK_WAIT = "BLOCK_WAIT";
 	public static final String LONG_POLL = "LONG_POLL";
-	public static final int POLL_INTERVAL = 60 * 1000;
+	public static final int POLL_INTERVAL = 1000;
 
 	private static XMPPConnection xmppConnection = null;
 	private static ClassifiedPacketListener packetListener = null;
@@ -55,7 +55,7 @@ public class MessagePollService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		Log.d(TAG, "Intent Received");
 
-		if (xmppConnection != null || xmppConnection.isConnected() == false) {
+		if (xmppConnection == null || xmppConnection.isConnected() == false) {
 			ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 
 			MyProfile myProfile = adapter.getMyProfiledata();
@@ -64,14 +64,13 @@ public class MessagePollService extends IntentService {
 					myProfile.getXmpp_host(), myProfile.getXmpp_port(),
 					myProfile.getXmpp_server());
 
-			XMPPConnection connection = new XMPPConnection(
-					connectionConfiguration);
+			xmppConnection = new XMPPConnection(connectionConfiguration);
 			try {
 				SASLAuthentication.supportSASLMechanism("PLAIN", 0);
-				connection.connect();
+				xmppConnection.connect();
 
 				Log.d(TAG, "Connected");
-				connection.login(myProfile.getXmpp_user_name(),
+				xmppConnection.login(myProfile.getXmpp_user_name(),
 						myProfile.getXmpp_password());
 				Log.d(TAG, "Logged in");
 			} catch (XMPPException e) {
@@ -103,6 +102,13 @@ public class MessagePollService extends IntentService {
 		// }
 
 		Packet[] packetList = packetListener.getPacketList();
+		if (packetList == null) {
+			Log.d(TAG, "PacketList is null");
+			return;
+		} else {
+			Log.d(TAG, "Packet List is not null, has " + packetList.length
+					+ " items");
+		}
 		for (Packet packet : packetList) {
 
 			if (packet != null) {
