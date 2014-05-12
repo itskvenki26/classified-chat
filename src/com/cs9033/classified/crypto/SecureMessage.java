@@ -50,6 +50,7 @@ public class SecureMessage {
 	public static final String MAC_OF_CRYPT = "MAC_OF_CRYPT";
 	public static final String FROM = "FROM";
 	public static final String CHAT = "CHAT";
+	public static final String COMMAND = "COMMAND";
 	public static final String MESSAGE = "MESSAGE";
 
 	Context context;
@@ -97,12 +98,15 @@ public class SecureMessage {
 		try {
 			JSONObject json = new JSONObject();
 
-			json.put(TYPE, CHAT_ROOM);
+			json.put(TYPE, CHAT_ROOM);// Plain
+			json.put(FROM, myProfile.getPh_no());// Plain
+
+			JSONObject jsonValue = new JSONObject();
 
 			JSONObject jsonChatRoom = chatRoom.toJSON()
 					.put(ChatRoom.CR_CURRENT_E, E)
 					.put(ChatRoom.CR_CURRENT_MAC, MAC);
-			Log.d(TAG, jsonChatRoom.toString());
+
 			JSONArray jsonUsers = new JSONArray();
 			JSONArray jsonPosts = new JSONArray();
 
@@ -116,6 +120,7 @@ public class SecureMessage {
 					jsonUsers.put(u.toJSON());
 				}
 			}
+
 			if (posts != null) {
 				for (Post p : posts) {
 					jsonPosts.put(p.toJSON());
@@ -123,22 +128,18 @@ public class SecureMessage {
 			}
 
 			jsonChatRoom.put(USER_ARRAY, jsonUsers).put(POST_ARRAY, jsonPosts);
-			json.put(VALUE, jsonChatRoom);
-			// .put(FROM, myProfile.getPh_no());
+			// json.put(VALUE, jsonChatRoom);
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(Key.getBytes(),
 					"AES"));
-			// encrypt json message
-			String clearText = json.toString();
-			Log.d(TAG, clearText);
+			String clearText = jsonChatRoom.toString();
 
 			byte[] cipherText = cipher.doFinal(clearText.getBytes());
 
-			String message = new String(Hex.encodeHex(cipherText));
-			String finalJSON = new JSONObject().put(TYPE, CHAT_ROOM)
-					.put(MESSAGE, message).toString();
+			String message = new String(cipherText);
+			String finalJSON = json.put(VALUE, message).toString();
 
-			return new String(Hex.encodeHex(finalJSON.getBytes()));
+			return finalJSON;
 		} catch (JSONException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeyException
 				| NoSuchAlgorithmException | NoSuchPaddingException e) {
@@ -180,7 +181,9 @@ public class SecureMessage {
 		if (json.has(POST_ARRAY)) {
 			JSONArray jsonPosts = json.getJSONArray(POST_ARRAY);
 			int length = jsonPosts.length();
+			Log.d(TAG, length + " Posts found");
 			for (int i = 0; i < length; i++) {
+				Log.d(TAG, "Post [" + i + "] = " + jsonPosts.get(i).toString());
 				Post p = Post.fromString(jsonPosts.get(i).toString());
 				p.setCR_id(chatRoom.getId());
 				p.saveToDB(context);
@@ -199,8 +202,6 @@ public class SecureMessage {
 
 			json.put(TYPE, POST).put(CHAT_ROOM, chatRoom.getCR_name())
 					.put(VALUE, post.toJSON());
-			// .put(FROM, myProfile.getPh_no());
-
 			return encrypt(json);
 		} catch (JSONException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeyException
@@ -217,8 +218,6 @@ public class SecureMessage {
 
 			json.put(TYPE, USER).put(CHAT_ROOM, chatRoom.getCR_name())
 					.put(VALUE, user.toJSON());
-			// .put(FROM, myProfile.getPh_no());
-
 			return encrypt(json);
 		} catch (JSONException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeyException
@@ -236,7 +235,6 @@ public class SecureMessage {
 
 			json.put(TYPE, COMMENT).put(CHAT_ROOM, chatRoom.getCR_name())
 					.put(POST, post.getTitle()).put(VALUE, comment.toJSON());
-			// .put(FROM, myProfile.getPh_no());
 
 			return encrypt(json);
 		} catch (JSONException | IllegalBlockSizeException
@@ -249,6 +247,9 @@ public class SecureMessage {
 
 	private static long processAddUser(JSONObject json) {
 		Log.d(TAG, "Adding User");
+		// Check Chat Room and from
+		// Add user to chat room
+
 		return 0;
 
 	}
@@ -256,10 +257,14 @@ public class SecureMessage {
 	private static long processAddPost(JSONObject json) {
 		Log.d(TAG, "Adding Post");
 		return 0;
-
+		// check chatroom and from
+		// add port
 	}
 
 	private long processAddComment(JSONObject json) throws JSONException {
+
+		// check chatroom, post and from
+		// add chatroom
 
 		String chatRoomName = json.getString(CHAT_ROOM);
 		String postTitle = json.getString(POST);
@@ -271,14 +276,14 @@ public class SecureMessage {
 
 	}
 
-	public void processMessage(String message, User user, String... list)
+	public void processMessage(JSONObject json, User user, String... list)
 			throws JSONException {
-		JSONObject json = new JSONObject(message);
+		// JSONObject json = new JSONObject(message);
 
 		Log.d(TAG, "Got JSON: " + json.toString());
 
 		if (json.getString(TYPE).equals(CHAT_ROOM)) {
-			String e_message = json.getString(MESSAGE);
+			String e_message = json.getString(VALUE);
 			String key3 = list[0];
 			SecretKeySpec skeySpec = new SecretKeySpec(key3.getBytes(), "AES");
 			try {
@@ -287,16 +292,14 @@ public class SecureMessage {
 				Log.d(TAG, "Cipher ready");
 
 				Log.d(TAG, "e_message:" + e_message);
-				byte[] cipherText = Hex.decodeHex(e_message.toCharArray());
+				byte[] cipherText = e_message.getBytes();
 				String clearText = new String(cipher.doFinal(cipherText));
 				Log.d(TAG, clearText);
-				processAddChatRoom(context, new JSONObject(new JSONObject(
-						clearText).getString(VALUE)));
+				processAddChatRoom(context, new JSONObject(clearText));
 			} catch (InvalidKeyException | NoSuchAlgorithmException
 					| NoSuchPaddingException | IllegalBlockSizeException
-					| BadPaddingException | DecoderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					| BadPaddingException e) {
+				Log.e(TAG, e.getClass().getName(), e);
 			}
 
 		} else if (json.getString(TYPE).equals(CHAT)) {

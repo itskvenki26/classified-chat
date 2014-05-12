@@ -19,11 +19,15 @@ public class SendMessage extends IntentService {
 	public static final String ADD_CHAT_ROOM_ACTION = "ADD_CHAT_ROOM_ACTION";
 	public static final String ADD_POST_ACTION = "ADD_POST_ACTION";
 	public static final String ADD_COMMENT_ACTION = "ADD_COMMENT_ACTION";
-	public static final String IKE_ACTION_PHASE1 = "IKE_ACTION_PHASE1";
-	public static final String IKE_ACTION_PHASE2 = "IKE_ACTION_PHASE2";
-	public static final String IKE_ACTION_PHASE3 = "IKE_ACTION_PHASE3";
+	public static final String IKE = "IKE";
+	public static final String MESSAGE = "MESSAGE";
 
 	public static final String TAG = "SendMessage";
+	public static final String HOST = "HOST";
+	public static final String PORT = "PORT";
+	public static final String SERVER = "SERVER";
+	public static final String USER_NAME = "USER_NAME";
+	public static final String IKE_PHASE3 = "IKE_PHASE3";
 
 	public SendMessage(String name) {
 		super(name);
@@ -43,14 +47,13 @@ public class SendMessage extends IntentService {
 		MyProfile myProfile = adapter.getMyProfiledata();
 
 		switch (action) {
-		case IKE_ACTION_PHASE1:
+		case IKE:
 			try {
 				Bundle extras = intent.getExtras();
 				String xChange2 = extras.getString(AddUserActivity.PHASE2KEY);
 
 				JSONObject json = new JSONObject();
-				json.put("TYPE", IKE_ACTION_PHASE1).put(
-						AddUserActivity.PHASE2KEY, xChange2);
+				json.put("TYPE", IKE).put(AddUserActivity.PHASE2KEY, xChange2);
 
 				String host = extras.getString(JoinChatRoomUserActivity.HOST);
 				int port = extras.getInt(JoinChatRoomUserActivity.PORT);
@@ -59,11 +62,6 @@ public class SendMessage extends IntentService {
 				String to = extras
 						.getString(JoinChatRoomUserActivity.USER_NAME);
 
-				Log.d(TAG, host);
-				Log.d(TAG, "" + port);
-				Log.d(TAG, server);
-				Log.d(TAG, to);
-				Log.d(TAG, json.toString());
 				String message = new String(Hex.encodeHex(json.toString()
 						.getBytes()));
 				Messager.sendChatMessage(host, port, server, message, to,
@@ -72,54 +70,51 @@ public class SendMessage extends IntentService {
 				Log.e(TAG, e.getClass().getName(), e);
 			}
 			break;
-		case IKE_ACTION_PHASE2:
-
-			try {
-				Bundle extras = intent.getExtras();
-				String xChange3 = extras.getString(AddUserActivity.PHASE3KEY);
-
-				JSONObject json = new JSONObject();
-				json.put("TYPE", IKE_ACTION_PHASE2).put(
-						AddUserActivity.PHASE3KEY, xChange3);
-
-				String host = extras.getString(JoinChatRoomUserActivity.HOST);
-				int port = extras.getInt(JoinChatRoomUserActivity.PORT);
-				String server = extras
-						.getString(JoinChatRoomUserActivity.SERVER);
-				String to = extras
-						.getString(JoinChatRoomUserActivity.USER_NAME);
-
-				Log.d(TAG, host);
-				Log.d(TAG, "" + port);
-				Log.d(TAG, server);
-				Log.d(TAG, to);
-				Log.d(TAG, json.toString());
-				String message = new String(Hex.encodeHex(json.toString()
-						.getBytes()));
-				Messager.sendChatMessage(host, port, server, message, to,
-						myProfile);
-			} catch (JSONException e) {
-				Log.e(TAG, e.getClass().getName(), e);
-			}
-
-			break;
-		case ADD_COMMENT_ACTION:
-			break;
-		case ADD_POST_ACTION:
-			break;
+		// case IKE_ACTION_PHASE2:
+		//
+		// try {
+		// Bundle extras = intent.getExtras();
+		// String xChange3 = extras.getString(AddUserActivity.PHASE3KEY);
+		//
+		// JSONObject json = new JSONObject();
+		// json.put("TYPE", IKE_ACTION_PHASE2).put(
+		// AddUserActivity.PHASE3KEY, xChange3);
+		//
+		// String host = extras.getString(JoinChatRoomUserActivity.HOST);
+		// int port = extras.getInt(JoinChatRoomUserActivity.PORT);
+		// String server = extras
+		// .getString(JoinChatRoomUserActivity.SERVER);
+		// String to = extras
+		// .getString(JoinChatRoomUserActivity.USER_NAME);
+		//
+		// Log.d(TAG, host);
+		// Log.d(TAG, "" + port);
+		// Log.d(TAG, server);
+		// Log.d(TAG, to);
+		// Log.d(TAG, json.toString());
+		// String message = new String(Hex.encodeHex(json.toString()
+		// .getBytes()));
+		// Messager.sendChatMessage(host, port, server, message, to,
+		// myProfile);
+		// } catch (JSONException e) {
+		// Log.e(TAG, e.getClass().getName(), e);
+		// }
+		//
+		// break;
+		// case ADD_COMMENT_ACTION:
+		// break;
+		// case ADD_POST_ACTION:
+		// break;
 		case ADD_CHAT_ROOM_ACTION:
 			Log.d(TAG, "case: " + ADD_CHAT_ROOM_ACTION);
 			Bundle extras = intent.getExtras();
-			String host = extras.getString(JoinChatRoomUserActivity.HOST);
-			int port = extras.getInt(JoinChatRoomUserActivity.PORT);
-			String server = extras.getString(JoinChatRoomUserActivity.SERVER);
-			String to = extras.getString(JoinChatRoomUserActivity.USER_NAME);
-			String message = extras.getString(AddUserActivity.PHASE3KEY);
-			Messager.sendChatMessage(host, port, server, message, to, myProfile);
-			Log.d(TAG, host);
-			Log.d(TAG, "" + port);
-			Log.d(TAG, server);
-			Log.d(TAG, to);
+			String host = extras.getString(HOST);
+			int port = extras.getInt(PORT);
+			String server = extras.getString(SERVER);
+			String to = extras.getString(USER_NAME);
+			String message = extras.getString(MESSAGE);
+			String hex = new String(Hex.encodeHex(message.getBytes()));
+			Messager.sendChatMessage(host, port, server, hex, to, myProfile);
 			break;
 		}
 

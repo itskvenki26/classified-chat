@@ -26,6 +26,8 @@ import com.cs9033.classified.R;
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.controllers.SendMessage;
 import com.cs9033.classified.crypto.SecureMessage;
+import com.cs9033.classified.models.ChatRoom;
+import com.cs9033.classified.models.User;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -119,7 +121,7 @@ public class AddUserActivity extends Activity {
 									Context.MODE_PRIVATE);
 					if (sharedPreferences != null) {
 						sharedPreferences.edit().clear()
-								.putString(PHASE1KEY, contents).commit();
+								.putString(PHASE1KEY, result).commit();
 						Log.d(TAG, "Shared Preferences is not null: "
 								+ sharedPreferences.getAll().toString());
 						((AddUserActivity) getActivity()).gotoPhase2(result);
@@ -174,8 +176,7 @@ public class AddUserActivity extends Activity {
 			if (sharedPreferences != null) {
 				String phase1Key = sharedPreferences.getString(PHASE1KEY, null);
 				try {
-					json = new JSONObject(new String(Hex.decodeHex(phase1Key
-							.toCharArray())));
+					json = new JSONObject(phase1Key);
 
 					Log.d(TAG, json.toString());
 
@@ -189,6 +190,7 @@ public class AddUserActivity extends Activity {
 							.getString(JoinChatRoomUserActivity.USER_NAME);
 					host = json.getString(JoinChatRoomUserActivity.HOST);
 					port = json.getInt(JoinChatRoomUserActivity.PORT);
+					email = json.getString(JoinChatRoomUserActivity.EMAIL);
 
 					((TextView) rootView
 							.findViewById(R.id.fragment_scan_qr2_key_text_view))
@@ -210,9 +212,12 @@ public class AddUserActivity extends Activity {
 							.findViewById(R.id.fragment_scan_qr2_host_text_view))
 							.setText(host);
 					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_email_text_view))
+							.setText(email);
+					((TextView) rootView
 							.findViewById(R.id.fragment_scan_qr2_port_text_view))
 							.setText(Integer.toString(port));
-				} catch (JSONException | DecoderException e) {
+				} catch (JSONException e) {
 					Log.e(TAG, e.getClass().getName(), e);
 				}
 			}
@@ -234,6 +239,11 @@ public class AddUserActivity extends Activity {
 
 				Log.d(TAG, "Creating Key2");
 				String xChange2 = SecureMessage.getNewEKey();
+				try {
+					json.put(AddUserActivity.PHASE2KEY, xChange2);
+				} catch (JSONException e) {
+					Log.e(TAG, e.getClass().getName(), e);
+				}
 				Log.d(TAG, "Send XMPP Message here");
 
 				Intent intent = new Intent(getActivity(), SendMessage.class);
@@ -242,9 +252,16 @@ public class AddUserActivity extends Activity {
 				intent.putExtra(JoinChatRoomUserActivity.PORT, port);
 				intent.putExtra(JoinChatRoomUserActivity.SERVER, server);
 				intent.putExtra(JoinChatRoomUserActivity.USER_NAME, userName);
-				intent.setAction(SendMessage.IKE_ACTION_PHASE1);
+				intent.setAction(SendMessage.IKE);
 				getActivity().startService(intent);
 				key2 = xChange2;
+
+				SharedPreferences sharedPreferences = getActivity()
+						.getSharedPreferences(ADD_USER, Context.MODE_PRIVATE);
+				if (sharedPreferences != null) {
+					sharedPreferences.edit().clear()
+							.putString(ADD_USER, json.toString());
+				}
 
 				break;
 			case R.id.fragment_scan_qr2_next_button:
@@ -286,29 +303,48 @@ public class AddUserActivity extends Activity {
 								Toast.LENGTH_SHORT).show();
 						Log.d(TAG, "Verified Key2");
 
-						// Log.d(TAG,"");
-						SecureMessage s = new SecureMessage(getActivity());
+						SecureMessage secureMessage = new SecureMessage(
+								getActivity());
 						Log.d(TAG, "Created SM");
 						String cr = parent.crName;
 						ChatRoomsDBAdapter a = new ChatRoomsDBAdapter(
 								getActivity());
-						s.init(a.getChatRoom(cr));
+						ChatRoom chatRoom = a.getChatRoom(cr);
+						secureMessage.init(chatRoom);
 
-						String p3Key = s.getAddChatRoomMessage(key3,
-								user_e_key, user_mac_key);
+						String securedChatRoom = secureMessage.getAddChatRoomMessage(
+								key3, user_e_key, user_mac_key);
 
-						Log.d(TAG, "p3key = " + p3Key);
+						Log.d(TAG, "p3key = " + securedChatRoom);
 
 						Intent intent = new Intent(getActivity(),
 								SendMessage.class);
-						intent.putExtra(PHASE3KEY, p3Key);
-						intent.putExtra(JoinChatRoomUserActivity.HOST, host);
-						intent.putExtra(JoinChatRoomUserActivity.PORT, port);
-						intent.putExtra(JoinChatRoomUserActivity.SERVER, server);
-						intent.putExtra(JoinChatRoomUserActivity.USER_NAME,
-								userName);
+						intent.putExtra(SendMessage.MESSAGE, securedChatRoom);
+						intent.putExtra(SendMessage.HOST, host);
+						intent.putExtra(SendMessage.PORT, port);
+						intent.putExtra(SendMessage.SERVER, server);
+						intent.putExtra(SendMessage.USER_NAME, userName);
 						intent.setAction(SendMessage.ADD_CHAT_ROOM_ACTION);
 						getActivity().startService(intent);
+
+						User user = new User();
+						user.setCr_id(chatRoom.getId());
+						user.setCurrent_e(user_e_key);
+						user.setCurrent_mac(user_mac_key);
+						user.setName(userName);
+						user.setXmpp_host(host);
+						user.setXmpp_port(port);
+						user.setXmpp_server(server);
+						user.setXmpp_user_name(userName);
+						user.setPh_no(ph_num);
+						user.setEmail_id(email);
+						user.setName(name);
+						Log.d(TAG, user.toJSON().toString());
+						// Notify all other Users
+
+						user.saveToDB(getActivity());
+						getActivity().finish();
+
 					}
 				} catch (JSONException e) {
 					Log.e(TAG, e.getClass().getName(), e);

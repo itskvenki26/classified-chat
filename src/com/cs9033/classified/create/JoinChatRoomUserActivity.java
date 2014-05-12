@@ -34,12 +34,12 @@ import com.google.zxing.integration.android.IntentIntegrator;
 public class JoinChatRoomUserActivity extends Activity {
 	private static final String TAG = "JoinChatRoomUserActivity";
 	public static final String JOIN_CHAT = "JOIN_CHAT";
-	public static final String HOST = "HOST";
-	public static final String PORT = "PORT";
-	public static final String EMAIL = "EMAIL";
+	public static final String HOST = "H";
+	public static final String PORT = "PT";
+	public static final String EMAIL = "E";
 	public static final String USER_NAME = "UN";
-	public static final String SERVER = "SERVER";
-	public static final String PHONE_NUMBER = "PH";
+	public static final String SERVER = "S";
+	public static final String PHONE_NUMBER = "P";
 	public static final String NAME = "N";
 
 	// public static final String KEY1 = "KEY1";
@@ -165,6 +165,7 @@ public class JoinChatRoomUserActivity extends Activity {
 						json.accumulate(USER_NAME,
 								myProfile.getXmpp_user_name());
 						json.accumulate(NAME, myProfile.getName());
+						json.accumulate(EMAIL, myProfile.getEmail_id());
 						xChange1 = new String(Hex.encodeHex(json.toString()
 								.getBytes()));
 						SharedPreferences sharedPreferences = getActivity()
@@ -237,7 +238,7 @@ public class JoinChatRoomUserActivity extends Activity {
 	 * 
 	 */
 	public static class ShowQRPhase2Fragment extends Fragment implements
-			OnClickListener, OnSharedPreferenceChangeListener {
+			OnClickListener {
 		private static final String TAG = "ShowQRPhase2Fragment";
 
 		JoinChatRoomUserActivity parent;
@@ -259,8 +260,8 @@ public class JoinChatRoomUserActivity extends Activity {
 					container, false);
 			((Button) rootView.findViewById(R.id.show_qr2_verify_key_button))
 					.setOnClickListener(this);
-			((Button) rootView.findViewById(R.id.show_qr2_next))
-					.setOnClickListener(this);
+			// ((Button) rootView.findViewById(R.id.show_qr2_next))
+			// .setOnClickListener(this);
 			return rootView;
 		}
 
@@ -281,15 +282,14 @@ public class JoinChatRoomUserActivity extends Activity {
 						IntentIntegrator integrator = new IntentIntegrator(this);
 						integrator.shareText(json.toString());
 					}
+					SharedPreferences s = getActivity().getSharedPreferences(
+							JOIN_CHAT, Context.MODE_PRIVATE);
 
+					s.edit().putString(AddUserActivity.PHASE3KEY, xChange3)
+							.commit();
 				} catch (JSONException e) {
 					Log.e(TAG, e.getClass().getName(), e);
 				}
-
-				SharedPreferences s = getActivity().getSharedPreferences(
-						JOIN_CHAT, Context.MODE_PRIVATE);
-
-				s.registerOnSharedPreferenceChangeListener(this);
 
 				break;
 
@@ -298,25 +298,25 @@ public class JoinChatRoomUserActivity extends Activity {
 			}
 		}
 
-		@Override
-		public void onSharedPreferenceChanged(
-				SharedPreferences sharedPreferences, String key) {
-			switch (key) {
-			case AddUserActivity.PHASE3KEY:
-				SecureMessage s = new SecureMessage(getActivity());
-				String xChange3 = sharedPreferences.getString(
-						AddUserActivity.PHASE3KEY, null);
-				Log.d(TAG, "Message is : " + xChange3);
-				if (xChange3 != null) {
-					try {
-						s.processMessage(xChange3, null, parent.key3);
-					} catch (JSONException e) {
-						Log.e(TAG, e.getClass().getName(), e);
-					}
-				}
-				break;
-			}
-		}
+		// @Override
+		// public void onSharedPreferenceChanged(
+		// SharedPreferences sharedPreferences, String key) {
+		// switch (key) {
+		// case AddUserActivity.PHASE3KEY:
+		// SecureMessage s = new SecureMessage(getActivity());
+		// String xChange3 = sharedPreferences.getString(
+		// AddUserActivity.PHASE3KEY, null);
+		// Log.d(TAG, "Message is : " + xChange3);
+		// if (xChange3 != null) {
+		// try {
+		// s.processMessage(xChange3, null, parent.key3);
+		// } catch (JSONException e) {
+		// Log.e(TAG, e.getClass().getName(), e);
+		// }
+		// }
+		// break;
+		// }
+		// }
 	}
 
 	public static class ShowReceivedChatRoom extends Fragment implements

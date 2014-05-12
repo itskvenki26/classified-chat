@@ -133,9 +133,8 @@ public class MessagePollService extends IntentService {
 							String type = json.getString("TYPE");
 
 							switch (type) {
-							case SendMessage.IKE_ACTION_PHASE1:
-								Log.d(TAG, "case: "
-										+ SendMessage.IKE_ACTION_PHASE1);
+							case SendMessage.IKE:
+								Log.d(TAG, "case: " + SendMessage.IKE);
 								SharedPreferences sharedPreferences = getSharedPreferences(
 										JoinChatRoomUserActivity.JOIN_CHAT,
 										Context.MODE_PRIVATE);
@@ -147,25 +146,42 @@ public class MessagePollService extends IntentService {
 										.commit();
 								break;
 
-							case SendMessage.IKE_ACTION_PHASE2:
-								Log.d(TAG, "case: "
-										+ SendMessage.IKE_ACTION_PHASE2);
-								break;
-							case SendMessage.IKE_ACTION_PHASE3:
-								Log.d(TAG, "case: "
-										+ SendMessage.IKE_ACTION_PHASE3);
-								break;
-							case SecureMessage.CHAT:
-								Log.d(TAG, "case: " + SecureMessage.CHAT);
+							// case SendMessage.IKE_ACTION_PHASE2:
+							// Log.d(TAG, "case: "
+							// + SendMessage.IKE_ACTION_PHASE2);
+							// break;
+							// case SendMessage.IKE_ACTION_PHASE3:
+							// Log.d(TAG, "case: "
+							// + SendMessage.IKE_ACTION_PHASE3);
+							// break;
+							// case SecureMessage.CHAT:
+							// Log.d(TAG, "case: " + SecureMessage.CHAT);
+							// // case SecureMessage.CHAT_ROOM:
+							// Log.d(TAG, "case: " + SecureMessage.CHAT_ROOM);
+							// SharedPreferences sharedPreferences2 =
+							// getSharedPreferences(
+							// JoinChatRoomUserActivity.JOIN_CHAT,
+							// Context.MODE_PRIVATE);
+							// sharedPreferences2
+							// .edit()
+							// .putString(AddUserActivity.PHASE3KEY,
+							// msg).commit();
+							// break;
+
 							case SecureMessage.CHAT_ROOM:
-								Log.d(TAG, "case: " + SecureMessage.CHAT_ROOM);
-								SharedPreferences sharedPreferences2 = getSharedPreferences(
+
+								SecureMessage secureMessage = new SecureMessage(
+										this);
+								SharedPreferences preferences = getSharedPreferences(
 										JoinChatRoomUserActivity.JOIN_CHAT,
 										Context.MODE_PRIVATE);
-								sharedPreferences2
-										.edit()
-										.putString(AddUserActivity.PHASE3KEY,
-												msg).commit();
+								String PHASE3KEY = preferences.getString(
+										AddUserActivity.PHASE3KEY, null);
+								if (PHASE3KEY != null) {
+									secureMessage.processMessage(json, null,
+											PHASE3KEY);
+								}
+
 								break;
 
 							default:
