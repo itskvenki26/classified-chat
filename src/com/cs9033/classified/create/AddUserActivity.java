@@ -258,7 +258,9 @@ public class AddUserActivity extends Activity {
 					requestCode, resultCode, data);
 			try {
 				if (scanResult != null) {
+					Log.d(TAG, "Scan Results is not null");
 					String contents = scanResult.getContents();
+					Log.d(TAG, contents);
 					if (contents == key2) {
 						Toast.makeText(getActivity(), "Verified",
 								Toast.LENGTH_SHORT).show();

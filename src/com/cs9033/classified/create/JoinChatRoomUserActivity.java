@@ -213,8 +213,7 @@ public class JoinChatRoomUserActivity extends Activity {
 			case KEY2:
 				String key2 = sharedPreferences.getString(KEY2, null);
 				Log.d(TAG, "KEY2 is :" + key2);
-				((Button) getView().findViewById(R.id.show_qr1_next_button))
-						.setEnabled(true);
+				parent.gotoPhase2();
 				break;
 
 			default:
@@ -222,7 +221,6 @@ public class JoinChatRoomUserActivity extends Activity {
 			}
 
 		}
-
 	}
 
 	/**
