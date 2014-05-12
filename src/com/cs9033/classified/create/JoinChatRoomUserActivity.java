@@ -154,13 +154,14 @@ public class JoinChatRoomUserActivity extends Activity {
 					MyProfile myProfile = dbAdapter.getMyProfiledata();
 					if (myProfile != null) {
 						String xChange1 = SecureMessage.getNewEKey();
-						json.accumulate("KEY1", xChange1);
-						json.accumulate("PH", myProfile.getPh_no());
-						json.accumulate("HOST", myProfile.getXmpp_host());
-						json.accumulate("SERVER", myProfile.getXmpp_server());
-						json.accumulate("PORT", myProfile.getXmpp_port());
-						json.accumulate("UN", myProfile.getXmpp_user_name());
-						json.accumulate("N", myProfile.getName());
+						json.accumulate(KEY1, xChange1);
+						json.accumulate(PHONE_NUMBER, myProfile.getPh_no());
+						json.accumulate(HOST, myProfile.getXmpp_host());
+						json.accumulate(SERVER, myProfile.getXmpp_server());
+						json.accumulate(PORT, myProfile.getXmpp_port());
+						json.accumulate(USER_NAME,
+								myProfile.getXmpp_user_name());
+						json.accumulate(NAME, myProfile.getName());
 						xChange1 = new String(Hex.encodeHex(json.toString()
 								.getBytes()));
 						SharedPreferences sharedPreferences = getActivity()
@@ -212,8 +213,6 @@ public class JoinChatRoomUserActivity extends Activity {
 			case KEY2:
 				String key2 = sharedPreferences.getString(KEY2, null);
 				Log.d(TAG, "KEY2 is :" + key2);
-				Toast.makeText(getActivity(), "KEY2 is :" + key2,
-						Toast.LENGTH_SHORT).show();
 				((Button) getView().findViewById(R.id.show_qr1_next_button))
 						.setEnabled(true);
 				break;

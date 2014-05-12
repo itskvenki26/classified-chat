@@ -26,7 +26,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.cs9033.classified.PostsActivity"
-            android:label="@string/title_activity_posts_view" >
+            android:label="@string/title_activity_posts_view"
+            android:screenOrientation="portrait" >
         </activity>
 
         <receiver android:name="com.cs9033.classified.controllers.SMSReceiver" >
@@ -40,7 +41,8 @@
 
         <activity
             android:name="com.cs9033.classified.ClassifiedChatRoomsActivity"
-            android:label="@string/title_activity_classified_chat_rooms" >
+            android:label="@string/title_activity_classified_chat_rooms"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,31 +51,38 @@
         </activity>
         <activity
             android:name="com.cs9033.classified.create.CreateChatRoomActivity"
-            android:label="@string/title_activity_create_chat_room" >
+            android:label="@string/title_activity_create_chat_room"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cs9033.classified.ChatRoomDetailActivity"
-            android:label="@string/title_activity_chat_room_detail" >
+            android:label="@string/title_activity_chat_room_detail"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cs9033.classified.create.CreatePostActivity"
-            android:label="@string/title_activity_create_post" >
+            android:label="@string/title_activity_create_post"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cs9033.classified.UsersActivity"
-            android:label="@string/title_activity_users" >
+            android:label="@string/title_activity_users"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cs9033.classified.create.JoinChatRoomUserActivity"
-            android:label="@string/title_activity_add_user" >
+            android:label="@string/title_activity_add_user"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cs9033.classified.create.AddUserActivity"
-            android:label="@string/title_activity_add_user" >
+            android:label="@string/title_activity_add_user"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cs9033.classified.create.UpdateProfileActivity"
-            android:label="@string/title_activity_update_profile" >
+            android:label="@string/title_activity_update_profile"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

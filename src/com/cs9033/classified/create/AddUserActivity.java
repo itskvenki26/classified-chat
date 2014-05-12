@@ -210,6 +210,9 @@ public class AddUserActivity extends Activity {
 			}
 			((Button) rootView.findViewById(R.id.fragment_scan_qr2_next_button))
 					.setOnClickListener(this);
+			((Button) rootView
+					.findViewById(R.id.fragment_scan_qr2_share_secret_button))
+					.setOnClickListener(this);
 
 			return rootView;
 		}
