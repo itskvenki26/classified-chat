@@ -11,11 +11,4 @@
         android:text="@string/verify_add_user_key" >
     </Button>
 
-    <Button
-        android:id="@+id/show_qr2_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/next" />
-
 </LinearLayout>

@@ -201,8 +201,7 @@ public class SecureMessage {
 			JSONObject json = new JSONObject();
 			json.put(TYPE, POST).put(FROM, myProfile.getPh_no())
 					.put(CHAT_ROOM, chatRoom.getCR_name());
-			return new String(
-					Hex.encodeHex(post.toJSON().toString().getBytes()));
+			return new String(post.toJSON().toString().getBytes());
 		} catch (JSONException e) {
 			Log.e(TAG, e.getClass().getName(), e);
 		}

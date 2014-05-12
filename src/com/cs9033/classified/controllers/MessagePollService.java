@@ -145,6 +145,7 @@ public class MessagePollService extends IntentService {
 
 							case SecureMessage.POST:
 								Log.d(TAG, json.toString());
+								
 								break;
 
 							default:
