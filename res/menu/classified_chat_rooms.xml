@@ -15,7 +15,7 @@
     <item
         android:id="@+id/classified_chat_rooms_menu_my_profile"
         android:icon="@drawable/ic_action_settings"
-        android:showAsAction="ifRoom"
+        android:showAsAction="collapseActionView"
         android:title="@string/title_activity_update_profile"/>
 
 </menu>

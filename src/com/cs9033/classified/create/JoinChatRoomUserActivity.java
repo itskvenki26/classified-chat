@@ -42,6 +42,15 @@ import com.google.zxing.integration.android.IntentIntegrator;
 public class JoinChatRoomUserActivity extends Activity {
 	private static final String TAG = "JoinChatRoomUserActivity";
 	public static final String JOIN_CHAT = "JOIN_CHAT";
+	public static final String HOST = "HOST";
+	public static final String PORT = "PORT";
+	public static final String EMAIL = "EMAIL";
+	public static final String USER_NAME = "UN";
+	public static final String SERVER = "SERVER";
+	public static final String PHONE_NUMBER = "PH";
+	public static final String KEY1 = "KEY1";
+	public static final String NAME = "N";
+
 	long crID;
 	String crName;
 	private String key2;

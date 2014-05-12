@@ -19,13 +19,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.cs9033.classified.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class AddUserActivity extends Activity {
+	@SuppressWarnings("unused")
 	private static final String TAG = "AddUserActivity";
+	public static final String PHASE1KEY = "PHASE1KEY";
 
 	public static final String ADD_USER = "ADD_USER";
 
@@ -60,63 +63,10 @@ public class AddUserActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		IntentResult scanResult = IntentIntegrator.parseActivityResult(
-				requestCode, resultCode, data);
-		try {
-			if (scanResult != null) {
-				String contents = scanResult.getContents();
-				String result = new String(
-						Hex.decodeHex(contents.toCharArray()));
-				SharedPreferences sharedPreferences = getSharedPreferences(
-						ADD_USER, Context.MODE_PRIVATE);
-				if (sharedPreferences != null) {
-					if (sharedPreferences.contains("KEY1") == false) {
-						sharedPreferences.edit().putString("KEY1", result)
-								.commit();
-						gotoPhase2();
-					} else {
-						sharedPreferences.edit().putString("KEY2", result)
-								.commit();
-					}
-				}
-			}
-		} catch (DecoderException e) {
-			Log.e(TAG, e.getClass().getName(), e);
-		}
-	}
-
-	private void gotoPhase2() {
-		SharedPreferences sharedPreferences = getSharedPreferences(ADD_USER,
-				Context.MODE_PRIVATE);
-		if (sharedPreferences != null && sharedPreferences.contains("KEY1")) {
-			String key1 = sharedPreferences.getString("KEY1", null);
-			if (key1 != null) {
-				try {
-					JSONObject json = new JSONObject(key1);
-					key1 = json.getString("KEY1");
-					String PH = json.getString("PH");
-					String host = json.getString("HOST");
-					String servet = json.getString("SERVER");
-					int port = json.getInt("PORT");
-
-					// use to send messages in Phase 3
-
-					gotoPhase3();
-				} catch (JSONException e) {
-					Log.e(TAG, e.getClass().getName(), e);
-				}
-
-			}
-		}
+	private void gotoPhase2(String result) {
 
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, new ScanQRPhase2Fragment()).commit();
-	}
-
-	private void gotoPhase3() {
-		// Collect Chatroom, Post, User details and send via XMPP
 	}
 
 	/**
@@ -124,6 +74,7 @@ public class AddUserActivity extends Activity {
 	 */
 	public static class ScanQRPhase1Fragment extends Fragment implements
 			OnClickListener {
+		private static final String TAG = "ScanQRPhase1Fragment";
 
 		public ScanQRPhase1Fragment() {
 		}
@@ -139,6 +90,38 @@ public class AddUserActivity extends Activity {
 					.setOnClickListener(this);
 
 			return rootView;
+		}
+
+		@Override
+		public void onActivityResult(int requestCode, int resultCode,
+				Intent data) {
+			super.onActivityResult(requestCode, resultCode, data);
+			Log.d(TAG, "back to Add User Activity");
+			IntentResult scanResult = IntentIntegrator.parseActivityResult(
+					requestCode, resultCode, data);
+			try {
+				if (scanResult != null) {
+					// Log.d(TAG, "Scan Result is not null");
+					String contents = scanResult.getContents();
+					// Log.d(TAG, "Contents = " + contents);
+					String result = new String(Hex.decodeHex(contents
+							.toCharArray()));
+					// Log.d(TAG, "Result = " + result);
+					SharedPreferences sharedPreferences = getActivity()
+							.getSharedPreferences(ADD_USER,
+									Context.MODE_PRIVATE);
+					if (sharedPreferences != null) {
+						sharedPreferences.edit().clear()
+								.putString(PHASE1KEY, contents).commit();
+						Log.d(TAG, "Shared Preferences is not null: "
+								+ sharedPreferences.getAll().toString());
+						((AddUserActivity) getActivity()).gotoPhase2(result);
+
+					}
+				}
+			} catch (DecoderException e) {
+				Log.e(TAG, e.getClass().getName(), e);
+			}
 		}
 
 		@Override
@@ -159,23 +142,89 @@ public class AddUserActivity extends Activity {
 
 	public static class ScanQRPhase2Fragment extends Fragment implements
 			OnClickListener {
+		private static final String TAG = "ScanQRPhase2Fragment";
+
+		String key1;
+		String name;
+		String userName;
+		String host;
+		String server;
+		int port;
+		String email;
+		String ph_num;
+		JSONObject json;
 
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_scan_qr1,
+			View rootView = inflater.inflate(R.layout.fragment_scan_qr2,
 					container, false);
 
-			// ((Button) rootView).findViewById(
-			// R.id.scan_qr1_initiate_add_user_button).setOnClickListener(
-			// this);
-			// ((Button) rootView).findViewById(R.id.scan_qr1_next_button)
-			// .setOnClickListener(this);
+			SharedPreferences sharedPreferences = getActivity()
+					.getSharedPreferences(ADD_USER, Context.MODE_PRIVATE);
+			if (sharedPreferences != null) {
+				String phase1Key = sharedPreferences.getString(PHASE1KEY, null);
+				try {
+					json = new JSONObject(new String(Hex.decodeHex(phase1Key
+							.toCharArray())));
+
+					Log.d(TAG, json.toString());
+
+					// ((TextView) rootView
+					// .findViewById(R.id.fragment_scan_qr2_email_text_view))
+					// .setText(json
+					// .getString(JoinChatRoomUserActivity.EMAIL));
+					key1 = json.getString(JoinChatRoomUserActivity.KEY1);
+					name = json.getString(JoinChatRoomUserActivity.NAME);
+					ph_num = json
+							.getString(JoinChatRoomUserActivity.PHONE_NUMBER);
+					server = json.getString(JoinChatRoomUserActivity.SERVER);
+
+					userName = json
+							.getString(JoinChatRoomUserActivity.USER_NAME);
+					host = json.getString(JoinChatRoomUserActivity.HOST);
+					port = json.getInt(JoinChatRoomUserActivity.PORT);
+
+					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_key_text_view))
+							.setText(key1);
+					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_name_text_view))
+							.setText(name);
+					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_ph_num_text_view))
+							.setText(ph_num);
+					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_server_text_view))
+							.setText(server);
+					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_user_name_text_view))
+							.setText(json
+									.getString(JoinChatRoomUserActivity.USER_NAME));
+					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_host_text_view))
+							.setText(host);
+					((TextView) rootView
+							.findViewById(R.id.fragment_scan_qr2_port_text_view))
+							.setText(Integer.toString(port));
+				} catch (JSONException | DecoderException e) {
+					Log.e(TAG, e.getClass().getName(), e);
+				}
+			}
+			((Button) rootView.findViewById(R.id.fragment_scan_qr2_next_button))
+					.setOnClickListener(this);
 
 			return rootView;
 		}
 
 		@Override
 		public void onClick(View v) {
+			int id = v.getId();
+
+			switch (id) {
+			case R.id.fragment_scan_qr2_next_button:
+				Log.d(TAG, "Send XMPP Message here");
+				break;
+			}
 
 		}
 	}

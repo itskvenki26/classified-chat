@@ -35,6 +35,7 @@
     <string name="save">Save</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
+    <string name="key">Key</string>
 
     <!-- Common Strings -->
     <string name="posts_list">Posts</string>
