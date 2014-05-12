@@ -106,7 +106,9 @@ public class SecureMessage {
 			JSONArray jsonUsers = new JSONArray();
 			JSONArray jsonPosts = new JSONArray();
 
-			jsonUsers.put(myProfile.toUserJSON());
+			jsonUsers.put(myProfile.toUserJSON()
+					.put(User.U_CURRENT_MAC, chatRoom.getCurrent_e())
+					.put(User.U_CURRENT_MAC, chatRoom.getCurrent_mac()));
 
 			Log.d(TAG, jsonUsers.toString());
 			if (users != null) {
@@ -161,12 +163,16 @@ public class SecureMessage {
 	private static long processAddChatRoom(Context context, JSONObject json)
 			throws JSONException {
 		Log.d(TAG, "In processAddChatRoom, JSON: " + json.toString());
+
 		String current_e = json.getString(ChatRoom.CR_CURRENT_E);
+		Log.d(TAG, current_e);
 		String current_mac = json.getString(ChatRoom.CR_CURRENT_MAC);
+		Log.d(TAG, current_mac);
 		ChatRoom chatRoom = ChatRoom.fromString(json.toString());
 		chatRoom.setCurrent_e(current_e);
 		chatRoom.setCurrent_mac(current_mac);
 		chatRoom.saveToDB(context);
+		Log.d(TAG, chatRoom.toJSON().toString());
 
 		JSONArray jsonUsers = json.getJSONArray(USER_ARRAY);
 
@@ -289,7 +295,8 @@ public class SecureMessage {
 				byte[] cipherText = Hex.decodeHex(e_message.toCharArray());
 				String clearText = new String(cipher.doFinal(cipherText));
 				Log.d(TAG, clearText);
-				processAddChatRoom(context, new JSONObject(clearText));
+				processAddChatRoom(context, new JSONObject(new JSONObject(
+						clearText).getString(VALUE)));
 			} catch (InvalidKeyException | NoSuchAlgorithmException
 					| NoSuchPaddingException | IllegalBlockSizeException
 					| BadPaddingException | DecoderException e) {

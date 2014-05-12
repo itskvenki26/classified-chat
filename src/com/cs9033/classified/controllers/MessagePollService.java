@@ -162,8 +162,10 @@ public class MessagePollService extends IntentService {
 								SharedPreferences sharedPreferences2 = getSharedPreferences(
 										JoinChatRoomUserActivity.JOIN_CHAT,
 										Context.MODE_PRIVATE);
-								sharedPreferences2.edit().putString(
-										AddUserActivity.PHASE3KEY, msg);
+								sharedPreferences2
+										.edit()
+										.putString(AddUserActivity.PHASE3KEY,
+												msg).commit();
 								break;
 
 							default:

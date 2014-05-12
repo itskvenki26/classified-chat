@@ -122,7 +122,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			+ " ( " + KEY_ID + " integer primary key autoincrement, " + CR_NAME
 			+ " text UNIQUE, " + CR_TIME + " text not null, " + CR_DESCRIPTION
 			+ " text not null, " + CR_CURRENT_MAC + " integer not null, "
-			+ CR_OLD_MAC + " integer not null, " + CR_CURRENT_E
+			+ CR_OLD_MAC + " integer , " + CR_CURRENT_E
 			+ " integer not null );";
 
 	private static final String MY_PROFILE_CREATE = "create table "

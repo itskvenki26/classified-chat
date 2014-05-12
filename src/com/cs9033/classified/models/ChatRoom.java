@@ -166,9 +166,9 @@ public class ChatRoom {
 			cr.setCR_name(json.getString(CR_NAME));
 			cr.setTime(json.getString(CR_TIME));
 			cr.setDescription(json.getString(CR_DESCRIPTION));
-			cr.setCurrent_e(json.getString(CR_CURRENT_E));
-			cr.setCurrent_mac(json.getString(CR_CURRENT_MAC));
-
+			// cr.setCurrent_e(json.getString(CR_CURRENT_E));
+			// cr.setCurrent_mac(json.getString(CR_CURRENT_MAC));
+			return cr;
 		} catch (JSONException e) {
 			Log.e(TAG, e.getClass().getName(), e);
 		}
