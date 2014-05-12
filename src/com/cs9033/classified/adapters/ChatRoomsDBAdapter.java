@@ -275,6 +275,23 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 		db.close();
 		return cursor;
 	}
+	
+	public Post[] getPostData(long crid) {	
+		Cursor cursor = getPostsCursor(crid);
+		int count;
+		Post[] postsArray = null; 
+		if (cursor != null) {
+			count = cursor.getCount();
+			postsArray= new Post[count];
+			for(int i=0;i<count;i++)
+			{
+				postsArray[i]=new Post(cursor.getLong(cursor.getColumnIndex(P_CR_ID)),cursor.getString(cursor.getColumnIndex(P_TITLE)),cursor.getString(cursor.getColumnIndex(P_MSG)));
+				//postsArray[i]=u;
+			}
+		}		
+
+		return postsArray;
+	}
 
 	public void addCommentData(Comment c) {
 		final SQLiteDatabase db = getWritableDatabase();
@@ -325,6 +342,23 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 		db.close();
 		return cursor;
+	}
+
+	public User[] getUsersData(long crid) {
+		Cursor cursor = getUsersCursor(crid);
+		int count;
+		User[] usersArray = null; 
+		if (cursor != null) {
+			count = cursor.getCount();
+			usersArray= new User[count];
+			for(int i=0;i<count;i++)
+			{
+				usersArray[i]=new User(cursor.getString(cursor.getColumnIndex(U_EMAIL_ID)),cursor.getString(cursor.getColumnIndex(U_NAME)),cursor.getString(cursor.getColumnIndex(U_PH_NO)),cursor.getString(cursor.getColumnIndex(U_XMPP_HOST)),cursor.getString(cursor.getColumnIndex(U_XMPP_SERVER)),cursor.getInt(cursor.getColumnIndex(U_XMPP_PORT)), cursor.getString(cursor.getColumnIndex(U_XMPP_USER_NAME)), cursor.getLong(cursor.getColumnIndex(U_CR_ID)));
+				
+			}
+		}		
+
+		return usersArray;
 	}
 
 	public MyProfile getMyProfiledata() {
