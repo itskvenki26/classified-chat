@@ -449,8 +449,34 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 
 			}
 		}
-
 		return usersArray;
+	}
+
+	public User getUserData(long crid, String ph_num) {
+
+		final SQLiteDatabase db = getReadableDatabase();
+
+		Cursor cursor = db.query(TABLE_USER, ALL_USERS, U_CR_ID + "=? AND "
+				+ U_PH_NO + " =?",
+				new String[] { Long.toString(crid), ph_num }, null, null, null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+			return new User(
+					cursor.getString(cursor.getColumnIndex(U_EMAIL_ID)),
+					cursor.getString(cursor.getColumnIndex(U_NAME)),
+					cursor.getString(cursor.getColumnIndex(U_PH_NO)),
+					cursor.getString(cursor.getColumnIndex(U_XMPP_HOST)),
+					cursor.getString(cursor.getColumnIndex(U_XMPP_SERVER)),
+					cursor.getInt(cursor.getColumnIndex(U_XMPP_PORT)),
+					cursor.getString(cursor.getColumnIndex(U_XMPP_USER_NAME)),
+					cursor.getLong(cursor.getColumnIndex(U_CR_ID)),
+					cursor.getString(cursor.getColumnIndex(U_CURRENT_MAC)),
+					cursor.getString(cursor.getColumnIndex(U_CURRENT_E)));
+		}
+
+		db.close();
+
+		return null;
 	}
 
 	public MyProfile getMyProfiledata() {
