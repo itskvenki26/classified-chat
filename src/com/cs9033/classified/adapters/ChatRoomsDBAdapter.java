@@ -332,6 +332,23 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 		db.close();
 		return cursor;
 	}
+	
+	public Comment[] getCommentsData(long crid,long postid) {
+		Cursor cursor = getCommentsCursor(crid,postid);
+		int count;
+		Comment[] commentsArray = null; 
+		if (cursor != null) {
+			count = cursor.getCount();
+			commentsArray= new Comment[count];
+			for(int i=0;i<count;i++)
+			{
+				commentsArray[i]=new Comment(cursor.getLong(cursor.getColumnIndex(C_P_ID)), cursor.getLong(cursor.getColumnIndex(C_CR_ID)),cursor.getString(cursor.getColumnIndex(C_MSG)));
+				
+			}
+		}		
+
+		return commentsArray;
+	}
 
 	public Cursor getUsersCursor(long crid) {
 		final SQLiteDatabase db = getReadableDatabase();
