@@ -106,7 +106,6 @@ public class SecureMessage {
 			JSONArray jsonUsers = new JSONArray();
 			JSONArray jsonPosts = new JSONArray();
 
-			Log.d(TAG, "Getting My Profile");
 			jsonUsers.put(myProfile.toUserJSON());
 
 			Log.d(TAG, jsonUsers.toString());
@@ -122,7 +121,6 @@ public class SecureMessage {
 			}
 
 			jsonChatRoom.put(USER_ARRAY, jsonUsers).put(POST_ARRAY, jsonPosts);
-			Log.d(TAG, jsonChatRoom.toString());
 			json.put(VALUE, jsonChatRoom);
 			// .put(FROM, myProfile.getPh_no());
 			Cipher cipher = Cipher.getInstance("AES");
@@ -130,12 +128,12 @@ public class SecureMessage {
 					"AES"));
 			// encrypt json message
 			Log.d(TAG, "Clear:" + json.toString());
+			String message = new String(Hex.encodeHex(cipher.doFinal(json
+					.toString().getBytes())));
 			Log.d(TAG,
 					"Sent: "
 							+ new JSONObject().put(TYPE, CHAT_ROOM)
 									.put(MESSAGE, message).toString());
-			String message = new String(Hex.encodeHex(cipher.doFinal(json
-					.toString().getBytes())));
 			return new JSONObject().put(TYPE, CHAT_ROOM).put(MESSAGE, message)
 					.toString();
 		} catch (JSONException | IllegalBlockSizeException
