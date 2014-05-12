@@ -269,12 +269,6 @@ public class JoinChatRoomUserActivity extends Activity {
 			int id = v.getId();
 			switch (id) {
 			case R.id.show_qr2_verify_key_button:
-				// SharedPreferences sharedPreferences = getActivity()
-				// .getSharedPreferences(
-				// JoinChatRoomUserActivity.JOIN_CHAT,
-				// Context.MODE_PRIVATE);
-				// sharedPreferences.getString(
-				// AddUserActivity.PHASE2KEY, null);
 				try {
 					String xChange2 = parent.key2;
 					String xChange3 = parent.key3 = SecureMessage.getNewEKey();
@@ -298,10 +292,6 @@ public class JoinChatRoomUserActivity extends Activity {
 				s.registerOnSharedPreferenceChangeListener(this);
 
 				break;
-
-			// case R.id.show_qr2_next:
-			// parent.gotoPhase3();
-			// break;
 
 			default:
 				break;

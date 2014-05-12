@@ -168,7 +168,7 @@ public class User {
 	}
 
 	public static User fromString(String jsonString) throws JSONException {
-
+		Log.d(TAG, "in User.fromString:" + jsonString);
 		JSONObject json = new JSONObject(jsonString);
 		return new User(json.getString(U_EMAIL_ID), json.getString(U_NAME),
 				json.getString(U_PH_NO), json.getString(U_XMPP_HOST),
