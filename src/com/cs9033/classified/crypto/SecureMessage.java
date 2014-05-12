@@ -69,6 +69,7 @@ public class SecureMessage {
 		super();
 		this.context = context;
 		adapter = new ChatRoomsDBAdapter(context);
+		myProfile = adapter.getMyProfiledata();
 	}
 
 	public void setContext(Context context) {
@@ -85,9 +86,13 @@ public class SecureMessage {
 	}
 
 	public String getAddChatRoomMessage(String Key, String E, String MAC) {
+		Log.d(TAG, "getAddChatRoomMessage");
 		long crid = chatRoom.getId();
+		Log.d(TAG, "Crid is " + crid);
 		User[] users = adapter.getUsersData(crid);
+		Log.d(TAG, "Got Users");
 		Post[] posts = adapter.getPostData(crid);
+		Log.d(TAG, "Got Posts");
 
 		try {
 			JSONObject json = new JSONObject();
@@ -97,26 +102,38 @@ public class SecureMessage {
 			JSONObject jsonChatRoom = chatRoom.toJSON()
 					.put(ChatRoom.CR_CURRENT_E, E)
 					.put(ChatRoom.CR_CURRENT_MAC, MAC);
-
+			Log.d(TAG, jsonChatRoom.toString());
 			JSONArray jsonUsers = new JSONArray();
 			JSONArray jsonPosts = new JSONArray();
 
+			Log.d(TAG, "Getting My Profile");
 			jsonUsers.put(myProfile.toUserJSON());
-			for (User u : users) {
-				jsonUsers.put(u.toJSON());
+
+			Log.d(TAG, jsonUsers.toString());
+			if (users != null) {
+				for (User u : users) {
+					jsonUsers.put(u.toJSON());
+				}
 			}
-			for (Post p : posts) {
-				jsonPosts.put(p.toJSON());
+			if (posts != null) {
+				for (Post p : posts) {
+					jsonPosts.put(p.toJSON());
+				}
 			}
 
 			jsonChatRoom.put(USER_ARRAY, jsonUsers).put(POST_ARRAY, jsonPosts);
-
+			Log.d(TAG, jsonChatRoom.toString());
 			json.put(VALUE, jsonChatRoom);
 			// .put(FROM, myProfile.getPh_no());
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(Key.getBytes(),
 					"AES"));
 			// encrypt json message
+			Log.d(TAG, "Clear:" + json.toString());
+			Log.d(TAG,
+					"Sent: "
+							+ new JSONObject().put(TYPE, CHAT_ROOM)
+									.put(MESSAGE, message).toString());
 			String message = new String(Hex.encodeHex(cipher.doFinal(json
 					.toString().getBytes())));
 			return new JSONObject().put(TYPE, CHAT_ROOM).put(MESSAGE, message)

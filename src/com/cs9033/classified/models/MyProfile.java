@@ -136,6 +136,8 @@ public class MyProfile {
 	}
 
 	public JSONObject toUserJSON() throws JSONException {
+
+		Log.d(TAG, toJSON().toString());
 		JSONObject json = new JSONObject();
 		json.put(User.U_EMAIL_ID, email_id);
 		json.put(User.U_NAME, name);
@@ -144,7 +146,7 @@ public class MyProfile {
 		json.put(User.U_XMPP_PORT, xmpp_port);
 		json.put(User.U_XMPP_SERVER, xmpp_server);
 		json.put(User.U_XMPP_USER_NAME, xmpp_user_name);
-
+		Log.d(TAG, json.toString());
 		return json;
 	}
 

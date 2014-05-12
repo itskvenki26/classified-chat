@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
 import com.cs9033.classified.create.AddUserActivity;
 import com.cs9033.classified.create.CreatePostActivity;
-import com.cs9033.classified.create.JoinChatRoomUserActivity;
 
 public class ChatRoomDetailActivity extends Activity {
 	private static final String TAG = "ChatRoomDetailActivity";

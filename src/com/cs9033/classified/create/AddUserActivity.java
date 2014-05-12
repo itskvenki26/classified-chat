@@ -38,12 +38,16 @@ public class AddUserActivity extends Activity {
 
 	public static final String ADD_USER = "ADD_USER";
 
+	String crName;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_user);
 
 		if (savedInstanceState == null) {
+			Bundle extars = getIntent().getExtras();
+			crName = extars.getString("CRName");
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new ScanQRPhase1Fragment()).commit();
 		}
@@ -158,6 +162,7 @@ public class AddUserActivity extends Activity {
 		JSONObject json;
 		String key2;
 		String key3;
+		AddUserActivity parent;
 
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -253,6 +258,12 @@ public class AddUserActivity extends Activity {
 		}
 
 		@Override
+		public void onAttach(Activity activity) {
+			super.onAttach(activity);
+			parent = (AddUserActivity) activity;
+		}
+
+		@Override
 		public void onActivityResult(int requestCode, int resultCode,
 				Intent data) {
 			super.onActivityResult(requestCode, resultCode, data);
@@ -275,9 +286,10 @@ public class AddUserActivity extends Activity {
 								Toast.LENGTH_SHORT).show();
 						Log.d(TAG, "Verified Key2");
 
-//						Log.d(TAG,"");
+						// Log.d(TAG,"");
 						SecureMessage s = new SecureMessage(getActivity());
-						String cr = null;
+						Log.d(TAG, "Created SM");
+						String cr = parent.crName;
 						ChatRoomsDBAdapter a = new ChatRoomsDBAdapter(
 								getActivity());
 						s.init(a.getChatRoom(cr));

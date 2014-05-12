@@ -53,7 +53,7 @@ public class MessagePollService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.d(TAG, "Intent Received" + intent.getClass());
+		// Log.d(TAG, "Intent Received" + intent.getClass());
 
 		if (xmppConnection == null || xmppConnection.isConnected() == false) {
 			ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
@@ -71,10 +71,10 @@ public class MessagePollService extends IntentService {
 				SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 				xmppConnection.connect();
 
-				Log.d(TAG, "Connected");
+				// Log.d(TAG, "Connected");
 				xmppConnection.login(myProfile.getXmpp_user_name(),
 						myProfile.getXmpp_password());
-				Log.d(TAG, "Logged in");
+				// Log.d(TAG, "Logged in");
 			} catch (XMPPException e) {
 				Log.e(TAG, e.getClass().getName(), e);
 			}
@@ -105,11 +105,11 @@ public class MessagePollService extends IntentService {
 
 		Packet[] packetList = packetListener.getPacketList();
 		if (packetList == null) {
-			Log.d(TAG, "PacketList is null");
+			// Log.d(TAG, "PacketList is null");
 			return;
 		} else {
-			Log.d(TAG, "Packet List is not null, has " + packetList.length
-					+ " items");
+			// Log.d(TAG, "Packet List is not null, has " + packetList.length
+			// + " items");
 		}
 		for (Packet packet : packetList) {
 
@@ -134,6 +134,8 @@ public class MessagePollService extends IntentService {
 
 							switch (type) {
 							case SendMessage.IKE_ACTION_PHASE1:
+								Log.d(TAG, "case: "
+										+ SendMessage.IKE_ACTION_PHASE1);
 								SharedPreferences sharedPreferences = getSharedPreferences(
 										JoinChatRoomUserActivity.JOIN_CHAT,
 										Context.MODE_PRIVATE);
@@ -146,12 +148,17 @@ public class MessagePollService extends IntentService {
 								break;
 
 							case SendMessage.IKE_ACTION_PHASE2:
+								Log.d(TAG, "case: "
+										+ SendMessage.IKE_ACTION_PHASE2);
 								break;
 							case SendMessage.IKE_ACTION_PHASE3:
+								Log.d(TAG, "case: "
+										+ SendMessage.IKE_ACTION_PHASE3);
 								break;
 							case SecureMessage.CHAT:
+								Log.d(TAG, "case: " + SecureMessage.CHAT);
 							case SecureMessage.CHAT_ROOM:
-
+								Log.d(TAG, "case: " + SecureMessage.CHAT_ROOM);
 								SharedPreferences sharedPreferences2 = getSharedPreferences(
 										JoinChatRoomUserActivity.JOIN_CHAT,
 										Context.MODE_PRIVATE);

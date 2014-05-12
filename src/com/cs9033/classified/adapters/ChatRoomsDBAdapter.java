@@ -288,6 +288,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 		int count;
 		Post[] postsArray = null;
 		if (cursor != null) {
+			cursor.moveToFirst();
 			count = cursor.getCount();
 			postsArray = new Post[count];
 			for (int i = 0; i < count; i++) {
@@ -381,16 +382,21 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 	}
 
 	public ChatRoom getChatRoom(String cr_name) {
+		Log.d(TAG, "Chatroom Name = " + cr_name);
 
 		final SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor = db.query(TABLE_CHATROOMS, ALL_CR, CR_NAME + "=?",
 				new String[] { cr_name }, null, null, null);
-		return new ChatRoom(cursor.getString(cursor
-				.getColumnIndex(CR_CURRENT_MAC)), cursor.getString(cursor
-				.getColumnIndex(CR_CURRENT_E)), cursor.getString(cursor
-				.getColumnIndex(CR_OLD_MAC)), cursor.getString(cursor
-				.getColumnIndex(CR_NAME)), cursor.getString(cursor
-				.getColumnIndex(CR_DESCRIPTION)));
+		if (cursor != null) {
+			cursor.moveToFirst();
+			return new ChatRoom(cursor.getString(cursor
+					.getColumnIndex(CR_CURRENT_MAC)), cursor.getString(cursor
+					.getColumnIndex(CR_CURRENT_E)), cursor.getString(cursor
+					.getColumnIndex(CR_OLD_MAC)), cursor.getString(cursor
+					.getColumnIndex(CR_NAME)), cursor.getString(cursor
+					.getColumnIndex(CR_DESCRIPTION)));
+		}
+		return null;
 
 	}
 
@@ -421,6 +427,7 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 		int count;
 		User[] usersArray = null;
 		if (cursor != null) {
+			cursor.moveToFirst();
 			count = cursor.getCount();
 			usersArray = new User[count];
 			for (int i = 0; i < count; i++) {
