@@ -367,6 +367,39 @@ public class ChatRoomsDBAdapter extends SQLiteOpenHelper {
 		db.close();
 		return cursor;
 	}
+	
+	public long getChatRoomId(String cr_name)
+	{
+	
+		final SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(TABLE_CHATROOMS, ALL_CR, CR_NAME + "=?",
+				new String[] { cr_name }, null, null, null);	
+		long crid=cursor.getLong(cursor.getColumnIndex(KEY_ID));
+		return crid;
+		
+	}
+	
+	public long getPostId(String ptitle,String cr_name)
+	{
+	    long crid=getChatRoomId(cr_name);
+		final SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(TABLE_POSTS, ALL_POSTS, P_CR_ID + "=? AND " + P_TITLE + "=?",
+				new String[] { Long.toString(crid),ptitle }, null, null, null);	
+		long postid=cursor.getLong(cursor.getColumnIndex(KEY_ID));
+		return postid;
+		
+	}
+	
+	public long getUserId(String cr_name,String usrname)
+	{
+	    long crid=getChatRoomId(cr_name);
+		final SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(TABLE_USER, ALL_USERS, U_CR_ID + "=? AND " + U_NAME + "=?",
+				new String[] { Long.toString(crid),usrname }, null, null, null);	
+		long usrid=cursor.getLong(cursor.getColumnIndex(KEY_ID));
+		return usrid;
+		
+	}
 
 	public User[] getUsersData(long crid) {
 		Cursor cursor = getUsersCursor(crid);
