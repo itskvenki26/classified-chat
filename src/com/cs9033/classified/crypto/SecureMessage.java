@@ -138,18 +138,6 @@ public class SecureMessage {
 			String finalJSON = new JSONObject().put(TYPE, CHAT_ROOM)
 					.put(MESSAGE, message).toString();
 
-			try {
-				String rmessage = new JSONObject(finalJSON).getString(MESSAGE);
-				Log.d(TAG, "rMessage:" + rmessage);
-				cipher.init(Cipher.DECRYPT_MODE,
-						new SecretKeySpec(Key.getBytes(), "AES"));
-				byte[] rcipherText = Hex.decodeHex(rmessage.toCharArray());
-				String rclearText = new String(cipher.doFinal(rcipherText));
-				Log.d(TAG, "Clear again:" + clearText);
-			} catch (DecoderException e) {
-				Log.e(TAG, e.getClass().getName(), e);
-			}
-
 			return new String(Hex.encodeHex(finalJSON.getBytes()));
 		} catch (JSONException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeyException
