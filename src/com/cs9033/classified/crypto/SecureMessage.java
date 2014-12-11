@@ -199,13 +199,10 @@ public class SecureMessage {
 
 		try {
 			JSONObject json = new JSONObject();
-
-			json.put(TYPE, POST).put(CHAT_ROOM, chatRoom.getCR_name())
-					.put(VALUE, post.toJSON());
-			return encrypt(json);
-		} catch (JSONException | IllegalBlockSizeException
-				| BadPaddingException | InvalidKeyException
-				| NoSuchAlgorithmException | NoSuchPaddingException e) {
+			json.put(TYPE, POST).put(FROM, myProfile.getPh_no())
+					.put(CHAT_ROOM, chatRoom.getCR_name());
+			return new String(post.toJSON().toString().getBytes());
+		} catch (JSONException e) {
 			Log.e(TAG, e.getClass().getName(), e);
 		}
 
@@ -295,8 +292,7 @@ public class SecureMessage {
 				Log.d(TAG, "e_message:" + e_message);
 				byte[] cipherText = e_message;
 				String clearText = new String(cipher.doFinal(cipherText));
-				Log.d(TAG, clearText);
-				Log.d(TAG, clearText);
+				Log.d(TAG, "Clear Text" + clearText);
 				processAddChatRoom(context, new JSONObject(clearText));
 			} catch (InvalidKeyException | NoSuchAlgorithmException
 					| NoSuchPaddingException | IllegalBlockSizeException

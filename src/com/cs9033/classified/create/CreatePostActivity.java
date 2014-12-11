@@ -1,6 +1,7 @@
 package com.cs9033.classified.create;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,7 +11,11 @@ import android.widget.Toast;
 
 import com.cs9033.classified.R;
 import com.cs9033.classified.adapters.ChatRoomsDBAdapter;
+import com.cs9033.classified.controllers.SendMessage;
+import com.cs9033.classified.crypto.SecureMessage;
+import com.cs9033.classified.models.ChatRoom;
 import com.cs9033.classified.models.Post;
+import com.cs9033.classified.models.User;
 
 public class CreatePostActivity extends Activity {
 	public static final String TAG = "CreatePostActivity";
@@ -60,6 +65,16 @@ public class CreatePostActivity extends Activity {
 				Log.d(TAG, post.toJSON().toString());
 				ChatRoomsDBAdapter adapter = new ChatRoomsDBAdapter(this);
 				adapter.addPostsData(post);
+				SecureMessage msg = new SecureMessage(this);
+				ChatRoom chatRoom = adapter.getChatRoom(crName);
+				msg.init(chatRoom);
+
+				Intent i = new Intent(this, SendMessage.class);
+				i.setAction(SendMessage.ADD_POST_ACTION);
+				i.putExtra("CRID", crID);
+				i.putExtra("CRName", crName);
+				i.putExtra(SendMessage.MESSAGE, msg.getAddPostMessage(post));
+				startService(i);
 
 				Toast.makeText(this, "Post Added successfully",
 						Toast.LENGTH_SHORT).show();

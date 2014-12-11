@@ -88,28 +88,10 @@ public class MessagePollService extends IntentService {
 			Log.d(TAG, "Registered Packet Listener");
 		}
 
-		// String action = intent.getAction();
-
-		// PacketCollector collector = connection.createPacketCollector(filter);
-
-		// packetListener.get
-
-		// Packet packet = null;
-
-		// if (action.equals(LONG_POLL)) {
-		// packet = collector.pollResult();
-		//
-		// } else {
-		// packet = collector.nextResult();
-		// }
-
 		Packet[] packetList = packetListener.getPacketList();
 		if (packetList == null) {
-			// Log.d(TAG, "PacketList is null");
 			return;
 		} else {
-			// Log.d(TAG, "Packet List is not null, has " + packetList.length
-			// + " items");
 		}
 		for (Packet packet : packetList) {
 
@@ -146,28 +128,6 @@ public class MessagePollService extends IntentService {
 										.commit();
 								break;
 
-							// case SendMessage.IKE_ACTION_PHASE2:
-							// Log.d(TAG, "case: "
-							// + SendMessage.IKE_ACTION_PHASE2);
-							// break;
-							// case SendMessage.IKE_ACTION_PHASE3:
-							// Log.d(TAG, "case: "
-							// + SendMessage.IKE_ACTION_PHASE3);
-							// break;
-							// case SecureMessage.CHAT:
-							// Log.d(TAG, "case: " + SecureMessage.CHAT);
-							// // case SecureMessage.CHAT_ROOM:
-							// Log.d(TAG, "case: " + SecureMessage.CHAT_ROOM);
-							// SharedPreferences sharedPreferences2 =
-							// getSharedPreferences(
-							// JoinChatRoomUserActivity.JOIN_CHAT,
-							// Context.MODE_PRIVATE);
-							// sharedPreferences2
-							// .edit()
-							// .putString(AddUserActivity.PHASE3KEY,
-							// msg).commit();
-							// break;
-
 							case SecureMessage.CHAT_ROOM:
 
 								SecureMessage secureMessage = new SecureMessage(
@@ -181,7 +141,11 @@ public class MessagePollService extends IntentService {
 									secureMessage.processMessage(json, null,
 											PHASE3KEY);
 								}
+								break;
 
+							case SecureMessage.POST:
+								Log.d(TAG, json.toString());
+								
 								break;
 
 							default:
